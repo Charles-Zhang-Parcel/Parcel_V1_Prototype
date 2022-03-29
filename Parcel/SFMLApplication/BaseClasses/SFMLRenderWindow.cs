@@ -55,7 +55,6 @@ namespace Parcel.SFMLApplication.BaseClasses
         #endregion
 
         #region Interface Calls
-
         public void Run()
         {
             while (this.IsOpen)

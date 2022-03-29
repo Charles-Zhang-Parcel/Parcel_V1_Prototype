@@ -22,9 +22,9 @@ namespace Parcel.SFMLApplication.Controls
         #endregion
 
         #region Interface
-
         public override void Initialize(SFMLRenderingContext context)
         {
+            // Create drawables
             Text = new Text(Label, context.BasicRendering.DefaultFont);
             Text.CharacterSize = 24;
             Text.FillColor = Color.Blue;
@@ -32,13 +32,30 @@ namespace Parcel.SFMLApplication.Controls
                 
             Shape = new RectangleShape(new Vector2f(bounds.Width, Text.CharacterSize));
 
+            // Register interaction events
             Owner.RegisterMouseEventListener(this);
+            
+            // Register drawables
+            Drawables.Add(Shape);
+            Drawables.Add(Text);
         }
+        #endregion
 
-        public override void Draw(RenderWindow owner)
+        #region Layouts
+        public override void Transform(Vector2f newPosition)
         {
-            owner.Draw(Shape);
-            owner.Draw(Text);
+            throw new System.NotImplementedException();
+        }
+        public override void Scale(float newScale)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
+        
+        #region Event Handling
+        public override bool IsMouseOver(Vector2f mouse)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using Parcel.SFMLApplication.BaseClasses;
+﻿using System;
+using Parcel.SFMLApplication.BaseClasses;
 using SFML.Graphics;
 using SFML.System;
 
@@ -22,21 +23,40 @@ namespace Parcel.SFMLApplication.Controls
         #endregion
 
         #region Interface
-
         public override void Initialize(SFMLRenderingContext context)
         {
+            // Create drawables
             Text = new Text(Label, context.BasicRendering.DefaultFont);
             Text.CharacterSize = 24;
             Text.FillColor = Color.Blue;
             FloatRect bounds = Text.GetGlobalBounds();
-                
+
             Shape = new RectangleShape(new Vector2f(bounds.Width, Text.CharacterSize));
+
+            // Register interaction events
+            
+            // Register drawables
+            Drawables.Add(Shape);
+            Drawables.Add(Text);
+        }
+        #endregion
+        
+        #region Layouts
+        public override void Transform(Vector2f newPosition)
+        {
+            throw new NotImplementedException();
         }
 
-        public override void Draw(RenderWindow owner)
+        public override void Scale(float newScale)
         {
-            owner.Draw(Shape);
-            owner.Draw(Text);
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Event Handling
+        public override bool IsMouseOver(Vector2f mouse)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

@@ -26,6 +26,7 @@
     <ItemGroup>
       <Folder Include="Assets" />
       <Folder Include="SFMLApplication\ToolWindows" />
+      <Folder Include="SFMLApplication\Types" />
     </ItemGroup>
 
     <ItemGroup>
