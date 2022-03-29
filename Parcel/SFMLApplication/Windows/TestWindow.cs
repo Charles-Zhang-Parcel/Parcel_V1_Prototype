@@ -1,6 +1,7 @@
 ﻿using System;
 using Parcel.SFMLApplication.BaseClasses;
 using Parcel.SFMLApplication.Controls;
+using SFML.System;
 using SFML.Window;
 
 namespace Parcel.SFMLApplication.Windows
@@ -29,11 +30,15 @@ namespace Parcel.SFMLApplication.Windows
         }
         #endregion
 
-
         protected override void CreateControls()
         {
-            Controls.Add(new Button(this, "Test TestJ"));
-            // Controls.Add(new Node(this, "Read CSV"));
+            // Controls.Add(new Button(this, "Test TestJ"));
+            Controls.Add(new Node(this, "Read CSV"));
+        }
+
+        protected override void LayoutControls()
+        {
+            Controls[0].Transform(new Vector2f(50, 0));
         }
     }
 }

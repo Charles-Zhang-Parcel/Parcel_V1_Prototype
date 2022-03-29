@@ -31,6 +31,7 @@ namespace Parcel.SFMLApplication.BaseClasses
             InitializeWindowHandlers();
             CreateControls();
             InitializeDrawContexts();
+            LayoutControls();
             PlayIntro();
         }
         #endregion
@@ -84,6 +85,7 @@ namespace Parcel.SFMLApplication.BaseClasses
             this.MouseMoved += AppWindowOnMouseMoved;
         }
         protected abstract void CreateControls();
+        protected abstract void LayoutControls();
         private void InitializeDrawContexts()
         {
             foreach (SFMLControl control in Controls)

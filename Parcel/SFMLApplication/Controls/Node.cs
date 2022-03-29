@@ -44,7 +44,8 @@ namespace Parcel.SFMLApplication.Controls
         #region Layouts
         public override void Transform(Vector2f newPosition)
         {
-            throw new System.NotImplementedException();
+            Text.Position = newPosition;
+            Shape.Position = newPosition;
         }
         public override void Scale(float newScale)
         {
