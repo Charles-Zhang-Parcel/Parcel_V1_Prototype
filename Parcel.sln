@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.SetupTest.Test001", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Macros", "Parcel.Macros\Parcel.Macros.csproj", "{1A11C367-22D5-4E65-98AF-F18AEF4388F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Finance", "Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj", "{E62060EE-7760-448B-9CD4-3074BD62A8E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Test.CoreTests", "Parcel.Test.CoreTests\Parcel.Test.CoreTests.csproj", "{2091A380-446C-4F4E-B142-ABEB60321687}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,9 +52,19 @@ Global
 		{1A11C367-22D5-4E65-98AF-F18AEF4388F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A11C367-22D5-4E65-98AF-F18AEF4388F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A11C367-22D5-4E65-98AF-F18AEF4388F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E62060EE-7760-448B-9CD4-3074BD62A8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E62060EE-7760-448B-9CD4-3074BD62A8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E62060EE-7760-448B-9CD4-3074BD62A8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E62060EE-7760-448B-9CD4-3074BD62A8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2091A380-446C-4F4E-B142-ABEB60321687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2091A380-446C-4F4E-B142-ABEB60321687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2091A380-446C-4F4E-B142-ABEB60321687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2091A380-446C-4F4E-B142-ABEB60321687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
 		{BE2DCDC8-D616-4EB7-A73B-939B7A32902C} = {1A641966-8FF6-4B74-AC00-A1FA44F64D64}
+		{E62060EE-7760-448B-9CD4-3074BD62A8E9} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
+		{2091A380-446C-4F4E-B142-ABEB60321687} = {13FF6CF4-9118-4537-88B4-8347828450E8}
 	EndGlobalSection
 EndGlobal

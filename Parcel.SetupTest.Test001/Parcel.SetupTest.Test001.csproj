@@ -9,6 +9,7 @@
       <ProjectReference Include="..\Parcel.Macros\Parcel.Macros.csproj" />
       <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj" />
     </ItemGroup>
 
 </Project>
