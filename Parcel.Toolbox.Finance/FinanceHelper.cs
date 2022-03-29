@@ -56,5 +56,19 @@ namespace Parcel.Toolbox.Finance
         {
             
         }
+
+        public static void Correlation()
+        {
+            
+        }
+
+        public static void Covariance()
+        {
+            
+        }
+        
+        public static void CovarianceMatrix()
+        {}
+        
     }
 }

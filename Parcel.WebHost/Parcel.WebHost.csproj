@@ -20,8 +20,4 @@
       <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\README.md" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="Components\MainLayout.razor.css" />
-    </ItemGroup>
-
 </Project>

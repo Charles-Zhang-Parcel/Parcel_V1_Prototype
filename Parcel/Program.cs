@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Windows.Threading;
+using Parcel.ApplicationState;
+using Parcel.SFMLApplication;
 using Parcel.Shared;
 
 namespace Parcel
@@ -9,9 +12,16 @@ namespace Parcel
         private static void Main(string[] args)
         {
             // Initialize application data
-            ParcelRuntime runtimeContext = new ParcelRuntime()
+            ApplicationRuntimeContext runtimeContext = new ApplicationRuntimeContext()
             {
+                STADispatcher = Dispatcher.CurrentDispatcher
             };
+            
+            new SFMLMainApplication(runtimeContext).Run();
+        }
+        private static void CreateHybridHost(ApplicationRuntimeContext runtimeContext)
+        {
+            
         }
     }
 }
