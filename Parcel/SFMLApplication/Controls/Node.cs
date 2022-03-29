@@ -4,9 +4,9 @@ using SFML.System;
 
 namespace Parcel.SFMLApplication.Controls
 {
-    public class Button: SFMLControl
+    public class Node: SFMLControl
     {
-        public Button(SFMLRenderWindow owner, string label)
+        public Node(SFMLRenderWindow owner, string label)
             :base(owner)
         {
             Label = label;
@@ -31,6 +31,8 @@ namespace Parcel.SFMLApplication.Controls
             FloatRect bounds = Text.GetGlobalBounds();
                 
             Shape = new RectangleShape(new Vector2f(bounds.Width, Text.CharacterSize));
+
+            Owner.RegisterMouseEventListener(this);
         }
 
         public override void Draw(RenderWindow owner)

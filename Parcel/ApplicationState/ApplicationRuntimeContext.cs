@@ -34,7 +34,6 @@ namespace Parcel.ApplicationState
         {
             SFMLRenderingContext = new SFMLRenderingContext()
             {
-                MainWindow = null,
                 BasicRendering = BasicRenderingInfrastructure.Setup()
             };
         }
