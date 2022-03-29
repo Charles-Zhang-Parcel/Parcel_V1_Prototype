@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using Parcel.Macros;
+using Parcel.Toolbox.FileSystem;
 
 namespace Parcel.SetupTest.Test001
 {
@@ -6,7 +9,11 @@ namespace Parcel.SetupTest.Test001
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            RegularRenameParameters parameters = new RegularRenameParameters()
+            {
+
+            };
+            FileSystemMacros.RegularRename(parameters);
         }
     }
 }
