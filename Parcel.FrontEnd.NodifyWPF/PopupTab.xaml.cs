@@ -6,9 +6,10 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Parcel.FrontEnd.NodifyWPF.ViewModels;
 using Parcel.Shared;
 using Parcel.Shared.Framework;
+using Parcel.Shared.Framework.ViewModels;
+using Parcel.Shared.Framework.ViewModels.BaseNodes;
 using Parcel.Toolbox.Basic;
 using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
@@ -45,13 +46,13 @@ namespace Parcel.FrontEnd.NodifyWPF
                 var type = typeof(IToolboxEntry);
                 var definition = (IToolboxEntry)Activator.CreateInstance(registry.Toolboxes[toolbox]
                     .GetTypes().Single(p => type.IsAssignableFrom(p)));
-                foreach (string name in definition.ExportNames)
+                foreach (ToolboxNodeExport node in definition.ExportNodes)
                 {
                     var item = new MenuItem()
                     {
-                        Header = name
+                        Header = node.Name
                     };
-                    item.Tag = registry.Toolboxes[toolbox];
+                    item.Tag = node;
                     
                     item.Click += NodeMenuItemOnClick;
                     topMenu.Items.Add(item);
@@ -61,7 +62,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         
         #region Interface
-        public ToolSelector ToolSelection { get; set; }
+        public ToolboxNodeExport ToolSelection { get; set; }
         #endregion
 
         #region View Properties
@@ -79,13 +80,9 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void NodeMenuItemOnClick(object sender, RoutedEventArgs e)
         {
-            if (!(e.Source is MenuItem item)) return;
+            if (!(e.Source is MenuItem item) || item.Tag == null) return;
             
-            ToolSelection = new ToolSelector()
-            {
-                Toolbox = item.Tag as Assembly,
-                NodeName = item.Name
-            };
+            ToolSelection = item.Tag as ToolboxNodeExport;
             Close();
         }
         #endregion

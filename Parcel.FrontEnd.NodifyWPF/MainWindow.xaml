@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
-        xmlns:viewModels="clr-namespace:Parcel.FrontEnd.NodifyWPF.ViewModels"
-        xmlns:baseNodes="clr-namespace:Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes"
+        xmlns:viewModels="clr-namespace:Parcel.Shared.Framework.ViewModels;assembly=Parcel.Shared"
+        xmlns:baseNodes="clr-namespace:Parcel.Shared.Framework.ViewModels.BaseNodes;assembly=Parcel.Shared"
         mc:Ignorable="d"
         Title="{Binding Version}" Height="450" Width="800"
         Background="Black"
@@ -23,7 +23,7 @@
                                  Brush="#333337" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
-        <viewModels:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
+        <local:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
     </Window.Resources>
     <Grid Background="#1E1E1E">
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -44,7 +44,15 @@
                                               Direction="{Binding Source.FlowType, Converter={StaticResource FlowToDirectionConverter}}"/>
                 </DataTemplate>
             </nodify:NodifyEditor.PendingConnectionTemplate>
-            <nodify:NodifyEditor.ItemTemplate>
+            <nodify:NodifyEditor.InputBindings>
+                <KeyBinding Key="Delete"
+                            Command="{Binding Canvas.DeleteSelectionCommand}" />
+                <KeyBinding Key="C"
+                            Command="{Binding Canvas.CommentSelectionCommand}" />
+                <KeyBinding Key="R"
+                            Command="{Binding RepeatLastCommand}" />
+            </nodify:NodifyEditor.InputBindings>
+            <nodify:NodifyEditor.Resources>
                 <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
                     <nodify:Node Header="{Binding Title}"
                                  Input="{Binding Input}"
@@ -65,7 +73,11 @@
                         </nodify:Node.OutputConnectorTemplate>
                     </nodify:Node>
                 </DataTemplate>
-            </nodify:NodifyEditor.ItemTemplate>
+                <DataTemplate DataType="{x:Type baseNodes:CommentNode}">
+                    <nodify:GroupingNode Header="{Binding Title}"
+                                         ActualSize="{Binding Size}" />
+                </DataTemplate>
+            </nodify:NodifyEditor.Resources>
             <nodify:NodifyEditor.ConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:BaseConnection}">
                     <nodify:CircuitConnection Source="{Binding Input.Anchor}"

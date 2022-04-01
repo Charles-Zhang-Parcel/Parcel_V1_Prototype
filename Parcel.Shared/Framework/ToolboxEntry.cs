@@ -4,6 +4,6 @@
     {
         public string ToolboxName { get; }
         public string ToolboxAssemblyFullName { get; }
-        public string[] ExportNames { get; }
+        public ToolboxNodeExport[] ExportNodes { get; }
     }
 }

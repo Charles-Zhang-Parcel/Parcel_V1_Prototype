@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.Shared.Framework.ViewModels
 {
     public interface INodifyObservableCollection<T>
     {

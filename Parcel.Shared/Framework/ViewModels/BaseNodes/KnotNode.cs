@@ -1,4 +1,4 @@
-﻿namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
+﻿namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
     public class KnotNode : BaseNode
     {

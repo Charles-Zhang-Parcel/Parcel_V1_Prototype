@@ -8,6 +8,6 @@ namespace Parcel.Toolbox.ControlFlow
     {
         public string ToolboxName => "Control Flow";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public string[] ExportNames => new string[] { };
+        public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[] {};
     }
 }

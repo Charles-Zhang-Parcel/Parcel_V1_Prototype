@@ -8,7 +8,7 @@ namespace Parcel.Toolbox.FileSystem
         #region Interface
         public string ToolboxName => "File System";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public string[] ExportNames => new string[] { "CSV" };
+        public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[] {};
         #endregion
     }
 }

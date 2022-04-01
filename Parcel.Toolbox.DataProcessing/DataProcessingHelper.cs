@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Parcel.Shared.Framework;
+using Parcel.Toolbox.DataProcessing.Nodes;
 
 namespace Parcel.Toolbox.DataProcessing
 {
@@ -8,6 +9,6 @@ namespace Parcel.Toolbox.DataProcessing
     {
         public string ToolboxName => "Data Processing";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public string[] ExportNames => new string[] { };
+        public ToolboxNodeExport[] ExportNodes => new[] {new ToolboxNodeExport("CSV", typeof(CSV))};
     }
 }

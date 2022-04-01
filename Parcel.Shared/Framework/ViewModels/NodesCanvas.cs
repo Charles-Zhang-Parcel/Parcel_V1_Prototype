@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Windows.Input;
-using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
+using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.Shared.Framework.ViewModels
 {
     public class NodesCanvas: ObservableObject
     {

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
+namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
-    public class GroupingNode : BaseNode
+    public class CommentNode: BaseNode
     {
         #region View Components
         private string? _title;

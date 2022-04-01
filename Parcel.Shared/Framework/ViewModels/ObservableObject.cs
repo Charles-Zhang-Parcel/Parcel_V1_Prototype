@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.Shared.Framework.ViewModels
 {
     public class ObservableObject: INotifyPropertyChanged
     {

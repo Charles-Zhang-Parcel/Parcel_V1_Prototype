@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.Shared.Framework.ViewModels
 {
     public class BaseConnection: ObservableObject
     {

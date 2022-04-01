@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.Shared.Framework.ViewModels
 {
     public interface INodifyCommand : ICommand
     {

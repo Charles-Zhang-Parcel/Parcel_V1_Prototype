@@ -8,7 +8,7 @@ namespace Parcel.Toolbox.Finance
         #region Interface
         public string ToolboxName => "Finance";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public string[] ExportNames => new string[] { };
+        public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[] {};
         #endregion
     }
 }

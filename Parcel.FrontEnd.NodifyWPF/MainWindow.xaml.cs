@@ -17,16 +17,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Nodify;
-using Parcel.FrontEnd.NodifyWPF.ViewModels;
-using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
 using Parcel.Shared;
+using Parcel.Shared.Framework;
+using Parcel.Shared.Framework.ViewModels;
+using Parcel.Shared.Framework.ViewModels.BaseNodes;
 using Parcel.Toolbox.Basic;
 using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
 using Parcel.Toolbox.FileSystem;
 using Parcel.Toolbox.Finance;
-using BaseConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.BaseConnection;
-using PendingConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.PendingConnection;
+using BaseConnection = Parcel.Shared.Framework.ViewModels.BaseConnection;
+using PendingConnection = Parcel.Shared.Framework.ViewModels.PendingConnection;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
@@ -38,9 +39,16 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Constructor
         public MainWindow()
         {
+            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool), () => LastTool != null);
+            
             InitializeComponent();
         }
         public NodesCanvas Canvas { get; set; } = new NodesCanvas();
+        #endregion
+
+        #region Commands
+        private ToolboxNodeExport LastTool { get; set; }
+        public ICommand RepeatLastCommand { get; }
         #endregion
 
         #region Events
@@ -58,21 +66,19 @@ namespace Parcel.FrontEnd.NodifyWPF
                 popupTab.ShowDialog();
                 if (popupTab.ToolSelection != null)
                 {
-                    Canvas.Nodes.Add(new ProcessorNode()
-                    {
-                        Title = "Test",
-                        Input = { new BaseConnector()
-                        {
-                            Title = "Input 1"
-                        }},
-                        Output = { new BaseConnector()
-                        {
-                            Title = "Output 1"
-                
-                        }}
-                    });
+                    LastTool = popupTab.ToolSelection;
+                    SpawnNode(LastTool);
                 }
             }
+        }
+        #endregion
+
+        #region Routine
+
+        private void SpawnNode(ToolboxNodeExport tool)
+        {
+            BaseNode node = (BaseNode) Activator.CreateInstance(LastTool.Type);
+            Canvas.Nodes.Add(node);
         }
         #endregion
     }
