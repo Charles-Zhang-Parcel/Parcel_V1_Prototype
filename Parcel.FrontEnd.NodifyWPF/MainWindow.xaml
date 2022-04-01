@@ -23,12 +23,27 @@
                                  Brush="#333337" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
+        <viewModels:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
     </Window.Resources>
     <Grid Background="#1E1E1E">
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                              x:Name="Editor"
                              Background="{StaticResource GridDrawingBrush}"
-                             ItemsSource="{Binding Nodes}">
+                             ItemsSource="{Binding Canvas.Nodes}"
+                             Connections="{Binding Canvas.Connections}"
+                             PendingConnection="{Binding Canvas.PendingConnection}"
+                             SelectedItems="{Binding Canvas.SelectedNodes}"
+                             DisconnectConnectorCommand="{Binding Canvas.DisconnectConnectorCommand}">
+            <nodify:NodifyEditor.PendingConnectionTemplate>
+                <DataTemplate DataType="{x:Type viewModels:PendingConnection}">
+                    <nodify:PendingConnection Source="{Binding Source, Mode=OneWayToSource}"
+                                              Content="{Binding PreviewText}"
+                                              Target="{Binding PreviewTarget, Mode=OneWayToSource}"
+                                              PreviewTarget="{Binding PreviewTarget, Mode=OneWayToSource}"
+                                              CompletedCommand="{Binding Graph.CreateConnectionCommand}"
+                                              Direction="{Binding Source.FlowType, Converter={StaticResource FlowToDirectionConverter}}"/>
+                </DataTemplate>
+            </nodify:NodifyEditor.PendingConnectionTemplate>
             <nodify:NodifyEditor.ItemTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
                     <nodify:Node Header="{Binding Title}"
@@ -53,8 +68,11 @@
             </nodify:NodifyEditor.ItemTemplate>
             <nodify:NodifyEditor.ConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:BaseConnection}">
-                    <nodify:Connection Source="{Binding Input.Anchor}"
-                                       Target="{Binding Output.Anchor}" />
+                    <nodify:CircuitConnection Source="{Binding Input.Anchor}"
+                                              Target="{Binding Output.Anchor}" 
+                                              SourceOffset="10 0"
+                                              TargetOffset="20 0"
+                                              OffsetMode="Circle"/>
                 </DataTemplate>
             </nodify:NodifyEditor.ConnectionTemplate>
             <nodify:NodifyEditor.ItemContainerStyle>

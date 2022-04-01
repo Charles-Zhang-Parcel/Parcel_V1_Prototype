@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,6 +18,8 @@ using System.Windows.Shapes;
 using Nodify;
 using Parcel.FrontEnd.NodifyWPF.ViewModels;
 using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
+using BaseConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.BaseConnection;
+using PendingConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.PendingConnection;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
@@ -30,14 +33,9 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             InitializeComponent();
         }
+        public NodesCanvas Canvas { get; set; } = new NodesCanvas();
         #endregion
 
-        #region Public View Properties
-        public IEnumerable<BaseNode> Nodes { get; } = new List<BaseNode>
-        {
-        };
-        #endregion
-        
         #region Events
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -53,7 +51,19 @@ namespace Parcel.FrontEnd.NodifyWPF
                 popupTab.ShowDialog();
                 if (popupTab.ToolSelection != null)
                 {
-                    
+                    Canvas.Nodes.Add(new ProcessorNode()
+                    {
+                        Title = "Test",
+                        Input = { new BaseConnector()
+                        {
+                            Title = "Input 1"
+                        }},
+                        Output = { new BaseConnector()
+                        {
+                            Title = "Output 1"
+                
+                        }}
+                    });
                 }
             }
         }

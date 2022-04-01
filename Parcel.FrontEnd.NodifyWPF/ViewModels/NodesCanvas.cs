@@ -49,27 +49,29 @@ namespace Parcel.FrontEnd.NodifyWPF.ViewModels
                  .WhenCleared(x => Connections.Clear());
         }
 
-        private NodifyObservableCollection<BaseNode> _nodes = new NodifyObservableCollection<BaseNode>();
-        public NodifyObservableCollection<BaseNode> Nodes
+        #region Public View Properties
+        private NotifyObservableCollection<BaseNode> _nodes = new NotifyObservableCollection<BaseNode>();
+        public NotifyObservableCollection<BaseNode> Nodes
         {
             get => _nodes;
             set => SetField(ref _nodes, value);
         }
 
-        private NodifyObservableCollection<BaseNode> _selectedNodes = new NodifyObservableCollection<BaseNode>();
-        public NodifyObservableCollection<BaseNode> SelectedNodes
+        private NotifyObservableCollection<BaseNode> _selectedNodes = new NotifyObservableCollection<BaseNode>();
+        public NotifyObservableCollection<BaseNode> SelectedNodes
         {
             get => _selectedNodes;
             set => SetField(ref _selectedNodes, value);
         }
 
-        private NodifyObservableCollection<BaseConnection> _connections = new NodifyObservableCollection<BaseConnection>();
-        public NodifyObservableCollection<BaseConnection> Connections
+        private NotifyObservableCollection<BaseConnection> _connections = new NotifyObservableCollection<BaseConnection>();
+        public NotifyObservableCollection<BaseConnection> Connections
         {
             get => _connections;
             set => SetField(ref _connections, value);
         }
-
+        #endregion
+        
         public PendingConnection PendingConnection { get; }
         public GraphSchema Schema { get; }
 

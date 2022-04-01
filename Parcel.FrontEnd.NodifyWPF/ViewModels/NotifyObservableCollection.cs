@@ -32,7 +32,7 @@ namespace Parcel.FrontEnd.NodifyWPF.ViewModels
         INodifyObservableCollection<T> WhenCleared(Action<IList<T>> cleared);
     }
 
-    public class NodifyObservableCollection<T> : Collection<T>, INodifyObservableCollection<T>, INotifyPropertyChanged, INotifyCollectionChanged
+    public class NotifyObservableCollection<T> : Collection<T>, INodifyObservableCollection<T>, INotifyPropertyChanged, INotifyCollectionChanged
     {
         protected static readonly PropertyChangedEventArgs IndexerPropertyChanged = new PropertyChangedEventArgs("Item[]");
         protected static readonly PropertyChangedEventArgs CountPropertyChanged = new PropertyChangedEventArgs("Count");
@@ -45,11 +45,11 @@ namespace Parcel.FrontEnd.NodifyWPF.ViewModels
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public NodifyObservableCollection()
+        public NotifyObservableCollection()
         {
         }
 
-        public NodifyObservableCollection(IEnumerable<T> collection)
+        public NotifyObservableCollection(IEnumerable<T> collection)
             : base(new List<T>(collection))
         {
         }

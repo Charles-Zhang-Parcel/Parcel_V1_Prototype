@@ -12,8 +12,8 @@
         #endregion
 
         #region Connectors
-        public NodifyObservableCollection<BaseConnector> Input { get; } = new NodifyObservableCollection<BaseConnector>();
-        public NodifyObservableCollection<BaseConnector> Output { get; } = new NodifyObservableCollection<BaseConnector>();
+        public NotifyObservableCollection<BaseConnector> Input { get; } = new NotifyObservableCollection<BaseConnector>();
+        public NotifyObservableCollection<BaseConnector> Output { get; } = new NotifyObservableCollection<BaseConnector>();
         #endregion
 
         #region Interface

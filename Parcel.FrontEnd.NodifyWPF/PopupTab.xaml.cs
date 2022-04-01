@@ -30,11 +30,13 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void MenuItem_Label_Click(object sender, RoutedEventArgs e)
         {
             ToolSelection = "Label";
+            Close();
         }
 
         private void MenuItem_CSV_Click(object sender, RoutedEventArgs e)
         {
             ToolSelection = "CSV";
+            Close();
         }
         #endregion
     }

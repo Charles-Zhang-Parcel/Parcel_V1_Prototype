@@ -64,7 +64,7 @@ namespace Parcel.FrontEnd.NodifyWPF.ViewModels
         public ConnectorFlowType FlowType { get; private set; }
         public int MaxConnections { get; set; } = 2;
 
-        public NodifyObservableCollection<BaseConnection> Connections { get; } = new NodifyObservableCollection<BaseConnection>();
+        public NotifyObservableCollection<BaseConnection> Connections { get; } = new NotifyObservableCollection<BaseConnection>();
 
         public BaseConnector()
         {
