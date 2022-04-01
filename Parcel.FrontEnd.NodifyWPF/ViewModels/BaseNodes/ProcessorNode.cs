@@ -1,4 +1,4 @@
-﻿namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+﻿namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
 {
     public class ProcessorNode: BaseNode
     {

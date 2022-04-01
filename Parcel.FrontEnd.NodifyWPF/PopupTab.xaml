@@ -9,7 +9,23 @@
         Title="PopupTab" Height="300" Width="150"
         PreviewKeyDown="PopupTab_OnPreviewKeyDown"
         MouseDown="PopupTab_OnMouseDown">
-    <Grid>
+    <DockPanel LastChildFill="True">
+        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+            <Image DockPanel.Dock="Left" Width="15" Height="15"></Image>
+            <TextBox></TextBox>
+        </DockPanel>
         
-    </Grid>
+        <ListView>
+            <Menu>
+                <MenuItem Header="Basic">
+                    <MenuItem Header="Label" Click="MenuItem_Label_Click"></MenuItem>
+                </MenuItem>    
+            </Menu>
+            <Menu>
+                <MenuItem Header="Finance Toolbox">
+                    <MenuItem Header="CSV" Click="MenuItem_CSV_Click"></MenuItem>
+                </MenuItem>    
+            </Menu>
+        </ListView>
+    </DockPanel>
 </Window>

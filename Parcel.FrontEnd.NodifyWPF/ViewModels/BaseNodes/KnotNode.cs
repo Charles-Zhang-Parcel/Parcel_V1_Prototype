@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using Nodify;
-
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+﻿namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
 {
     public class KnotNode : BaseNode
     {

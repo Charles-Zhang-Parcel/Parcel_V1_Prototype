@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Nodify;
+using Parcel.FrontEnd.NodifyWPF.ViewModels;
+using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
@@ -31,42 +33,11 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Public View Properties
-        public IEnumerable<object> Items { get; } = new List<object>
+        public IEnumerable<BaseNode> Nodes { get; } = new List<BaseNode>
         {
-            "My first item",
-            "My second item",
-            new Node()
-            {
-                Header = "My Node"
-            },
-            new Node()
-            {
-                Header = "My Other Node"
-            },
-            new GroupingNode()
-            {
-                Header = "Grouping Node",
-                Width = 300,
-                Height = 150
-            },
-            new KnotNode()
         };
         #endregion
-
-        #region Data Binding
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        private bool SetField<TType>(ref TType field, TType value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<TType>.Default.Equals(field, value)) return false;
-            field = value;
-            NotifyPropertyChanged(propertyName);
-            return true;
-        }
-        #endregion
-
+        
         #region Events
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -80,7 +51,25 @@ namespace Parcel.FrontEnd.NodifyWPF
                     Top = this.Top + cursor.Y
                 };
                 popupTab.ShowDialog();
+                if (popupTab.ToolSelection != null)
+                {
+                    
+                }
             }
+        }
+        #endregion
+
+        #region Data Binding
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private bool SetField<TType>(ref TType field, TType value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<TType>.Default.Equals(field, value)) return false;
+            field = value;
+            NotifyPropertyChanged(propertyName);
+            return true;
         }
         #endregion
     }

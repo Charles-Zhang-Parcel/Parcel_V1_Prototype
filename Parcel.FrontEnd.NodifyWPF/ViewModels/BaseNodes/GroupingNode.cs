@@ -1,9 +1,10 @@
 ﻿using System.Windows;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
 {
-    public class CommentNode: BaseNode
+    public class GroupingNode : BaseNode
     {
+        #region View Components
         private string? _title;
         public string? Title
         {
@@ -17,5 +18,6 @@ namespace Parcel.FrontEnd.NodifyWPF.ViewModels
             get => _size;
             set => SetField(ref _size, value);
         }
+        #endregion
     }
 }

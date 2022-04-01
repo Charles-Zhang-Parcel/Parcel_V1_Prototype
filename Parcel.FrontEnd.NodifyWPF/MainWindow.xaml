@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
         xmlns:viewModels="clr-namespace:Parcel.FrontEnd.NodifyWPF.ViewModels"
+        xmlns:baseNodes="clr-namespace:Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes"
         mc:Ignorable="d"
         Title="{Binding Version}" Height="450" Width="800"
         Background="Black"
@@ -24,41 +25,44 @@
         </DrawingBrush>
     </Window.Resources>
     <Grid Background="#1E1E1E">
-        <!-- <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch" -->
-        <!--                      x:Name="Editor" -->
-        <!--                      Background="{StaticResource GridDrawingBrush}" -->
-        <!--                      ItemsSource="{Binding Items}"/> -->
-        <nodify:NodifyEditor>
-            <nodify:NodifyEditor.Resources>
-                <viewModels:ProcessorNode x:Key="NodeContext"
-                                         Title="My Node">
-                    <viewModels:ProcessorNode.Input>
-                        <viewModels:BaseConnector Title="In 0" />
-                        <viewModels:BaseConnector Title="In 1" />
-                    </viewModels:ProcessorNode.Input>
-                    <viewModels:ProcessorNode.Output>
-                        <viewModels:BaseConnector Title="Out 0" />
-                        <viewModels:BaseConnector Title="Out 1" />
-                    </viewModels:ProcessorNode.Output>
-                </viewModels:ProcessorNode>
-            </nodify:NodifyEditor.Resources>
-
-            <nodify:Node DataContext="{StaticResource NodeContext}"
-                         Header="{Binding Title}"
-                         Input="{Binding Input}"
-                         Output="{Binding Output}">
-                <nodify:Node.InputConnectorTemplate>
-                    <DataTemplate>
-                        <nodify:NodeInput Header="{Binding Title}" />
-                    </DataTemplate>
-                </nodify:Node.InputConnectorTemplate>
-                <nodify:Node.OutputConnectorTemplate>
-                    <DataTemplate>
-                        <nodify:NodeOutput Header="{Binding Title}" />
-                    </DataTemplate>
-                </nodify:Node.OutputConnectorTemplate>
-            </nodify:Node>
+        <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                             x:Name="Editor"
+                             Background="{StaticResource GridDrawingBrush}"
+                             ItemsSource="{Binding Nodes}">
+            <nodify:NodifyEditor.ItemTemplate>
+                <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
+                    <nodify:Node Header="{Binding Title}"
+                                 Input="{Binding Input}"
+                                 Output="{Binding Output}">
+                        <nodify:Node.InputConnectorTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
+                                <nodify:NodeInput Header="{Binding Title}"
+                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                  IsConnected="{Binding IsConnected}" />
+                            </DataTemplate>
+                        </nodify:Node.InputConnectorTemplate>
+                        <nodify:Node.OutputConnectorTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
+                                <nodify:NodeOutput Header="{Binding Title}"
+                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                   IsConnected="{Binding IsConnected}" />
+                            </DataTemplate>
+                        </nodify:Node.OutputConnectorTemplate>
+                    </nodify:Node>
+                </DataTemplate>
+            </nodify:NodifyEditor.ItemTemplate>
+            <nodify:NodifyEditor.ConnectionTemplate>
+                <DataTemplate DataType="{x:Type viewModels:BaseConnection}">
+                    <nodify:Connection Source="{Binding Input.Anchor}"
+                                       Target="{Binding Output.Anchor}" />
+                </DataTemplate>
+            </nodify:NodifyEditor.ConnectionTemplate>
+            <nodify:NodifyEditor.ItemContainerStyle>
+                <Style TargetType="{x:Type nodify:ItemContainer}">
+                    <Setter Property="Location"
+                            Value="{Binding Location}" />
+                </Style>
+            </nodify:NodifyEditor.ItemContainerStyle>
         </nodify:NodifyEditor>
-
     </Grid>
 </Window>

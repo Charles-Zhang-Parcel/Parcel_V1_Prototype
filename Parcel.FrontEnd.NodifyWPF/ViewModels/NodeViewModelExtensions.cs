@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
 
 namespace Parcel.FrontEnd.NodifyWPF.ViewModels
 {

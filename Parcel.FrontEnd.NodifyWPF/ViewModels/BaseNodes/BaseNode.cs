@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+namespace Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes
 {
     public class BaseNode : ObservableObject
     {

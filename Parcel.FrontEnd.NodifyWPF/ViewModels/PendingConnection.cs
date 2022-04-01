@@ -1,4 +1,6 @@
-﻿namespace Parcel.FrontEnd.NodifyWPF.ViewModels
+﻿using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
+
+namespace Parcel.FrontEnd.NodifyWPF.ViewModels
 {
     public class PendingConnection: ObservableObject
     {

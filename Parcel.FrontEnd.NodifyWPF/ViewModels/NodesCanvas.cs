@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Input;
+using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
 
 namespace Parcel.FrontEnd.NodifyWPF.ViewModels
 {
