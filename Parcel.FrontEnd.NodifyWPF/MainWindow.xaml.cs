@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Nodify;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow : Window, INotifyPropertyChanged
     {
         #region Constructor
         public MainWindow()
@@ -30,10 +31,25 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Public View Properties
-        public IEnumerable<string> Items { get; } = new List<string>
+        public IEnumerable<object> Items { get; } = new List<object>
         {
             "My first item",
-            "My second item"
+            "My second item",
+            new Node()
+            {
+                Header = "My Node"
+            },
+            new Node()
+            {
+                Header = "My Other Node"
+            },
+            new GroupingNode()
+            {
+                Header = "Grouping Node",
+                Width = 300,
+                Height = 150
+            },
+            new KnotNode()
         };
         #endregion
 
