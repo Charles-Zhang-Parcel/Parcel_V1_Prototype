@@ -1,0 +1,31 @@
+﻿<Window x:Class="Parcel.FrontEnd.NodifyWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
+        xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
+        mc:Ignorable="d"
+        Title="{Binding Version}" Height="450" Width="800"
+        Background="Black"
+        DataContext="{Binding RelativeSource={RelativeSource self}}"
+        PreviewKeyDown="MainWindow_OnPreviewKeyDown">
+    <Window.Resources>
+        <DrawingBrush x:Key="GridDrawingBrush"
+                      TileMode="Tile"
+                      ViewportUnits="Absolute"
+                      Viewport="0 0 15 15"
+                      Transform="{Binding AppliedTransform, ElementName=Editor}">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Geometry="M0,0 L0,1 0.03,1 0.03,0.03 1,0.03 1,0 Z"
+                                 Brush="#333337" />
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </Window.Resources>
+    <Grid Background="#1E1E1E">
+        <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                             x:Name="Editor"
+                             Background="{StaticResource GridDrawingBrush}"
+                             ItemsSource="{Binding Items}"/>
+    </Grid>
+</Window>
