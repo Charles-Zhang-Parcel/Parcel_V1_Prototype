@@ -2,7 +2,7 @@
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
-    public partial class PropertyWindow : Window
+    public partial class PropertyWindow : BaseWindow
     {
         public PropertyWindow()
         {

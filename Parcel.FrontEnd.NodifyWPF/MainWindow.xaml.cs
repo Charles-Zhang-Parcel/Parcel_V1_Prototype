@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,12 @@ using System.Windows.Shapes;
 using Nodify;
 using Parcel.FrontEnd.NodifyWPF.ViewModels;
 using Parcel.FrontEnd.NodifyWPF.ViewModels.BaseNodes;
+using Parcel.Shared;
+using Parcel.Toolbox.Basic;
+using Parcel.Toolbox.ControlFlow;
+using Parcel.Toolbox.DataProcessing;
+using Parcel.Toolbox.FileSystem;
+using Parcel.Toolbox.Finance;
 using BaseConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.BaseConnection;
 using PendingConnection = Parcel.FrontEnd.NodifyWPF.ViewModels.PendingConnection;
 
@@ -26,7 +33,7 @@ namespace Parcel.FrontEnd.NodifyWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public sealed partial class MainWindow : Window, INotifyPropertyChanged
+    public sealed partial class MainWindow : BaseWindow
     {
         #region Constructor
         public MainWindow()
@@ -66,20 +73,6 @@ namespace Parcel.FrontEnd.NodifyWPF
                     });
                 }
             }
-        }
-        #endregion
-
-        #region Data Binding
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        private bool SetField<TType>(ref TType field, TType value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<TType>.Default.Equals(field, value)) return false;
-            field = value;
-            NotifyPropertyChanged(propertyName);
-            return true;
         }
         #endregion
     }

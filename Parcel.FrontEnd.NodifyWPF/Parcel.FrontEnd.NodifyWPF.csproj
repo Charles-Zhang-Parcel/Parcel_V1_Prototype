@@ -16,4 +16,13 @@
       <Folder Include="PropertyWindows" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.Basic\Parcel.Toolbox.Basic.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.ControlFlow\Parcel.Toolbox.ControlFlow.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.DataProcessing\Parcel.Toolbox.DataProcessing.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj" />
+    </ItemGroup>
+
 </Project>

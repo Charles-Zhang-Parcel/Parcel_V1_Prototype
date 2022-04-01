@@ -1,4 +1,4 @@
-﻿<Window x:Class="Parcel.FrontEnd.NodifyWPF.MainWindow"
+﻿<local:BaseWindow x:Class="Parcel.FrontEnd.NodifyWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -83,4 +83,4 @@
             </nodify:NodifyEditor.ItemContainerStyle>
         </nodify:NodifyEditor>
     </Grid>
-</Window>
+</local:BaseWindow>

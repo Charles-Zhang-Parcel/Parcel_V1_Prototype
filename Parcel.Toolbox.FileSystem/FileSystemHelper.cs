@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Parcel.Shared.Framework;
 
 namespace Parcel.Toolbox.FileSystem
 {
