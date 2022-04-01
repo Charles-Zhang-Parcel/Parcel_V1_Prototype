@@ -21,7 +21,7 @@ namespace Parcel.FrontEnd.NodifyWPF
     public partial class PopupTab : BaseWindow
     {
         ToolboxRegistry registry = new ToolboxRegistry();
-        public PopupTab()
+        public PopupTab(Window owner)
         {
             registry.RegisterToolbox("Basic", Assembly.GetAssembly(typeof(BasicHelper)));
             registry.RegisterToolbox("Control Flow", Assembly.GetAssembly(typeof(ControlFlowHelper)));
@@ -29,6 +29,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             registry.RegisterToolbox("File System", Assembly.GetAssembly(typeof(FileSystemHelper)));
             registry.RegisterToolbox("Finance", Assembly.GetAssembly(typeof(FinanceHelper)));
 
+            Owner = owner;
             InitializeComponent();
             
             foreach (string toolbox in registry.Toolboxes.Keys.OrderBy(k => k))
@@ -48,14 +49,21 @@ namespace Parcel.FrontEnd.NodifyWPF
                     .GetTypes().Single(p => type.IsAssignableFrom(p)));
                 foreach (ToolboxNodeExport node in definition.ExportNodes)
                 {
-                    var item = new MenuItem()
+                    if (node == null)
                     {
-                        Header = node.Name
-                    };
-                    item.Tag = node;
+                        topMenu.Items.Add(new Separator());
+                    }
+                    else
+                    {
+                        var item = new MenuItem()
+                        {
+                            Header = node.Name
+                        };
+                        item.Tag = node;
                     
-                    item.Click += NodeMenuItemOnClick;
-                    topMenu.Items.Add(item);
+                        item.Click += NodeMenuItemOnClick;
+                        topMenu.Items.Add(item);   
+                    }
                 }
                 modulesList.Items.Add(menu);
             }

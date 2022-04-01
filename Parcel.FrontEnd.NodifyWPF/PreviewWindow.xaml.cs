@@ -2,9 +2,9 @@
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
-    public partial class PropertyWindow : BaseWindow
+    public partial class PreviewWindow : BaseWindow
     {
-        public PropertyWindow(Window owner)
+        public PreviewWindow(Window owner)
         {
             Owner = owner;
             InitializeComponent();

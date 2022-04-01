@@ -5,10 +5,8 @@ using Parcel.Toolbox.DataProcessing.Nodes;
 
 namespace Parcel.Toolbox.DataProcessing
 {
-    public class DataProcessingHelper: IToolboxEntry
+    public static class DataProcessingHelper
     {
-        public string ToolboxName => "Data Processing";
-        public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public ToolboxNodeExport[] ExportNodes => new[] {new ToolboxNodeExport("CSV", typeof(CSV))};
+        
     }
 }

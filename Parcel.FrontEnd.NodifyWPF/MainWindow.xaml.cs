@@ -58,7 +58,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             {
                 var cursor = Mouse.GetPosition(this);
 
-                PopupTab popupTab = new PopupTab()
+                PopupTab popupTab = new PopupTab(this)
                 {
                     Left = this.Left + cursor.X,
                     Top = this.Top + cursor.Y
@@ -70,6 +70,10 @@ namespace Parcel.FrontEnd.NodifyWPF
                     SpawnNode(LastTool);
                 }
             }
+        }
+        private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
