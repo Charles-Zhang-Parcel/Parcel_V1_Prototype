@@ -7,6 +7,7 @@
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
         xmlns:viewModels="clr-namespace:Parcel.Shared.Framework.ViewModels;assembly=Parcel.Shared"
         xmlns:baseNodes="clr-namespace:Parcel.Shared.Framework.ViewModels.BaseNodes;assembly=Parcel.Shared"
+        xmlns:primitives="clr-namespace:Parcel.Shared.Framework.ViewModels.Primitives;assembly=Parcel.Shared"
         xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
         mc:Ignorable="d"
         Title="{Binding Version}" Height="450" Width="800"
@@ -14,6 +15,7 @@
         DataContext="{Binding RelativeSource={RelativeSource self}}"
         PreviewKeyDown="MainWindow_OnPreviewKeyDown">
     <Window.Resources>
+        <!--Grid Background Brushes-->
         <DrawingBrush x:Key="SmallGridLinesDrawingBrush"
                       TileMode="Tile"
                       ViewportUnits="Absolute"
@@ -35,6 +37,96 @@
                                  Brush="#515157" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
+        
+        <!--Connector Shapes-->
+        <SolidColorBrush x:Key="SquareConnectorColor" Color="MediumSlateBlue"></SolidColorBrush>
+        <SolidColorBrush x:Key="TriangleConnectorColor" Color="MediumVioletRed"></SolidColorBrush>
+        <ControlTemplate x:Key="SquareConnector" TargetType="Control">
+            <Rectangle Width="14"
+                       Height="14"
+                       StrokeDashCap="Round"
+                       StrokeLineJoin="Round"
+                       StrokeStartLineCap="Round"
+                       StrokeEndLineCap="Round"
+                       Stroke="{TemplateBinding BorderBrush}"
+                       Fill="{TemplateBinding Background}"
+                       StrokeThickness="2" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="TriangleConnector" TargetType="Control">
+            <Polygon Width="14"
+                     Height="14"
+                     Points="1,13 13,13 7,1"
+                     StrokeDashCap="Round"
+                     StrokeLineJoin="Round"
+                     StrokeStartLineCap="Round"
+                     StrokeEndLineCap="Round"
+                     Stroke="{TemplateBinding BorderBrush}"
+                     Fill="{TemplateBinding Background}"
+                     StrokeThickness="2" />
+        </ControlTemplate>
+        <Style x:Key="ConnectionStyle" TargetType="{x:Type nodify:BaseConnection}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Input.Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                    <Setter Property="Stroke" Value="{StaticResource SquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Input.Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                    <Setter Property="Stroke" Value="{StaticResource TriangleConnectorColor}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+            <!-- <Setter Property="Stroke" Value="{DynamicResource Connection.StrokeBrush}"></Setter> -->
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="ToolTip" Value="Double click to split"></Setter>
+        </Style>
+        <Style TargetType="{x:Type nodify:NodeInput}"
+               BasedOn="{StaticResource {x:Type nodify:NodeInput}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource TriangleConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource TriangleConnectorColor}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Header"
+                    Value="{Binding Title}" />
+            <Setter Property="Anchor"
+                    Value="{Binding Anchor, Mode=OneWayToSource}" />
+            <Setter Property="IsConnected"
+                    Value="{Binding IsConnected}" />
+        </Style>
+        <Style TargetType="{x:Type nodify:NodeOutput}"
+               BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource TriangleConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource TriangleConnectorColor}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Header"
+                    Value="{Binding Title}" />
+            <Setter Property="Anchor"
+                    Value="{Binding Anchor, Mode=OneWayToSource}" />
+            <Setter Property="IsConnected"
+                    Value="{Binding IsConnected}" />
+        </Style>
+        
+        <!--Custom Styling-->
+        
+        
+        <!--Data Converters-->
         <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
     </Window.Resources>
@@ -66,6 +158,41 @@
                             Command="{Binding RepeatLastCommand}" />
             </nodify:NodifyEditor.InputBindings>
             <nodify:NodifyEditor.Resources>
+                <!--Node Type Data Templates-->
+                <DataTemplate DataType="{x:Type primitives:OpenFileNode}">
+                    <nodify:Node Header="{Binding Title}"
+                                 Content="{Binding}"
+                                 Input="{Binding Input}"
+                                 Output="{Binding Output}"
+                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                        <nodify:Node.ContentTemplate>
+                            <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
+                                <DockPanel LastChildFill="True">
+                                    <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
+                                    <TextBox Text="{Binding Value}"
+                                             MinWidth="100"
+                                             Margin="5 0 0 0" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </nodify:Node.ContentTemplate>
+                        <nodify:Node.InputConnectorTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
+                                <nodify:NodeInput Header="{Binding Title}"
+                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                  IsConnected="{Binding IsConnected}"
+                                                  Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
+                            </DataTemplate>
+                        </nodify:Node.InputConnectorTemplate>
+                        <nodify:Node.OutputConnectorTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
+                                <nodify:NodeOutput Header="{Binding Title}"
+                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                   IsConnected="{Binding IsConnected}" 
+                                                   Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
+                            </DataTemplate>
+                        </nodify:Node.OutputConnectorTemplate>
+                    </nodify:Node>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                     <nodify:Node Header="{Binding Title}"
                                  Content="{Binding}"
@@ -122,6 +249,9 @@
                     <nodify:GroupingNode Header="{Binding Title}"
                                          ActualSize="{Binding Size}" />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type baseNodes:KnotNode}">
+                    <nodify:KnotNode Content="{Binding Connector}"/>
+                </DataTemplate>
             </nodify:NodifyEditor.Resources>
             <nodify:NodifyEditor.ConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:BaseConnection}">
@@ -129,7 +259,8 @@
                                               Target="{Binding Output.Anchor}" 
                                               SourceOffset="10 0"
                                               TargetOffset="20 0"
-                                              OffsetMode="Circle"/>
+                                              OffsetMode="Circle"
+                                              Style="{StaticResource ConnectionStyle}"/>
                 </DataTemplate>
             </nodify:NodifyEditor.ConnectionTemplate>
             <nodify:NodifyEditor.ItemContainerStyle>

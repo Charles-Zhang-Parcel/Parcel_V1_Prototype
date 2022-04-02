@@ -12,8 +12,8 @@ namespace Parcel.Shared.Framework.ViewModels
 
     public enum ConnectorShape
     {
-        Circle,
-        Triangle,
+        Circle, // Default; Primitive
+        Triangle, // Compound data
         Square,
     }
 
