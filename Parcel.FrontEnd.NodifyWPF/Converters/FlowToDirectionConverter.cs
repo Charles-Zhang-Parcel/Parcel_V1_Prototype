@@ -4,7 +4,7 @@ using System.Windows.Data;
 using Nodify;
 using Parcel.Shared.Framework.ViewModels;
 
-namespace Parcel.FrontEnd.NodifyWPF
+namespace Parcel.FrontEnd.NodifyWPF.Converters
 {
     public class FlowToDirectionConverter : IValueConverter
     {

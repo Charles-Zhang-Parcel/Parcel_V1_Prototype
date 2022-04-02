@@ -23,7 +23,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public OpenFileNode()
         {
             Title = "File";
-            Output.Clear();  // TODO: Notice BaseNodes only gets Graph set when Added to Canvas's Nodes property, so it's not available yet here
+            ValueOutput.IsHidden = true;
             Output.Add(FilePathOutput);
         }
         #endregion

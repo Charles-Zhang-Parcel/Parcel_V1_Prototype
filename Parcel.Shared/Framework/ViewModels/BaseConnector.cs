@@ -34,11 +34,11 @@ namespace Parcel.Shared.Framework.ViewModels
             set => SetField(ref _isConnected, value);
         }
         
-        private bool _isVisible;
-        public bool IsVisible
+        private bool _isHidden;
+        public bool IsHidden
         {
-            get => _isVisible;
-            set => SetField(ref _isVisible, value);
+            get => _isHidden;
+            set => SetField(ref _isHidden, value);
         }
 
         private Point _anchor;

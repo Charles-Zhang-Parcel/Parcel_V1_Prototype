@@ -22,7 +22,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public NumberNode()
         {
             Title = "Number";
-            Output.Clear();
+            ValueOutput.IsHidden = true;
             Output.Add(NumberOutput);
         }
         #endregion

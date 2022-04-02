@@ -7,6 +7,7 @@
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
         xmlns:viewModels="clr-namespace:Parcel.Shared.Framework.ViewModels;assembly=Parcel.Shared"
         xmlns:baseNodes="clr-namespace:Parcel.Shared.Framework.ViewModels.BaseNodes;assembly=Parcel.Shared"
+        xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
         mc:Ignorable="d"
         Title="{Binding Version}" Height="450" Width="800"
         Background="#1E1E1E"
@@ -34,7 +35,8 @@
                                  Brush="#515157" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
-        <local:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
+        <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
+        <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
     </Window.Resources>
     <Grid Background="{StaticResource LargeGridLinesDrawingBrush}">
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -81,14 +83,16 @@
                             <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                                 <nodify:NodeInput Header="{Binding Title}"
                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                  IsConnected="{Binding IsConnected}" />
+                                                  IsConnected="{Binding IsConnected}"
+                                                  Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
                             </DataTemplate>
                         </nodify:Node.InputConnectorTemplate>
                         <nodify:Node.OutputConnectorTemplate>
                             <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                                 <nodify:NodeOutput Header="{Binding Title}"
                                                    Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                   IsConnected="{Binding IsConnected}" />
+                                                   IsConnected="{Binding IsConnected}" 
+                                                   Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
                             </DataTemplate>
                         </nodify:Node.OutputConnectorTemplate>
                     </nodify:Node>
