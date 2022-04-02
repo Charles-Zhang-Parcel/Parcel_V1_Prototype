@@ -10,11 +10,13 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Node Interface
         protected BaseConnector PathInput = new BaseConnector()
         {
-            Title = "Path"
+            Title = "Path",
+            Shape = ConnectorShape.Circle
         };
         protected BaseConnector DataTableOutput = new BaseConnector()
         {
-            Title = "Data Table"
+            Title = "Data Table",
+            Shape = ConnectorShape.Triangle
         }; 
         public CSV()
         {

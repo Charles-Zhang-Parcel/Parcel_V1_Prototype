@@ -16,11 +16,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Nodify;
 using Parcel.Shared;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
+using Parcel.Shared.Framework.ViewModels.Primitives;
 using Parcel.Toolbox.Basic;
 using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
@@ -74,6 +76,16 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
         {
             throw new NotImplementedException();
+        }
+        private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!(e.Source is Button {DataContext: OpenFileNode node})) return;
+            
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                node.Value = openFileDialog.FileName;
+            }
         }
         #endregion
 
