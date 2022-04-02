@@ -1,4 +1,6 @@
-﻿namespace Parcel.Shared.Framework.ViewModels.BaseNodes
+﻿using System;
+
+namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
     public class PrimitiveNode: ProcessorNode
     {
@@ -11,13 +13,26 @@
         }
         #endregion
 
-        #region Interface
+        #region Node Interface
+        protected BaseConnector ValueOutput = new BaseConnector()
+        {
+            Title = "Value"
+        }; 
         public PrimitiveNode()
         {
-            Output.Add(new BaseConnector()
+            Output.Add(ValueOutput);
+        }
+        #endregion
+        
+        #region Processor Interface
+        public override NodeExecutionResult Execute()
+        {
+            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor()
             {
-                Title = "Value"
-            });
+                DataObject = _value,
+                DataType = CacheDataType.String 
+            };
+            return new NodeExecutionResult(true, null);
         }
         #endregion
     }

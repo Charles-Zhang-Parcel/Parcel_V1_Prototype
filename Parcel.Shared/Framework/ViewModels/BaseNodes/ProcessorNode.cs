@@ -1,6 +1,8 @@
-﻿namespace Parcel.Shared.Framework.ViewModels.BaseNodes
+﻿using System.Collections.Generic;
+
+namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
-    public class ProcessorNode: BaseNode
+    public abstract class ProcessorNode: BaseNode, IProcessor
     {
         #region Public View Properties
         private string _title;
@@ -30,6 +32,11 @@
             Input.Clear();
             Output.Clear();
         }
+        public abstract NodeExecutionResult Execute();
+
+        public Dictionary<BaseConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =
+            new Dictionary<BaseConnector, ConnectorCacheDescriptor>();
+
         #endregion
     }
 }

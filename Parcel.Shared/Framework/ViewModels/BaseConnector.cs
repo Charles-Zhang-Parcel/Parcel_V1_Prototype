@@ -33,6 +33,13 @@ namespace Parcel.Shared.Framework.ViewModels
             get => _isConnected;
             set => SetField(ref _isConnected, value);
         }
+        
+        private bool _isVisible;
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => SetField(ref _isVisible, value);
+        }
 
         private Point _anchor;
         public Point Anchor

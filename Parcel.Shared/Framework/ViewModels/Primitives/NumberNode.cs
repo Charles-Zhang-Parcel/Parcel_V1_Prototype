@@ -13,10 +13,31 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             set => SetField(ref _number, value);
         }
         #endregion
-
+        
+        #region Node Interface
+        protected BaseConnector NumberOutput = new BaseConnector()
+        {
+            Title = "Number"
+        }; 
         public NumberNode()
         {
             Title = "Number";
+            Output.Clear();
+            Output.Add(NumberOutput);
         }
+        #endregion
+
+        #region Interface
+        public override NodeExecutionResult Execute()
+        {
+            ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor()
+            {
+                DataObject = _number,
+                DataType = CacheDataType.Number 
+            };
+            
+            return base.Execute();
+        }
+        #endregion
     }
 }

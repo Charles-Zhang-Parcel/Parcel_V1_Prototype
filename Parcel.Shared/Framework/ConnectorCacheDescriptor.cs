@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Imaging;
-
-namespace Parcel.Shared.Framework
+﻿namespace Parcel.Shared.Framework
 {
     public enum CacheDataType
     {
@@ -8,13 +6,13 @@ namespace Parcel.Shared.Framework
         Number,
         String,
         // Basic Numerical
-        Table
+        ParcelDataGrid
     }
     
     public struct ConnectorCacheDescriptor
     {
         public object DataObject { get; set; }
-        public CachedBitmap DataType { get; set; }
+        public CacheDataType DataType { get; set; }
 
         public bool IsAvailable => DataObject != null;
     }
