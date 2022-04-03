@@ -122,6 +122,16 @@ namespace Parcel.FrontEnd.NodifyWPF
             SpawnPreviewWindow(node);
             ExecuteAll();
         }
+        private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!(e.Source is Button {DataContext: OpenFileNode node})) return;
+            
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                node.Value = openFileDialog.FileName;
+            }
+        }
         #endregion
 
         #region Routine

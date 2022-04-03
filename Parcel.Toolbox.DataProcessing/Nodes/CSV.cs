@@ -18,7 +18,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Data Table"
+            Title = "Data Table",
+            Shape = ConnectorShape.Triangle
         }; 
         public CSV()
         {
