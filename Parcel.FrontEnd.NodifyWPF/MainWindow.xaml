@@ -253,6 +253,7 @@
                     <nodify:Node Header="{Binding Title}"
                                  Input="{Binding Input}"
                                  Output="{Binding Output}"
+                                 Content="{Binding}"
                                  MouseDoubleClick="NodeDoubleclick_OpenProperties">
                         <nodify:Node.Resources>
                             <SolidColorBrush Color="MediumPurple" x:Key="PreviewModeBorderColor"></SolidColorBrush>

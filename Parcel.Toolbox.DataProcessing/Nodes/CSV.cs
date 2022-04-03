@@ -26,8 +26,6 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             Input.Add(PathInput);
             Input.Add(HeaderInput);
             Output.Add(DataTableOutput);
-
-            Message.Content = "Test"; // TODO: Not working
         }
         #endregion
         
