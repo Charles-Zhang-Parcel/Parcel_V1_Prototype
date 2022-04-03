@@ -15,7 +15,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected BaseConnector TruthOutput = new BaseConnector(typeof(bool))
+        protected BaseConnector TruthOutput = new OutputConnector(typeof(bool))
         {
             Title = "Truth"
         }; 

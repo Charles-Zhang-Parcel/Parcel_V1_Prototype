@@ -51,12 +51,10 @@ namespace Parcel.Shared.Framework.ViewModels
 
         private void AddConnection(BaseConnector source, BaseConnector target)
         {
-            var sourceIsInput = source.FlowType == ConnectorFlowType.Input;
-
             source.Node.Graph.Connections.Add(new BaseConnection()
             {
-                Input = sourceIsInput ? source : target,
-                Output = sourceIsInput ? target : source
+                Input = source,
+                Output = target
             });
         }
 
@@ -85,7 +83,7 @@ namespace Parcel.Shared.Framework.ViewModels
             {
                 Location = location,
                 Flow = connector.FlowType,
-                Connector = new BaseConnector(connector.DataType)
+                Connector = new KnotConnector(connector.DataType)
                 {
                     MaxConnections = connection.Output.MaxConnections + connection.Input.MaxConnections,
                     Shape = connection.Input.Shape
@@ -94,7 +92,7 @@ namespace Parcel.Shared.Framework.ViewModels
             connection.Graph.Nodes.Add(knot);
 
             AddConnection(connector, knot.Connector);
-            AddConnection(knot.Connector, connection.Input);
+            AddConnection(knot.Connector, connection.Input);    // TODO: How does this handle input/output direction since Knot has only a single connector?
 
             connection.Remove();
         }

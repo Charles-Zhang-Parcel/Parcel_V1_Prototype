@@ -14,7 +14,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Node Interface
-        protected BaseConnector ValueOutput = new BaseConnector(typeof(string))
+        protected BaseConnector ValueOutput = new OutputConnector(typeof(string))
         {
             Title = "Value"
         }; 

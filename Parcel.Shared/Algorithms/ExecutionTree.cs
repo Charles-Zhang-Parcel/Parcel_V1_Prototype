@@ -11,22 +11,26 @@ namespace Parcel.Shared.Algorithms
         public Dictionary<ProcessorNode, ExecutionTreeNode> Traversed { get; set; } =
             new Dictionary<ProcessorNode, ExecutionTreeNode>();
 
+        #region Interface
         public void DraftTree(IEnumerable<ProcessorNode> targetNodes)
         {
             foreach (ProcessorNode node in targetNodes)
-                DraftBranchesForNode(node);
+                DraftBranchesForNode(null, node);
         }
+        public void ExecuteTree()
+        {
+            Roots.ForEach(tr => ExecuteTreeNode(tr));
+        }
+        #endregion
 
         #region Routines
-        private void DraftBranchesForNode(ProcessorNode node)
+        private void DraftBranchesForNode(ExecutionTreeNode last, ProcessorNode node)
         {
             if (Traversed.ContainsKey(node))
                 return;
 
-            ExecutionTreeNode treeNode = new ExecutionTreeNode()
-            {
-                Processor = node
-            };
+            ExecutionTreeNode treeNode = new ExecutionTreeNode(node);
+            if(last != null) treeNode.AddChild(last);
             Traversed.Add(node, treeNode);
             
             if(!node.Input.Any(i => i.IsConnected))
@@ -43,16 +47,34 @@ namespace Parcel.Shared.Algorithms
                         input = knot.Previous;
 
                     if(input is ProcessorNode processor)
-                        DraftBranchesForNode(processor);
+                        DraftBranchesForNode(treeNode, processor);
                 }
             }
+        }
+
+        private void ExecuteTreeNode(ExecutionTreeNode node)
+        {
+            node.Processor.Execute();
+            
+            foreach (ExecutionTreeNode childNode in node.Children)
+                ExecuteTreeNode(childNode);
         }
         #endregion
     }
 
     public class ExecutionTreeNode
     {
-        public ProcessorNode Processor { get; set; }
-        public ExecutionTreeNode Parent { get; set; }
+        public ProcessorNode Processor { get; }
+        public HashSet<ExecutionTreeNode> Children { get; } = new HashSet<ExecutionTreeNode>();
+
+        public ExecutionTreeNode(ProcessorNode processor)
+        {
+            Processor = processor;
+        }
+
+        public void AddChild(ExecutionTreeNode child)
+        {
+            Children.Add(child);
+        }
     }
 }

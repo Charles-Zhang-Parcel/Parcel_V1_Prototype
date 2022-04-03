@@ -16,7 +16,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        public readonly BaseConnector FilePathOutput = new BaseConnector(typeof(string))
+        public readonly BaseConnector FilePathOutput = new OutputConnector(typeof(string))
         {
             Title = "File"
         }; 
@@ -34,7 +34,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             ProcessorCache[FilePathOutput] = new ConnectorCacheDescriptor()
             {
                 DataObject = _path,
-                DataType = CacheDataType.Number 
+                DataType = CacheDataType.String,
             };
             
             return base.Execute();

@@ -8,11 +8,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class DataTable: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector PathInput = new BaseConnector(typeof(string))
+        public readonly BaseConnector PathInput = new InputConnector(typeof(string))
         {
             Title = "Path",
         };
-        public readonly BaseConnector DataTableOutput = new BaseConnector(typeof(DataGrid))
+        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 

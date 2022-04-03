@@ -89,7 +89,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                node.Value = openFileDialog.FileName;
+                node.Path = openFileDialog.FileName;
             }
         }
         private void ProcessorNodeTogglePreviewButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -97,17 +97,12 @@ namespace Parcel.FrontEnd.NodifyWPF
             if (!(sender is Border {Tag: ProcessorNode node} border)) return;
 
             node.IsPreview = !node.IsPreview;
-
-            if (node.IsPreview)
-                border.Background = border.BorderBrush;
-            else 
-                border.Background = Brushes.Transparent;
         }
         private void ProcessorNodePreviewButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button {Tag: ProcessorNode node} button)) return;
 
-            ProcessorNodeTogglePreviewButton_MouseDown((button.Parent as StackPanel)?.Children.OfType<Border>().Single(), null);
+            node.IsPreview = true;
             
             // Auto-Generate
             if ((node is CSV || node is DataTable)
@@ -120,7 +115,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    filePathNode.Value = openFileDialog.FileName;
+                    filePathNode.Path = openFileDialog.FileName;
                 }
             }
             
@@ -151,8 +146,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             ExecutionTree tree = new ExecutionTree();
             tree.DraftTree(processors);
-            
-            tree.Roots.ForEach(r => r.Processor.Execute());
+            tree.ExecuteTree();
             _previewWindows.ForEach(p => p.Update());
         }
         #endregion

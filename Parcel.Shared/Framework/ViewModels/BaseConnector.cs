@@ -10,7 +10,8 @@ namespace Parcel.Shared.Framework.ViewModels
     public enum ConnectorFlowType
     {
         Input,
-        Output
+        Output,
+        Knot
     }
 
     public enum ConnectorShape
@@ -20,8 +21,31 @@ namespace Parcel.Shared.Framework.ViewModels
         Square, // Boolean
     }
 
+    public class InputConnector : BaseConnector
+    {
+        public InputConnector(Type dataType) : base(dataType)
+        {
+            FlowType = ConnectorFlowType.Input;
+        }
+    }
+
+    public class OutputConnector : BaseConnector
+    {
+        public OutputConnector(Type dataType) : base(dataType)
+        {
+            FlowType = ConnectorFlowType.Output;
+        }
+    }
     
-    public class BaseConnector: ObservableObject
+    public class KnotConnector : BaseConnector
+    {
+        public KnotConnector(Type dataType) : base(dataType)
+        {
+            FlowType = ConnectorFlowType.Knot;
+        }
+    }
+    
+    public abstract class BaseConnector: ObservableObject
     {
         #region View Properties
         private string? _title;
@@ -69,7 +93,7 @@ namespace Parcel.Shared.Framework.ViewModels
         #endregion
 
         #region Other Properties
-        public ConnectorFlowType FlowType { get; private set; }
+        public ConnectorFlowType FlowType { get; protected set; }
         public int MaxConnections { get; set; } = 2;
         public NotifyObservableCollection<BaseConnection> Connections { get; } = new NotifyObservableCollection<BaseConnection>();
         
@@ -155,7 +179,10 @@ namespace Parcel.Shared.Framework.ViewModels
                 }
                 else
                 {
-                    return (T)DefaultDataStorage ?? default(T);
+                    if (Node is ProcessorNode processor && processor.ProcessorCache.ContainsKey(this))
+                        return (T) processor.ProcessorCache[this].DataObject;
+                    else
+                        return DefaultDataStorage != null ? (T) DefaultDataStorage : default(T);
                 }
             }
             else throw new ArgumentException("Wrong type.");

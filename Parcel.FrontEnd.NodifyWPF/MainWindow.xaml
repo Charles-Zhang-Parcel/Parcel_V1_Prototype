@@ -153,6 +153,7 @@
         <!--Data Converters-->
         <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
+        <converters:NodeMessageTypeToVisibilityConverter x:Key="NodeMessageTypeToVisibilityConverter" />
     </Window.Resources>
     <Grid Background="{StaticResource LargeGridLinesDrawingBrush}">
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -263,6 +264,14 @@
                                 </Style.Triggers>
                             </Style>
                         </nodify:Node.Resources>
+                        <nodify:Node.ContentTemplate>
+                            <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
+                                <Label Foreground="LightSlateGray" Margin="0" Padding="0"
+                                       Content="{Binding Message.Content}"
+                                       Visibility="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToVisibilityConverter}}">
+                                </Label>
+                            </DataTemplate>
+                        </nodify:Node.ContentTemplate>
                         <nodify:Node.InputConnectorTemplate>
                             <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                                 <nodify:NodeInput Header="{Binding Title}"
@@ -282,10 +291,22 @@
                                 <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                                     <StackPanel DockPanel.Dock="Right" Margin="0" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Border Margin="5, 0, 0, 0" Padding="0" Width="10" Height="10" CornerRadius="5"
-                                                BorderThickness="2" BorderBrush="{StaticResource PreviewModeBorderColor}" Background="Transparent" 
+                                                BorderThickness="2" BorderBrush="{StaticResource PreviewModeBorderColor}" 
                                                 MouseDown="ProcessorNodeTogglePreviewButton_MouseDown"
                                                 Tag="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:Node},Mode=FindAncestor}}"
+                                                DataContext="{Binding Path=DataContext, 
                                                     RelativeSource={RelativeSource AncestorType={x:Type nodify:Node},Mode=FindAncestor}}">
+                                            <Border.Resources>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="Transparent"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsPreview}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource PreviewModeBorderColor}"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Resources>
                                         </Border>
                                         <Button Content="Preview" 
                                                 Click="ProcessorNodePreviewButton_Click"

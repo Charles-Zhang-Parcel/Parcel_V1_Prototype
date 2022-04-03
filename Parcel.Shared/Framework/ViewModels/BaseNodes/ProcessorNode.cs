@@ -18,6 +18,13 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             get => _isPreview;
             set => SetField(ref _isPreview, value);
         }
+
+        private NodeMessage _message = new NodeMessage();
+        public NodeMessage Message
+        {
+            get => _message;
+            set => SetField(ref _message, value);
+        }
         #endregion
 
         #region Connectors

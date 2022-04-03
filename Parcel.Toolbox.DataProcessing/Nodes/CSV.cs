@@ -8,15 +8,15 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class CSV: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector PathInput = new BaseConnector(typeof(string))
+        public readonly BaseConnector PathInput = new InputConnector(typeof(string))
         {
             Title = "Path",
         };
-        public readonly  BaseConnector HeaderInput = new BaseConnector(typeof(bool))
+        public readonly  BaseConnector HeaderInput = new InputConnector(typeof(bool))
         {
             Title = "Contains Header"
         };
-        public readonly BaseConnector DataTableOutput = new BaseConnector(typeof(DataGrid))
+        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 
@@ -26,6 +26,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             Input.Add(PathInput);
             Input.Add(HeaderInput);
             Output.Add(DataTableOutput);
+
+            Message.Content = "Test"; // TODO: Not working
         }
         #endregion
         
@@ -44,6 +46,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 DataObject = new DataGrid(),
                 DataType = CacheDataType.ParcelDataGrid 
             };
+
+            Message.Content = "Loaded.";
+            Message.Type = NodeMessageType.Normal;
+            
             return new NodeExecutionResult(true, null);
         }
         #endregion
