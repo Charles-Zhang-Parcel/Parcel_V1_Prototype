@@ -16,7 +16,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected BaseConnector FilePathOutput = new BaseConnector()
+        protected BaseConnector FilePathOutput = new BaseConnector(typeof(string))
         {
             Title = "File"
         }; 

@@ -1,4 +1,7 @@
-﻿namespace Parcel.Shared.Framework.ViewModels.BaseNodes
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
     public class KnotNode : BaseNode
     {
@@ -18,5 +21,13 @@
         #endregion
 
         public ConnectorFlowType Flow { get; set; }
+
+        #region Accessor
+        public BaseNode Previous =>
+            Connector.Connections.SingleOrDefault(c => c.Input.Node != this)?.Input.Node ?? null;
+        public IEnumerable<BaseNode> Next => Connector.Connections
+            .Where(c => c.Input.Node == this || c.Output.IsConnected)
+            .Select(c => c.Output.Node);
+        #endregion
     }
 }

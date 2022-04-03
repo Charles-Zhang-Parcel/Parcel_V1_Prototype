@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Csv;
 
 namespace Parcel.Shared.DataTypes
 {
@@ -34,6 +35,17 @@ namespace Parcel.Shared.DataTypes
     
     public class DataGrid
     {
+        #region Constructors
+        public DataGrid(){}
+        public DataGrid(IEnumerable<ICsvLine> csvLines)
+        {
+            foreach (ICsvLine line in csvLines)
+            {
+                
+            }
+        }
+        #endregion
+
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
 
         #region Editors

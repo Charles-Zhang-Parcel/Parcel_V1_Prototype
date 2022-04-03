@@ -267,6 +267,61 @@
                                                    IsConnected="{Binding IsConnected}" />
                             </DataTemplate>
                         </nodify:Node.OutputConnectorTemplate>
+                        <nodify:Node.HeaderTemplate>
+                            <DataTemplate><!--The data type here is just a string-->
+                                <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                                    <StackPanel DockPanel.Dock="Right" Margin="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Margin="5, 0, 0, 0" Padding="0" Width="10" Height="10" CornerRadius="5"
+                                                BorderThickness="2" BorderBrush="MediumPurple" Background="Transparent" 
+                                                MouseDown="ProcessorNodeTogglePreviewButton_MouseDown"
+                                                Tag="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:Node},Mode=FindAncestor}}">
+                                        </Border>
+                                        <Button Content="Preview" 
+                                                Click="ProcessorNodePreviewButton_Click"
+                                                Tag="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:Node},Mode=FindAncestor}}">
+                                            <Button.Resources>
+                                                <!--Custom Styling-->
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="BorderBrush" Value="#272727"/>
+                                                    <Setter Property="Foreground" Value="DarkGray"/>
+                                                    <Setter Property="Margin" Value="2,0"/>
+                                                    <Setter Property="Padding" Value="2, 1"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                    <Setter Property="FontSize" Value="10"></Setter>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                                <Border Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        Margin="{TemplateBinding Margin}"
+                                                                        Padding="{TemplateBinding Padding}"
+                                                                        VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="SlateGray"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="4"/>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
+                                    </StackPanel>
+                                    <Label Content="{Binding }" 
+                                           Foreground="White" Margin="0" Padding="0"
+                                           VerticalAlignment="Center"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </nodify:Node.HeaderTemplate>
                     </nodify:Node>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:CommentNode}">

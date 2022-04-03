@@ -11,6 +11,13 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             get => _title;
             set => SetField(ref _title, value);
         }
+
+        private bool _isPreview;
+        public bool IsPreview
+        {
+            get => _isPreview;
+            set => SetField(ref _isPreview, value);
+        }
         #endregion
 
         #region Connectors

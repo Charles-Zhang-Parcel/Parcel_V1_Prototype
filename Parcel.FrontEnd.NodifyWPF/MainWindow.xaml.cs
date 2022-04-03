@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -19,6 +20,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using Nodify;
 using Parcel.Shared;
+using Parcel.Shared.Algorithms;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -75,7 +77,9 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            if (!(e.Source is Nodify.Node {DataContext: ProcessorNode node})) return;
+            
+            new PropertyWindow(this, node).Show();
         }
         private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
         {
@@ -87,15 +91,62 @@ namespace Parcel.FrontEnd.NodifyWPF
                 node.Value = openFileDialog.FileName;
             }
         }
+        private void ProcessorNodeTogglePreviewButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(e.Source is Border {Tag: ProcessorNode node} border)) return;
+
+            node.IsPreview = !node.IsPreview;
+
+            if (node.IsPreview)
+                border.Background = border.BorderBrush;
+            else 
+                border.Background = Brushes.Transparent;
+        }
+        private void ProcessorNodePreviewButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(e.Source is Border {Tag: ProcessorNode node} border)) return;
+
+            node.IsPreview = !node.IsPreview;
+
+            if (node.IsPreview)
+                border.Background = border.BorderBrush;
+            else 
+                border.Background = Brushes.Transparent;
+            
+            SpawnPreview(node);
+            ExecuteAll();
+        }
         #endregion
 
         #region Routine
-
         private void SpawnNode(ToolboxNodeExport tool)
         {
             BaseNode node = (BaseNode) Activator.CreateInstance(LastTool.Type);
             Canvas.Nodes.Add(node);
         }
+        private void SpawnPreview(ProcessorNode node)
+        {
+            PreviewWindow preview = new PreviewWindow(this, node);
+            _previewWindows.Add(preview);
+            preview.Closed += (sender, args) => _previewWindows.Remove(sender as PreviewWindow); 
+            preview.Show();
+        }
+        private void ExecuteAll()
+        {
+            var processors = Canvas.Nodes
+                .Where(n => n is ProcessorNode node && node.IsPreview == true)
+                .Select(n => n as ProcessorNode);
+            
+            ExecutionTree tree = new ExecutionTree();
+            tree.DraftTree(processors);
+            
+            tree.Roots.ForEach(r => r.Processor.Execute());
+            _previewWindows.ForEach(p => p.Update());
+        }
+        #endregion
+
+        #region State
+        private readonly List<PreviewWindow> _previewWindows = new List<PreviewWindow>();
         #endregion
     }
 }

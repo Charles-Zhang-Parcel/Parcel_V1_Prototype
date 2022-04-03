@@ -15,7 +15,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected BaseConnector NumberOutput = new BaseConnector()
+        protected BaseConnector NumberOutput = new BaseConnector(typeof(double))
         {
             Title = "Number"
         }; 

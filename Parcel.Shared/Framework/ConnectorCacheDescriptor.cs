@@ -3,10 +3,11 @@
     public enum CacheDataType
     {
         // Primitive
+        Boolean,
         Number,
         String,
         // Basic Numerical
-        ParcelDataGrid
+        ParcelDataGrid,
     }
     
     public struct ConnectorCacheDescriptor

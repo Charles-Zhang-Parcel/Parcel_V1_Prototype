@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Csv" Version="2.0.67" />
+    </ItemGroup>
+
 </Project>

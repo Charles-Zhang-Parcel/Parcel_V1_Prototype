@@ -85,7 +85,7 @@ namespace Parcel.Shared.Framework.ViewModels
             {
                 Location = location,
                 Flow = connector.FlowType,
-                Connector = new BaseConnector
+                Connector = new BaseConnector(connector.DataType)
                 {
                     MaxConnections = connection.Output.MaxConnections + connection.Input.MaxConnections,
                     Shape = connection.Input.Shape

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
@@ -16,8 +17,7 @@ namespace Parcel.Shared.Algorithms
             
             if (self is KnotNode knot)
             {
-                var outConnections = knot.Connector.Connections.Where(c => c.Input.Node == self || c.Output.IsConnected)
-                    .Select(c => c.Output.Node);
+                IEnumerable<BaseNode> outConnections = knot.Next;
                 return outConnections.Any(c => FindSelf(startingNode, c));
             }
             else if (self is ProcessorNode processor)

@@ -5,7 +5,8 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
                   mc:Ignorable="d"
-                  Title="PropertyWindow" Height="450" Width="800">
+                  Title="PropertyWindow" Height="450" Width="800"
+                  DataContext="{Binding RelativeSource={RelativeSource self}}">
     <Grid>
         
     </Grid>

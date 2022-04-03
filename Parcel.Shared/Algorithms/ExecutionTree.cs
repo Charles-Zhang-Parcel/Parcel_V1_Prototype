@@ -33,13 +33,14 @@ namespace Parcel.Shared.Algorithms
                 Roots.Add(treeNode);
             else
             {
-                foreach (BaseNode transInput in node.Input.Where(i => i.IsConnected)
+                foreach (BaseNode iter in node.Input.Where(i => i.IsConnected)
                     .Select(i => i.Connections.Single())
                     .Select(c => c.Input.Node))
                 {
-                    BaseNode input = transInput;
+                    BaseNode input = iter;
+                    
                     while (input is KnotNode knot)
-                        input = knot.Connector.Connections.SingleOrDefault(c => c.Input.Node != transInput)?.Input.Node ?? null;
+                        input = knot.Previous;
 
                     if(input is ProcessorNode processor)
                         DraftBranchesForNode(processor);
