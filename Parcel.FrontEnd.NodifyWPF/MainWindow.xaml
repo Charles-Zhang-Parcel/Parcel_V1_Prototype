@@ -253,6 +253,16 @@
                                  Input="{Binding Input}"
                                  Output="{Binding Output}"
                                  MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                        <nodify:Node.Resources>
+                            <SolidColorBrush Color="MediumPurple" x:Key="PreviewModeBorderColor"></SolidColorBrush>
+                            <Style TargetType="{x:Type nodify:Node}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPreview}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{StaticResource PreviewModeBorderColor}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </nodify:Node.Resources>
                         <nodify:Node.InputConnectorTemplate>
                             <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                                 <nodify:NodeInput Header="{Binding Title}"
@@ -272,7 +282,7 @@
                                 <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                                     <StackPanel DockPanel.Dock="Right" Margin="0" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Border Margin="5, 0, 0, 0" Padding="0" Width="10" Height="10" CornerRadius="5"
-                                                BorderThickness="2" BorderBrush="MediumPurple" Background="Transparent" 
+                                                BorderThickness="2" BorderBrush="{StaticResource PreviewModeBorderColor}" Background="Transparent" 
                                                 MouseDown="ProcessorNodeTogglePreviewButton_MouseDown"
                                                 Tag="{Binding Path=DataContext, 
                                                     RelativeSource={RelativeSource AncestorType={x:Type nodify:Node},Mode=FindAncestor}}">

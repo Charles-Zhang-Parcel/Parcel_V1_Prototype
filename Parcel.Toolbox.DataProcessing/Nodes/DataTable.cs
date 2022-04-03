@@ -5,26 +5,21 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    public class CSV: ProcessorNode
+    public class DataTable: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector PathInput = new BaseConnector(typeof(string))
         {
             Title = "Path",
         };
-        public readonly  BaseConnector HeaderInput = new BaseConnector(typeof(bool))
-        {
-            Title = "Contains Header"
-        };
         public readonly BaseConnector DataTableOutput = new BaseConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 
-        public CSV()
+        public DataTable()
         {
-            Title = "CSV";
+            Title = "Data Table";
             Input.Add(PathInput);
-            Input.Add(HeaderInput);
             Output.Add(DataTableOutput);
         }
         #endregion
@@ -32,12 +27,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Processor Interface
         public override NodeExecutionResult Execute()
         {
-            CSVParameter parameter = new CSVParameter()
-            {
-                InputPath = PathInput.FetchInputValue<string>(),
-                InputContainsHeader = HeaderInput.FetchInputValue<bool>()
-            };
-            DataProcessingHelper.CSV(parameter);
+            // Read from file
+            // ...
             
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor()
             {

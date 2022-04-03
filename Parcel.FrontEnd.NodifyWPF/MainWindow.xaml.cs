@@ -28,6 +28,7 @@ using Parcel.Shared.Framework.ViewModels.Primitives;
 using Parcel.Toolbox.Basic;
 using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
+using Parcel.Toolbox.DataProcessing.Nodes;
 using Parcel.Toolbox.FileSystem;
 using Parcel.Toolbox.Finance;
 using BaseConnection = Parcel.Shared.Framework.ViewModels.BaseConnection;
@@ -93,7 +94,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void ProcessorNodeTogglePreviewButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!(e.Source is Border {Tag: ProcessorNode node} border)) return;
+            if (!(sender is Border {Tag: ProcessorNode node} border)) return;
 
             node.IsPreview = !node.IsPreview;
 
@@ -104,27 +105,38 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void ProcessorNodePreviewButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(e.Source is Border {Tag: ProcessorNode node} border)) return;
+            if (!(sender is Button {Tag: ProcessorNode node} button)) return;
 
-            node.IsPreview = !node.IsPreview;
-
-            if (node.IsPreview)
-                border.Background = border.BorderBrush;
-            else 
-                border.Background = Brushes.Transparent;
+            ProcessorNodeTogglePreviewButton_MouseDown((button.Parent as StackPanel)?.Children.OfType<Border>().Single(), null);
             
-            SpawnPreview(node);
+            // Auto-Generate
+            if ((node is CSV || node is DataTable)
+                && node.Input.All(i => i.Connections.Count == 0))
+            {
+                OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode))) as OpenFileNode;
+                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput,
+                    (node is CSV csv) ? csv.PathInput : (node as DataTable).PathInput);
+                
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    filePathNode.Value = openFileDialog.FileName;
+                }
+            }
+            
+            SpawnPreviewWindow(node);
             ExecuteAll();
         }
         #endregion
 
         #region Routine
-        private void SpawnNode(ToolboxNodeExport tool)
+        private BaseNode SpawnNode(ToolboxNodeExport tool)
         {
-            BaseNode node = (BaseNode) Activator.CreateInstance(LastTool.Type);
+            BaseNode node = (BaseNode) Activator.CreateInstance(tool.Type);
             Canvas.Nodes.Add(node);
+            return node;
         }
-        private void SpawnPreview(ProcessorNode node)
+        private void SpawnPreviewWindow(ProcessorNode node)
         {
             PreviewWindow preview = new PreviewWindow(this, node);
             _previewWindows.Add(preview);
