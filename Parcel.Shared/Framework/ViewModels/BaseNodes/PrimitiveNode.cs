@@ -16,8 +16,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Node Interface
         protected BaseConnector ValueOutput = new OutputConnector(typeof(string))
         {
-            Title = "Value",
-            Shape = ConnectorShape.Circle
+            Title = "Value"
         }; 
         public PrimitiveNode()
         {

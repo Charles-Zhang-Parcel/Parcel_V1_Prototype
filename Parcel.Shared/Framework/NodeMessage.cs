@@ -9,7 +9,7 @@ namespace Parcel.Shared.Framework
         Error
     }
     
-    public class NodeMessage:ObservableObject
+    public class NodeMessage: ObservableObject
     {
         #region Public View Properties
         private NodeMessageType _type;
