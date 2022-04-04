@@ -144,9 +144,9 @@ namespace Parcel.FrontEnd.NodifyWPF
                 .Where(n => n is ProcessorNode node && node.IsPreview == true)
                 .Select(n => n as ProcessorNode);
             
-            ExecutionTree tree = new ExecutionTree();
-            tree.DraftTree(processors);
-            tree.ExecuteTree();
+            IExecutionGraph graph = new ExecutionQueue();
+            graph.InitializeGraph(processors);
+            graph.ExecuteGraph();
             _previewWindows.ForEach(p => p.Update());
         }
         #endregion

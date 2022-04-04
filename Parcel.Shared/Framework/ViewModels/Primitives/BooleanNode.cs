@@ -8,7 +8,12 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #region View Components
         public bool Boolean
         {
-            get => bool.Parse(_value);
+            get
+            {
+                if (bool.TryParse(_value, out bool result))
+                    return result;
+                return false;
+            }
             set => SetField(ref _value, value.ToString());
         }
         #endregion

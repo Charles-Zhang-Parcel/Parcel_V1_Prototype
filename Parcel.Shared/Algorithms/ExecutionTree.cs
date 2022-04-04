@@ -1,26 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
-using YamlDotNet.Serialization.NodeDeserializers;
 
 namespace Parcel.Shared.Algorithms
 {
-    public class ExecutionTree
+    public class ExecutionTree: IExecutionGraph
     {
-        public List<ExecutionTreeNode> Roots { get; set; } = new List<ExecutionTreeNode>();
-        public Dictionary<ProcessorNode, ExecutionTreeNode> Traversed { get; set; } =
+        #region Internal State
+        private List<ExecutionTreeNode> Roots { get; set; } = new List<ExecutionTreeNode>();
+        private Dictionary<ProcessorNode, ExecutionTreeNode> Traversed { get; set; } =
             new Dictionary<ProcessorNode, ExecutionTreeNode>();
+        #endregion
 
         #region Interface
-        public void DraftTree(IEnumerable<ProcessorNode> targetNodes)
+        public void InitializeGraph(IEnumerable<ProcessorNode> targetNodes)
         {
+            // TODO: Currently we are not able to deal with a single node has multiple inputs
             foreach (ProcessorNode node in targetNodes)
                 DraftBranchesForNode(null, node);
         }
-        public void ExecuteTree()
-        {
-            Roots.ForEach(tr => ExecuteTreeNode(tr));
-        }
+        public void ExecuteGraph()
+            => Roots.ForEach(ExecuteTreeNode);
         #endregion
 
         #region Routines
@@ -62,7 +62,7 @@ namespace Parcel.Shared.Algorithms
         #endregion
     }
 
-    public class ExecutionTreeNode
+    internal class ExecutionTreeNode
     {
         public ProcessorNode Processor { get; }
         public HashSet<ExecutionTreeNode> Children { get; } = new HashSet<ExecutionTreeNode>();
