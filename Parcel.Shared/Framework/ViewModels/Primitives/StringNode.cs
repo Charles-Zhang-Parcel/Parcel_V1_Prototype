@@ -9,5 +9,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         {
             Title = "String";
         }
+
+        public override OutputConnector MainOutput => ValueOutput as OutputConnector;
     }
 }

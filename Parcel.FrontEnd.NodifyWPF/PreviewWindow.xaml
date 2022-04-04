@@ -8,6 +8,15 @@
             Title="PreviewWindow" Height="450" Width="800"
             DataContext="{Binding RelativeSource={RelativeSource self}}">
     <Grid>
-        <Label Content="{Binding TestLabel}"></Label>
+        <Grid Visibility="{Binding InfoGridVisibility}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Label Content="{Binding TestLabel}"></Label>    
+        </Grid>
+        
+        <Grid Visibility="{Binding DataGridVisibility}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <DataGrid x:Name="WpfDataGrid" IsReadOnly="True"
+                      AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"></DataGrid>
+        </Grid>
+        
+        <Grid x:Name="WindowGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Grid>
     </Grid>
 </local:BaseWindow>

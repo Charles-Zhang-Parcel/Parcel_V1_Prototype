@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Csv;
 
@@ -39,14 +40,45 @@ namespace Parcel.Shared.DataTypes
         public DataGrid(){}
         public DataGrid(IEnumerable<ICsvLine> csvLines)
         {
+            string[] headers = null;
             foreach (ICsvLine line in csvLines)
             {
+                // Initialize columns
+                if (headers == null)
+                {
+                    headers = line.Headers;
+                    foreach (string header in headers)
+                        Columns.Add(new DataColumn() {Header = header});
+                }
                 
+                // Add data to columns
+                for (var i = 0; i < headers.Length; i++)
+                    Columns[i].ColumnData.Add(line[i]);
             }
         }
         #endregion
 
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
+
+        #region Accessors
+        public List<dynamic> Rows
+        {
+            get
+            {
+                int colCount = Columns.Count;
+                int rowCount = Columns.First().ColumnData.Count;
+                List<dynamic> rows = new List<dynamic>();
+                for (int row = 0; row < rowCount; row++)
+                {
+                    dynamic temp = new ExpandoObject();
+                    for (int col = 0; col < colCount; col++)
+                        ((IDictionary<String, Object>)temp)[Columns[col].Header] = Columns[col].ColumnData[row];
+                    rows.Add(temp);
+                }
+                return rows;
+            }
+        }
+        #endregion
 
         #region Editors
         public void AddRow(params object[] values)

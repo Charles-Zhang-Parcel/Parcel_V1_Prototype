@@ -30,6 +30,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
         
         #region Processor Interface
+        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
             CSVParameter parameter = new CSVParameter()
@@ -41,7 +42,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor()
             {
-                DataObject = new DataGrid(),
+                DataObject = parameter.OutputTable,
                 DataType = CacheDataType.ParcelDataGrid 
             };
 

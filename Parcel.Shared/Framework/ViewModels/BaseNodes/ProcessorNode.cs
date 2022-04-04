@@ -46,6 +46,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             Input.Clear();
             Output.Clear();
         }
+        public abstract OutputConnector MainOutput { get; }
         public abstract NodeExecutionResult Execute();
 
         public Dictionary<BaseConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =

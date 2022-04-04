@@ -194,7 +194,7 @@
                             <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                                 <DockPanel LastChildFill="True">
                                     <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
-                                    <TextBox Text="{Binding Value}"
+                                    <TextBox Text="{Binding Path}"
                                              MinWidth="100"
                                              Margin="5 0 0 0" />
                                 </DockPanel>

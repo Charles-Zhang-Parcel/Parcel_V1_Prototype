@@ -25,6 +25,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
         
         #region Processor Interface
+        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
             // Read from file

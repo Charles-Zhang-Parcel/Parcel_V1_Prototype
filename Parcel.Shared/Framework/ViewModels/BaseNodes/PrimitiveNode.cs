@@ -2,7 +2,7 @@
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
-    public class PrimitiveNode: ProcessorNode
+    public abstract class PrimitiveNode: ProcessorNode
     {
         #region Public View Properties
         private string _value;

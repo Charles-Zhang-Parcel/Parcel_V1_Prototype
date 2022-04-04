@@ -28,6 +28,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
 
         #region Interface
+        public override OutputConnector MainOutput => NumberOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
             ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor()
