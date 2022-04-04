@@ -7,11 +7,10 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
     public class OpenFileNode: StringNode
     {
         #region View Components
-        private string? _path;
-        public string? Path
+        public string Path
         {
-            get => _path;
-            set => SetField(ref _path, File.Exists(value) ? value : null);
+            get => _value;
+            set => SetField(ref _value, File.Exists(value) ? value : null);
         }
         #endregion
         
@@ -33,7 +32,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         {
             ProcessorCache[FilePathOutput] = new ConnectorCacheDescriptor()
             {
-                DataObject = _path,
+                DataObject = Path,
                 DataType = CacheDataType.String,
             };
             

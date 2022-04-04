@@ -6,11 +6,10 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
     public class NumberNode: PrimitiveNode
     {
         #region View Components
-        private double? _number;
         public double? Number
         {
-            get => _number;
-            set => SetField(ref _number, value);
+            get => double.Parse(_value);
+            set => SetField(ref _value, value.ToString());
         }
         #endregion
         
@@ -33,7 +32,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         {
             ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor()
             {
-                DataObject = _number,
+                DataObject = Number,
                 DataType = CacheDataType.Number 
             };
             

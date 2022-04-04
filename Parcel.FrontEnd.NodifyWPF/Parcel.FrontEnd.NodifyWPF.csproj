@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="DataTemplateSelectors" />
       <Folder Include="Nodes" />
       <Folder Include="PreviewWindows" />
       <Folder Include="PropertyWindows" />

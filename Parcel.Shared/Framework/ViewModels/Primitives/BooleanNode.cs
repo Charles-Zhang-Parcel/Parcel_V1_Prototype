@@ -6,11 +6,10 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
     public class BooleanNode: PrimitiveNode
     {
         #region View Components
-        private bool? _boolean;
-        public bool? Boolean
+        public bool Boolean
         {
-            get => _boolean;
-            set => SetField(ref _boolean, value);
+            get => bool.Parse(_value);
+            set => SetField(ref _value, value.ToString());
         }
         #endregion
         
@@ -33,7 +32,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         {
             ProcessorCache[TruthOutput] = new ConnectorCacheDescriptor()
             {
-                DataObject = _boolean,
+                DataObject = Boolean,
                 DataType = CacheDataType.Boolean 
             };
             

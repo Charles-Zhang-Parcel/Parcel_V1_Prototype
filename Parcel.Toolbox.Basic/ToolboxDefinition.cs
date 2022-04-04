@@ -15,8 +15,9 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("Comment", typeof(CommentNode)),
             null, // Divisor line
             new ToolboxNodeExport("Number", typeof(NumberNode)),
-            new ToolboxNodeExport("File", typeof(OpenFileNode)),
             new ToolboxNodeExport("String", typeof(StringNode)),
+            new ToolboxNodeExport("Boolean", typeof(BooleanNode)),
+            new ToolboxNodeExport("File", typeof(OpenFileNode)),
         };
         #endregion
     }
