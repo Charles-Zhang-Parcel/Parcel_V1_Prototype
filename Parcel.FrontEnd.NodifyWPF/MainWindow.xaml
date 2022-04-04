@@ -171,13 +171,14 @@
     </Window.Resources>
     <Grid Background="{StaticResource LargeGridLinesDrawingBrush}">
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                             x:Name="Editor"
+                             x:Name="Editor" DisableAutoPanning="True"
                              Background="{StaticResource SmallGridLinesDrawingBrush}"
                              ItemsSource="{Binding Canvas.Nodes}"
                              Connections="{Binding Canvas.Connections}"
                              PendingConnection="{Binding Canvas.PendingConnection}"
                              SelectedItems="{Binding Canvas.SelectedNodes}"
-                             DisconnectConnectorCommand="{Binding Canvas.DisconnectConnectorCommand}">
+                             DisconnectConnectorCommand="{Binding Canvas.DisconnectConnectorCommand}"
+                             MouseRightButtonUp="Editor_OnMouseRightButtonUp">
             <nodify:NodifyEditor.PendingConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:PendingConnection}">
                     <nodify:PendingConnection Source="{Binding Source, Mode=OneWayToSource}"
@@ -195,6 +196,10 @@
                             Command="{Binding Canvas.CommentSelectionCommand}" />
                 <KeyBinding Key="R"
                             Command="{Binding RepeatLastCommand}" />
+                <KeyBinding Key="S" Modifiers="Control"
+                            Command="{Binding SaveCanvasCommand}" />
+                <KeyBinding Key="O" Modifiers="Control"
+                            Command="{Binding OpenCanvasCommand}" />
             </nodify:NodifyEditor.InputBindings>
             <nodify:NodifyEditor.Resources>
                 <!--Node Type Data Templates-->

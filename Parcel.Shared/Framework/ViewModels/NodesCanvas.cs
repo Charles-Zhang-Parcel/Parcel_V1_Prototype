@@ -1,9 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
+    public class CanvasSerialization
+    {
+        public List<BaseNode> Nodes { get; set; }
+        public List<BaseConnection> Connections { get; set; }
+    }
+    
     public class NodesCanvas: ObservableObject
     {
         public NodesCanvas()
@@ -71,15 +80,42 @@ namespace Parcel.Shared.Framework.ViewModels
             set => SetField(ref _connections, value);
         }
         #endregion
-        
+
+        #region Interface
+        public void Open(string path)
+        {
+            string text = File.ReadAllText(path);
+            CanvasSerialization loaded = new YamlDotNet.Serialization.Deserializer().Deserialize<CanvasSerialization>(text);
+            
+            SelectedNodes.Clear();
+            Nodes.Clear(); Nodes.AddRange(loaded.Nodes);
+            Connections.Clear(); Connections.AddRange(loaded.Connections);
+        }
+
+        public void Save(string path)
+        {
+            string text = new YamlDotNet.Serialization.Serializer().Serialize(new CanvasSerialization()
+            {
+                Nodes = new List<BaseNode>(Nodes),
+                Connections = new List<BaseConnection>(Connections)
+            });
+            File.WriteAllText(path, text);
+        }
+        #endregion
+
+        #region Intermediate Data
         public PendingConnection PendingConnection { get; }
         public GraphSchema Schema { get; }
+        #endregion
 
+        #region Commands
         public ICommand DeleteSelectionCommand { get; }
         public ICommand DisconnectConnectorCommand { get; }
         public ICommand CreateConnectionCommand { get; }
         public ICommand CommentSelectionCommand { get; }
+        #endregion
 
+        #region Routines
         private void DeleteSelection()
         {
             var selected = SelectedNodes.ToList();
@@ -89,5 +125,6 @@ namespace Parcel.Shared.Framework.ViewModels
                 Nodes.Remove(selected[i]);
             }
         }
+        #endregion
     }
 }

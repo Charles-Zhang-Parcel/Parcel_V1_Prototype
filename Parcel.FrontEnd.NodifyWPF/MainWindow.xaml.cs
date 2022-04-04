@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -45,6 +47,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         public MainWindow()
         {
             RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool), () => LastTool != null);
+            SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(), () => Canvas.Nodes.Count != 0);
+            OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             
             InitializeComponent();
         }
@@ -54,28 +58,18 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Commands
         private ToolboxNodeExport LastTool { get; set; }
         public ICommand RepeatLastCommand { get; }
+        public ICommand SaveCanvasCommand { get; }
+        public ICommand OpenCanvasCommand { get; }
         #endregion
 
         #region Events
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
-            {
-                var cursor = Mouse.GetPosition(this);
-
-                PopupTab popupTab = new PopupTab(this)
-                {
-                    Left = this.Left + cursor.X,
-                    Top = this.Top + cursor.Y
-                };
-                popupTab.ShowDialog();
-                if (popupTab.ToolSelection != null)
-                {
-                    LastTool = popupTab.ToolSelection;
-                    SpawnNode(LastTool);
-                }
-            }
+               ShowSearchNodePopup();
         }
+        private void Editor_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+            => ShowSearchNodePopup();
         private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
         {
             if (!(e.Source is Nodify.Node {DataContext: ProcessorNode node})) return;
@@ -128,6 +122,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         private BaseNode SpawnNode(ToolboxNodeExport tool)
         {
             BaseNode node = (BaseNode) Activator.CreateInstance(tool.Type);
+            node!.Location = Editor.MouseLocation;
             Canvas.Nodes.Add(node);
             return node;
         }
@@ -149,10 +144,76 @@ namespace Parcel.FrontEnd.NodifyWPF
             graph.ExecuteGraph();
             _previewWindows.ForEach(p => p.Update());
         }
+        private void ShowSearchNodePopup()
+        {
+            var cursor = Mouse.GetPosition(this);
+            var rect = GetWindowRectangle(this);
+
+            PopupTab popupTab = new PopupTab(this)
+            {
+                Left = this.WindowState == WindowState.Maximized ? rect.Left : this.Left + cursor.X,
+                Top = this.WindowState == WindowState.Maximized ? rect.Top : this.Top + cursor.Y,
+                Topmost = true
+            };
+            popupTab.Closed += delegate
+            {
+                if (popupTab.ToolSelection != null)
+                {
+                    LastTool = popupTab.ToolSelection;
+                    SpawnNode(LastTool);
+                }
+            };
+            popupTab.MouseLeave += delegate { popupTab.Close(); };
+            popupTab.Show();
+        }
+        private void OpenCanvas()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string path = openFileDialog.FileName;
+                Canvas.Open(path);
+            }
+        }
+        private void SaveCanvas()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string path = saveFileDialog.FileName;
+                Canvas.Save(path);
+            }
+        }
         #endregion
 
         #region State
         private readonly List<PreviewWindow> _previewWindows = new List<PreviewWindow>();
+        #endregion
+
+        #region Interop
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        // Make sure RECT is actually OUR defined struct, not the windows rect.
+        public static RECT GetWindowRectangle(Window window)
+        {
+            RECT rect;
+            GetWindowRect((new WindowInteropHelper(window)).Handle, out rect);
+
+            return rect;
+        }
         #endregion
     }
 }

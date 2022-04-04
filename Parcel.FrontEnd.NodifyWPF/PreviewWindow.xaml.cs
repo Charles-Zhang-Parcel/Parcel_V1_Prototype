@@ -117,7 +117,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                 // now set up a column and binding for each property
                 var column = new DataGridTextColumn 
                 {
-                    Header = text,
+                    Header = text.Trim().Trim('"'),
                     Binding = new Binding(text)
                 };
                 WpfDataGrid.Columns.Add(column);
