@@ -155,7 +155,7 @@ namespace Parcel.Shared.Framework.ViewModels
                 throw new InvalidOperationException("Input connector has more than 1 connection.");
 
             BaseConnection connection = Connections.SingleOrDefault();
-            if (typeof(T) == DataType)
+            if (typeof(T) == DataType || typeof(T).IsAssignableFrom(DataType))
             {
                 if (connection != null)
                 {

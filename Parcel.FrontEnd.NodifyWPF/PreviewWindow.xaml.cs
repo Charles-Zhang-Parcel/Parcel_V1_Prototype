@@ -77,14 +77,9 @@ namespace Parcel.FrontEnd.NodifyWPF
                 ConnectorCacheDescriptor cache = Node.ProcessorCache[output];
                 switch (cache.DataType)
                 {
+                    case CacheDataType.Generic:
                     case CacheDataType.Boolean:
-                        TestLabel = $"{cache.DataObject}";
-                        InfoGridVisibility = Visibility.Visible;
-                        break;
                     case CacheDataType.Number:
-                        TestLabel = $"{cache.DataObject}";
-                        InfoGridVisibility = Visibility.Visible;
-                        break;
                     case CacheDataType.String:
                         TestLabel = $"{cache.DataObject}";
                         InfoGridVisibility = Visibility.Visible;

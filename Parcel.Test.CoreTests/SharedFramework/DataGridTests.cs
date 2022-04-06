@@ -35,10 +35,10 @@ namespace Parcel.Test.CoreTests.SharedFramework
         [Test]
         public void DataGridCorrectColumnTypes()
         {
-            Assert.AreEqual(typeof(int), TestDataGrid.Columns[0].ColumnType);
-            Assert.AreEqual(typeof(double), TestDataGrid.Columns[1].ColumnType);
-            Assert.AreEqual(typeof(string), TestDataGrid.Columns[2].ColumnType);
-            Assert.AreEqual(typeof(bool), TestDataGrid.Columns[3].ColumnType);
+            Assert.AreEqual(typeof(int), TestDataGrid.Columns[0].TypeName);
+            Assert.AreEqual(typeof(double), TestDataGrid.Columns[1].TypeName);
+            Assert.AreEqual(typeof(string), TestDataGrid.Columns[2].TypeName);
+            Assert.AreEqual(typeof(bool), TestDataGrid.Columns[3].TypeName);
         }
         #endregion
 

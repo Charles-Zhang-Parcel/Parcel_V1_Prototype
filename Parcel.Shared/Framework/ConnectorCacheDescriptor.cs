@@ -8,6 +8,10 @@
         String,
         // Basic Numerical
         ParcelDataGrid,
+        // Advanced
+        Array,
+        Generic,
+        BatchJob
     }
     
     public struct ConnectorCacheDescriptor
