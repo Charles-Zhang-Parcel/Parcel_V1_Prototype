@@ -82,8 +82,10 @@ namespace Parcel.Toolbox.Finance
             if (parameter.InputTable != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName)
                                              && parameter.InputTable.Columns.All(c => c.Header != parameter.InputColumnName))
                 throw new ArgumentException("Cannot find column with specified name on data table");
-            
-            parameter.OutputValue = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName).Variance();
+
+            var column = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName);
+            bool usePopulation = column.Length > 50;
+            parameter.OutputValue = column.Variance(usePopulation);
         }
         
         public static void StandardDeviation(StandardDeviationParameter parameter)
@@ -96,7 +98,9 @@ namespace Parcel.Toolbox.Finance
                                              && parameter.InputTable.Columns.All(c => c.Header != parameter.InputColumnName))
                 throw new ArgumentException("Cannot find column with specified name on data table");
             
-            parameter.OutputValue = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName).STD();
+            var column = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName);
+            bool usePopulation = column.Length > 50;
+            parameter.OutputValue = column.STD(usePopulation);
         }
         
         public static void Min(MinParameter parameter)

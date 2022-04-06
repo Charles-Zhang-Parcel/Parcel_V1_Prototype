@@ -44,7 +44,7 @@ namespace Parcel.Shared.DataTypes
             IEnumerable<double> list = _columnData.Cast<double>();
             return list.Average();
         }
-        public double Variance()
+        public double Variance(bool population)
         {
             if (_columnType != typeof(double))
                 throw new InvalidOperationException("Column is not of numerical type.");
@@ -56,15 +56,15 @@ namespace Parcel.Shared.DataTypes
                 double avg = values.Average();
                 variance += values.Sum(value => Math.Pow(value - avg, 2.0));
             }
-            return variance;
+            return variance / (population ? values.Length - 1 : values.Length); // For population, use n-1, for sample, use n
         }
-        public double STD()
+        public double STD(bool population)
         {
             if (_columnType != typeof(double))
                 throw new InvalidOperationException("Column is not of numerical type.");
 
             IEnumerable<double> list = _columnData.Cast<double>();
-            return Math.Sqrt(Variance());
+            return Math.Sqrt(Variance(population));
         }
         public double Min()
         {
@@ -163,6 +163,14 @@ namespace Parcel.Shared.DataTypes
         public void AddColumn(string columnName)
         {
             Columns.Add(new DataColumn(){ Header = columnName});
+        }
+        public void AddColumnFrom(DataColumn refColumn, int rowCount)
+        {
+            var column = new DataColumn() {Header = refColumn.Header};
+            var count = rowCount == 0 ? refColumn.Length : rowCount;
+            for (int i = 0; i < count; i++)
+                column.Add(refColumn[i]);
+            Columns.Add(column);
         }
         #endregion
     }

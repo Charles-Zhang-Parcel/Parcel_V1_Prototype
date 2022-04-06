@@ -20,6 +20,7 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Validate", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Reinterpret", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Sort", typeof(object)),
+            new ToolboxNodeExport("Take", typeof(Take)),
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
             new ToolboxNodeExport("Convert", typeof(object)), // Act on individual columns
