@@ -9,6 +9,7 @@
         xmlns:baseNodes="clr-namespace:Parcel.Shared.Framework.ViewModels.BaseNodes;assembly=Parcel.Shared"
         xmlns:primitives="clr-namespace:Parcel.Shared.Framework.ViewModels.Primitives;assembly=Parcel.Shared"
         xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
+        xmlns:specialNodes="clr-namespace:Parcel.FrontEnd.NodifyWPF.SpecialNodes"
         mc:Ignorable="d"
         Title="Parcel - Workflow Engine" Height="450" Width="800"
         Background="#1E1E1E"
@@ -203,40 +204,6 @@
             </nodify:NodifyEditor.InputBindings>
             <nodify:NodifyEditor.Resources>
                 <!--Node Type Data Templates-->
-                <DataTemplate DataType="{x:Type primitives:OpenFileNode}">
-                    <nodify:Node Header="{Binding Title}"
-                                 Content="{Binding}"
-                                 Input="{Binding Input}"
-                                 Output="{Binding Output}"
-                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
-                        <nodify:Node.ContentTemplate>
-                            <DataTemplate DataType="{x:Type primitives:OpenFileNode}">
-                                <DockPanel LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
-                                    <TextBox Text="{Binding Path}"
-                                             MinWidth="100"
-                                             Margin="5 0 0 0" />
-                                </DockPanel>
-                            </DataTemplate>
-                        </nodify:Node.ContentTemplate>
-                        <nodify:Node.InputConnectorTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
-                                <nodify:NodeInput Header="{Binding Title}"
-                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                  IsConnected="{Binding IsConnected}"
-                                                  Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
-                            </DataTemplate>
-                        </nodify:Node.InputConnectorTemplate>
-                        <nodify:Node.OutputConnectorTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
-                                <nodify:NodeOutput Header="{Binding Title}"
-                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                   IsConnected="{Binding IsConnected}" 
-                                                   Visibility="{Binding IsHidden, Converter={StaticResource HiddenVisibilityConverter}}"/>
-                            </DataTemplate>
-                        </nodify:Node.OutputConnectorTemplate>
-                    </nodify:Node>
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                     <nodify:Node Header="{Binding Title}"
                                  Content="{Binding}"
@@ -250,6 +217,14 @@
                                 <TextBox Text="{Binding Value}"
                                          MinWidth="100"
                                          Margin="5 0 0 0" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type primitives:OpenFileNode}">
+                                <DockPanel LastChildFill="True">
+                                    <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
+                                    <TextBox Text="{Binding Path}"
+                                             MinWidth="100"
+                                             Margin="5 0 0 0" />
+                                </DockPanel>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type primitives:BooleanNode}">
                                 <CheckBox IsChecked="{Binding Value}"
@@ -372,6 +347,33 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:KnotNode}">
                     <nodify:KnotNode Content="{Binding Connector}"/>
+                </DataTemplate>
+                <!--Special Nodes-->
+                <DataTemplate DataType="{x:Type specialNodes:GraphStats}">
+                    <nodify:Node Header="{Binding Title}"
+                                 Content="{Binding}"
+                                 Input="{Binding Input}"
+                                 Output="{Binding Output}"
+                                 InputConnectorTemplate="{StaticResource PrimitiveNodeInputConnectorTemplate}"
+                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}"
+                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                        <nodify:Node.ContentTemplate>
+                            <DataTemplate DataType="{x:Type specialNodes:GraphStats}">
+                                <DataTemplate.Resources>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="White"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Nodes: "></Label>
+                                        <Label Content="{Binding Graph.Nodes.Count}"></Label>
+                                        <Label Content="(Including comments and this node)"></Label>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </nodify:Node.ContentTemplate>
+                    </nodify:Node>
                 </DataTemplate>
             </nodify:NodifyEditor.Resources>
             <nodify:NodifyEditor.ConnectionTemplate>

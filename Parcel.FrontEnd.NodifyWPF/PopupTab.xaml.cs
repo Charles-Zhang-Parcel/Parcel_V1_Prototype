@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Parcel.FrontEnd.NodifyWPF.SpecialNodes;
 using Parcel.Shared;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -28,6 +29,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             registry.RegisterToolbox("Data Processing", Assembly.GetAssembly(typeof(DataProcessingHelper)));
             registry.RegisterToolbox("File System", Assembly.GetAssembly(typeof(FileSystemHelper)));
             registry.RegisterToolbox("Finance", Assembly.GetAssembly(typeof(FinanceHelper)));
+            registry.RegisterToolbox("Special", Assembly.GetAssembly(typeof(GraphToolboxDefinition)));
 
             Owner = owner;
             InitializeComponent();
