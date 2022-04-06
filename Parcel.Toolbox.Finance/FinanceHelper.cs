@@ -50,7 +50,7 @@ namespace Parcel.Toolbox.Finance
     public class PercentReturnParameter
     {
         public DataGrid InputTable { get; set; }
-        public string InputColumnName { get; set; }
+        public bool LatestAtTop { get; set; }
         public DataGrid OutputTable { get; set; }
     }
     #endregion
@@ -213,8 +213,38 @@ namespace Parcel.Toolbox.Finance
         {
             if (parameter.InputTable == null)
                 throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputTable.Columns.Any(c => c.Type != typeof(DateTime) 
+                                                      && c.TypeName != "Number"
+                                                      && c.Type != typeof(string)))
+                throw new ArgumentException("Data Table contains invalid rows.");
 
-            throw new NotImplementedException();
+            DataGrid result = new DataGrid();
+            foreach (DataColumn sourceColumn in parameter.InputTable.Columns)
+            {
+                var resultColumn = result.AddColumn(sourceColumn.Header);
+                if (parameter.LatestAtTop)
+                {
+                    for (int i = 0; i < sourceColumn.Length - 1; i++)
+                    {
+                        if (sourceColumn.Type == typeof(double))
+                            resultColumn.Add((sourceColumn[i] - sourceColumn[i+1]) / sourceColumn[i+1]);
+                        else 
+                            resultColumn.Add(sourceColumn[i]);
+                    }    
+                }
+                else
+                {
+                    for (int i = sourceColumn.Length - 1; i > 0; i--)
+                    {
+                        if (sourceColumn.Type == typeof(double))
+                            resultColumn.Add((sourceColumn[i] - sourceColumn[i-1]) / sourceColumn[i-1]);
+                        else 
+                            resultColumn.Add(sourceColumn[i]);
+                    }    
+                }
+            }
+
+            parameter.OutputTable = result;
         }
     }
 }

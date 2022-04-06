@@ -49,21 +49,24 @@ namespace Parcel.Shared.Framework.ViewModels
             return false;
         }
 
-        private void AddConnection(BaseConnector source, BaseConnector target)
+        private void AddConnection(BaseConnector connector1, BaseConnector connector2)
         {
-            source.Node.Graph.Connections.Add(new BaseConnection()
+            bool shouldReverse = !(connector1.FlowType == ConnectorFlowType.Output ||
+                                   connector1.FlowType == ConnectorFlowType.Knot);
+            var newConnection = new BaseConnection()
             {
-                Input = source,
-                Output = target
-            });
+                Input =  shouldReverse ? connector2 : connector1,
+                Output = shouldReverse ? connector1 : connector2
+            };
+            connector1.Node.Graph.Connections.Add(newConnection);
         }
 
-        private void AddConnection(BaseConnector source, ProcessorNode target)
+        private void AddConnection(BaseConnector connector1, ProcessorNode target)
         {
-            var allConnectors = source.FlowType == ConnectorFlowType.Input ? target.Output : target.Input;
+            var allConnectors = connector1.FlowType == ConnectorFlowType.Input ? target.Output : target.Input;
             var connector = allConnectors.First(c => c.AllowsNewConnections());
 
-            AddConnection(source, connector);
+            AddConnection(connector1, connector);
         }
 
         #endregion

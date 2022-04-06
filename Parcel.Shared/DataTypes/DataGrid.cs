@@ -48,6 +48,7 @@ namespace Parcel.Shared.DataTypes
                 return _columnType.Name;
             }
         }
+        public Type Type => _columnType;
         #endregion
 
         #region Column Operations (Math)
@@ -159,8 +160,11 @@ namespace Parcel.Shared.DataTypes
                 // Add data to columns
                 for (var i = 0; i < headers.Length; i++)
                 {
-                    if (double.TryParse(line[i], out double value))
-                        Columns[i].Add(value);
+                    // Perform pre-formatting
+                    if (double.TryParse(line[i], out double number))
+                        Columns[i].Add(number);
+                    else if (DateTime.TryParse(line[i], out DateTime dateTime))
+                        Columns[i].Add(dateTime);
                     else Columns[i].Add(line[i]);
                 }
             }
@@ -203,26 +207,30 @@ namespace Parcel.Shared.DataTypes
                 Columns[i].Add(values[i]);
             }
         }
-        public void AddColumn(string columnName)
+        public DataColumn AddColumn(string columnName)
         {
-            Columns.Add(new DataColumn(columnName));
+            var newColumn = new DataColumn(columnName);
+            Columns.Add(newColumn);
+            return newColumn;
         }
         public void AddOptionalRowHeaderColumn(string columnName)
         {
             OptionalRowHeaderColumn = new DataColumn(columnName);
         }
-        public void AddColumnFrom(DataColumn refColumn, int rowCount)
+        public DataColumn AddColumnFrom(DataColumn refColumn, int rowCount)
         {
             var column = new DataColumn(refColumn.Header);
             var count = rowCount == 0 ? refColumn.Length : rowCount;
             for (int i = 0; i < count; i++)
                 column.Add(refColumn[i]);
             Columns.Add(column);
+            return column;
         }
-        public void Sort(string anchorColumnName)
+        public void Sort(string anchorColumnName, bool reverseOrder)
         {
-            var result = Rows.OrderBy(r => ((IDictionary<String, Object>) r)[anchorColumnName])
-                .ToArray();
+            var result = reverseOrder 
+                ? Rows.OrderByDescending(r => ((IDictionary<String, Object>) r)[anchorColumnName]).ToArray()
+                : Rows.OrderBy(r => ((IDictionary<String, Object>) r)[anchorColumnName]).ToArray();
             var names = Columns.Select(c => c.Header);
             Columns = names.Select(name =>
             {

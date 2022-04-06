@@ -40,6 +40,7 @@ namespace Parcel.Toolbox.DataProcessing
     {
         public DataGrid InputTable { get; set; }
         public string InputColumnName { get; set; }
+        public bool InputReverseOrder { get; set; }
         public DataGrid OutputTable { get; set; }
     }
     public class AppendParameter
@@ -56,6 +57,7 @@ namespace Parcel.Toolbox.DataProcessing
         {
             if (string.IsNullOrWhiteSpace(parameter.InputPath) || !File.Exists(parameter.InputPath))
                 throw new ArgumentException("Invalid inputs");
+            // TODO: Currently if the CSV File is opened by excel then it's not readable by us, and the File.ReadAllText will throw an exception
 
             IEnumerable<ICsvLine> csv = Csv.CsvReader.ReadFromText(File.ReadAllText(parameter.InputPath), new CsvOptions()
             {
@@ -117,7 +119,7 @@ namespace Parcel.Toolbox.DataProcessing
                 throw new ArgumentException("Cannot find column with specified name on data table");
 
             var newTable = parameter.InputTable.MakeCopy();
-            newTable.Sort(parameter.InputColumnName);
+            newTable.Sort(parameter.InputColumnName, parameter.InputReverseOrder);
             parameter.OutputTable = newTable;
         }
         

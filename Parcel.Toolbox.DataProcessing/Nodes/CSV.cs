@@ -42,7 +42,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
 
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = "Loaded.";
+            Message.Content = $"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns.";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

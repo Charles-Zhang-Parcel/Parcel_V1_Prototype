@@ -94,7 +94,7 @@ namespace Parcel.Shared.Framework.ViewModels
 
         #region Other Properties
         public ConnectorFlowType FlowType { get; protected set; }
-        public int MaxConnections { get; set; } = 2;
+        public int MaxConnections { get; set; } = int.MaxValue;
         public NotifyObservableCollection<BaseConnection> Connections { get; } = new NotifyObservableCollection<BaseConnection>();
         
         public Type DataType { get; set; }
@@ -141,7 +141,8 @@ namespace Parcel.Shared.Framework.ViewModels
         public bool IsConnectedTo(BaseConnector connector)
             => Connections.Any(c => c.Input == connector || c.Output == connector);
         public virtual bool AllowsNewConnections()
-            => Connections.Count < MaxConnections;
+            => (FlowType != ConnectorFlowType.Input && Connections.Count < MaxConnections)
+                || (FlowType == ConnectorFlowType.Input && Connections.Count == 0);
         public void Disconnect()
             => Node.Graph.Schema.DisconnectConnector(this);
         #endregion

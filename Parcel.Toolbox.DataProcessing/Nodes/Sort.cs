@@ -16,6 +16,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             Title = "Column Name",
         };
+        public readonly BaseConnector ReverseOrderInput = new InputConnector(typeof(bool))
+        {
+            Title = "Reverse Order",
+        };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
@@ -25,6 +29,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             Title = "Sort";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
+            Input.Add(ReverseOrderInput);
             Output.Add(DataTableOutput);
         }
         #endregion
@@ -35,10 +40,12 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
             string columnName = ColumnNameInput.FetchInputValue<string>();
+            bool reverseOrder = ReverseOrderInput.FetchInputValue<bool>();
             SortParameter parameter = new SortParameter()
             {
                 InputTable = dataGrid,
-                InputColumnName = columnName
+                InputColumnName = columnName,
+                InputReverseOrder = reverseOrder
             };
             DataProcessingHelper.Sort(parameter);
 

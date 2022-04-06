@@ -51,6 +51,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             
             InitializeComponent();
+            
+            EventManager.RegisterClassHandler(typeof(Nodify.BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
         }
         public NodesCanvas Canvas { get; set; } = new NodesCanvas();
         #endregion
@@ -60,6 +62,23 @@ namespace Parcel.FrontEnd.NodifyWPF
         public ICommand RepeatLastCommand { get; }
         public ICommand SaveCanvasCommand { get; }
         public ICommand OpenCanvasCommand { get; }
+        #endregion
+
+        #region Advanced Node Graph Behaviors
+        private void OnConnectionInteraction(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Nodify.BaseConnection ctrl && ctrl.DataContext is BaseConnection connection)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Alt)
+                {
+                    connection.Remove();
+                }
+                else if (e.ClickCount > 1)
+                {
+                    connection.Split(e.GetPosition(ctrl) - new Vector(30, 15));
+                }
+            }
+        }
         #endregion
 
         #region Events
@@ -99,8 +118,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             node.IsPreview = true;
             
             // Auto-Generate
-            if ((node is CSV || node is DataTable)
-                && node.Input.All(i => i.Connections.Count == 0))
+            if ((node is CSV csvNode && csvNode.PathInput.Connections.Count == 0)
+                || (node is DataTable dataTableNode && dataTableNode.PathInput.Connections.Count == 0))
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode))) as OpenFileNode;
                 Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput,

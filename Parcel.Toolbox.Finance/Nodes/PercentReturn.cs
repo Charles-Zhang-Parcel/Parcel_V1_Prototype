@@ -12,11 +12,12 @@ namespace Parcel.Toolbox.Finance.Nodes
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
+
+        public readonly BaseConnector LatestAtTopInput = new InputConnector(typeof(bool))
         {
-            Title = "Date Column Name",
+            Title = "Latest At Top"
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(double))
+        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
         };
@@ -24,10 +25,10 @@ namespace Parcel.Toolbox.Finance.Nodes
         {
             Title = "PercentReturn";
             Input.Add(DataTableInput);
-            Input.Add(ColumnNameInput);
+            Input.Add(LatestAtTopInput);
             Output.Add(DataTableOutput);
             
-            Tooltip = $"This node takes in a table of time series data in each column; It can optionally preserve a column.";
+            Tooltip = $"This node takes in a table of time series data in each column; It will automatically trim rows; Non-numerical data will be trimmed.";
             Message.Content = "Input a time series.";
             Message.Type = NodeMessageType.Documentation;
         }
@@ -38,11 +39,11 @@ namespace Parcel.Toolbox.Finance.Nodes
         public override NodeExecutionResult Execute()
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            string columnName = ColumnNameInput.FetchInputValue<string>();
+            bool latestAtTop = LatestAtTopInput.FetchInputValue<bool>();
             PercentReturnParameter parameter = new PercentReturnParameter()
             {
                 InputTable = dataGrid,
-                InputColumnName = columnName,
+                LatestAtTop = latestAtTop
             };
             FinanceHelper.PercentReturn(parameter);
 

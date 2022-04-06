@@ -37,8 +37,14 @@ namespace Parcel.Shared.Framework
         {
             DataObject = dataObject;
 
-            Type type = dataObject.GetType();
-            DataType = DataTypeMapping.ContainsKey(type) ? DataTypeMapping[type] : CacheDataType.Generic;   // TODO: or we should potentially throw an error
+            if (dataObject != null)
+            {
+                Type type = dataObject.GetType();
+                DataType = DataTypeMapping.ContainsKey(type)
+                    ? DataTypeMapping[type]
+                    : CacheDataType.Generic; // TODO: or we should potentially throw an error    
+            }
+            else DataType = CacheDataType.Generic;
         }
         public ConnectorCacheDescriptor(object dataObject, CacheDataType dataType)
         {
