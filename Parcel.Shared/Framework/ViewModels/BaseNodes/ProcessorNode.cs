@@ -11,6 +11,13 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             get => _title;
             set => SetField(ref _title, value);
         }
+        
+        private string _tooltip;
+        public string Tooltip
+        {
+            get => _tooltip;
+            set => SetField(ref _tooltip, value);
+        }
 
         private bool _isPreview;
         public bool IsPreview

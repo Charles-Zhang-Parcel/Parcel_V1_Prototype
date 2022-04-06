@@ -6,7 +6,8 @@ namespace Parcel.Shared.Framework
     {
         Empty,
         Normal,
-        Error
+        Error,
+        Documentation
     }
     
     public class NodeMessage: ObservableObject

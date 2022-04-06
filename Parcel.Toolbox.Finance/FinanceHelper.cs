@@ -4,6 +4,7 @@ using Parcel.Shared.DataTypes;
 
 namespace Parcel.Toolbox.Finance
 {
+    #region Parameters
     public class RobustMeanParameter
     {
         public double[] InputList { get; set; }
@@ -46,6 +47,13 @@ namespace Parcel.Toolbox.Finance
         public DataGrid InputTable { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class PercentReturnParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public string InputColumnName { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
+    #endregion
     
     public static class FinanceHelper
     {
@@ -199,6 +207,14 @@ namespace Parcel.Toolbox.Finance
                 throw new ArgumentException("Missing Data Table input.");
 
             parameter.OutputTable = parameter.InputTable.CorrelationMatrix();   
+        }
+        
+        public static void PercentReturn(PercentReturnParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+
+            throw new NotImplementedException();
         }
     }
 }

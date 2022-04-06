@@ -15,7 +15,7 @@ namespace Parcel.Toolbox.Finance
             new ToolboxNodeExport("Mean", typeof(Mean)),
             new ToolboxNodeExport("Variance", typeof(Variance)),
             new ToolboxNodeExport("Standard Deviation", typeof(StandardDeviation)),
-            new ToolboxNodeExport("% Return", typeof(object)),
+            new ToolboxNodeExport("% Return", typeof(PercentReturn)),
             new ToolboxNodeExport("Correlation", typeof(object)),
             new ToolboxNodeExport("Covariance", typeof(object)),
             new ToolboxNodeExport("Covariance Matrix", typeof(object)), // This one operates on multiple columns
