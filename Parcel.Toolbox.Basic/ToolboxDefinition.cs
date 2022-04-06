@@ -24,11 +24,12 @@ namespace Parcel.Toolbox.Basic
             null, // Divisor line // Queries
             new ToolboxNodeExport("Count", typeof(object)), // Return count of an array
             null, // Divisor line // Basic Operations - Number
-            new ToolboxNodeExport("Add", typeof(object)),
-            new ToolboxNodeExport("Subtract", typeof(object)),
-            new ToolboxNodeExport("Multiply", typeof(object)),
-            new ToolboxNodeExport("Divide", typeof(object)),
-            new ToolboxNodeExport("Modulus", typeof(object)),
+            new ToolboxNodeExport("Add", typeof(Add)),
+            new ToolboxNodeExport("Subtract", typeof(Subtract)),
+            new ToolboxNodeExport("Multiply", typeof(Multiply)),
+            new ToolboxNodeExport("Divide", typeof(Divide)),
+            new ToolboxNodeExport("Modulus", typeof(Module)),
+            new ToolboxNodeExport("Power", typeof(Power)),
         };
         #endregion
     }

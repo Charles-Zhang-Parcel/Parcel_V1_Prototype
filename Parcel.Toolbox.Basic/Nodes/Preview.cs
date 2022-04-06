@@ -8,11 +8,11 @@ namespace Parcel.Toolbox.Basic.Nodes
     public class Preview: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector ObjectInput = new InputConnector(typeof(string))
+        public readonly BaseConnector ObjectInput = new InputConnector(typeof(object))
         {
             Title = "Object",
         };
-        public readonly BaseConnector ObjectOutput = new OutputConnector(typeof(string))
+        public readonly BaseConnector ObjectOutput = new OutputConnector(typeof(object))
         {
             Title = "Object",
         };
