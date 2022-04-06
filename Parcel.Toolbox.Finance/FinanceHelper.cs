@@ -19,18 +19,33 @@ namespace Parcel.Toolbox.Finance
         public double OutputValue { get; set; }
     }
 
-    public class BaseColumnOperationParameter
+    public class BaseSingleColumnOperationParameter
     {
         public DataGrid InputTable { get; set; }
         public string InputColumnName { get; set; }
         public double OutputValue { get; set; }
     }
-    public class MeanParameter : BaseColumnOperationParameter {}
-    public class VarianceParameter: BaseColumnOperationParameter {}
-    public class StandardDeviationParameter: BaseColumnOperationParameter {}
-    public class MinParameter : BaseColumnOperationParameter {}
-    public class MaxParameter : BaseColumnOperationParameter {}
-    public class SumParameter : BaseColumnOperationParameter {}
+    public class BaseTwoTableOperationParameter
+    {
+        public DataGrid InputTable1 { get; set; }
+        public string InputColumnName1 { get; set; }
+        public DataGrid InputTable2 { get; set; }
+        public string InputColumnName2 { get; set; }
+        public double OutputValue { get; set; }
+    }
+    public class MeanParameter : BaseSingleColumnOperationParameter {}
+    public class VarianceParameter: BaseSingleColumnOperationParameter {}
+    public class StandardDeviationParameter: BaseSingleColumnOperationParameter {}
+    public class MinParameter : BaseSingleColumnOperationParameter {}
+    public class MaxParameter : BaseSingleColumnOperationParameter {}
+    public class SumParameter : BaseSingleColumnOperationParameter {}
+    public class CovarianceParameter: BaseTwoTableOperationParameter {}
+    public class CorrelationParameter: BaseTwoTableOperationParameter {}
+    public class CovarianceMatrixParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
     
     public static class FinanceHelper
     {
@@ -142,18 +157,48 @@ namespace Parcel.Toolbox.Finance
             parameter.OutputValue = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName).Sum();
         }
 
-        public static void Correlation()
+        public static void Correlation(CorrelationParameter parameter)
         {
-            
+            if (parameter.InputTable1 == null || parameter.InputTable2 == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if ((parameter.InputTable1 != null && string.IsNullOrWhiteSpace(parameter.InputColumnName1) && parameter.InputTable1.Columns.Count != 1)
+                || (parameter.InputTable2 != null && string.IsNullOrWhiteSpace(parameter.InputColumnName2) && parameter.InputTable2.Columns.Count != 1))
+                throw new ArgumentException("No column selection is given for the table");
+            if ((parameter.InputTable1 != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName1)
+                                               && parameter.InputTable1.Columns.All(c => c.Header != parameter.InputColumnName1))
+                || (parameter.InputTable2 != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName2)
+                                                  && parameter.InputTable2.Columns.All(c => c.Header != parameter.InputColumnName2)))
+                throw new ArgumentException("Cannot find column with specified name on data table");
+
+            var column1 = parameter.InputTable1.Columns.Single(c => string.IsNullOrWhiteSpace(parameter.InputColumnName1) || c.Header == parameter.InputColumnName1);
+            var column2 = parameter.InputTable1.Columns.Single(c => string.IsNullOrWhiteSpace(parameter.InputColumnName2) || c.Header == parameter.InputColumnName2);
+            parameter.OutputValue = column1.Correlation(column2);
         }
 
-        public static void Covariance()
+        public static void Covariance(CovarianceParameter parameter)
         {
-            
+            if (parameter.InputTable1 == null || parameter.InputTable2 == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if ((parameter.InputTable1 != null && string.IsNullOrWhiteSpace(parameter.InputColumnName1) && parameter.InputTable1.Columns.Count != 1)
+                 || (parameter.InputTable2 != null && string.IsNullOrWhiteSpace(parameter.InputColumnName2) && parameter.InputTable2.Columns.Count != 1))
+                throw new ArgumentException("No column selection is given for the table");
+            if ((parameter.InputTable1 != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName1)
+                                              && parameter.InputTable1.Columns.All(c => c.Header != parameter.InputColumnName1))
+                || (parameter.InputTable2 != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName2)
+                                                 && parameter.InputTable2.Columns.All(c => c.Header != parameter.InputColumnName2)))
+                throw new ArgumentException("Cannot find column with specified name on data table");
+
+            var column1 = parameter.InputTable1.Columns.Single(c => string.IsNullOrWhiteSpace(parameter.InputColumnName1) || c.Header == parameter.InputColumnName1);
+            var column2 = parameter.InputTable1.Columns.Single(c => string.IsNullOrWhiteSpace(parameter.InputColumnName2) || c.Header == parameter.InputColumnName2);
+            parameter.OutputValue = column1.Covariance(column2);
         }
-        
-        public static void CovarianceMatrix()
-        {}
-        
+
+        public static void CovarianceMatrix(CovarianceMatrixParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+
+            parameter.OutputTable = parameter.InputTable.CorrelationMatrix();   
+        }
     }
 }

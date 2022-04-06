@@ -85,7 +85,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                         InfoGridVisibility = Visibility.Visible;
                         break;
                     case CacheDataType.ParcelDataGrid:
-                        PopulateDataGrid((cache.DataObject as DataGrid).Rows);
+                        PopulateDataGrid(cache.DataObject as DataGrid);
                         DataGridVisibility = Visibility.Visible;
                         break;
                     default:
@@ -96,24 +96,28 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
         }
 
-        private void PopulateDataGrid(List<dynamic> objects)
+        private void PopulateDataGrid(DataGrid dataGrid)
         {
-            dynamic test = new ExpandoObject();
-            test.Name = "Name";
-            test.Value = "Value";
+            string FormatHeader(string header, string typeName)
+            {
+                return $"{header} ({typeName})";
+            }
+
+            List<dynamic> objects = dataGrid.Rows;
+            Dictionary<string, string> types = dataGrid.Columns.ToDictionary(c=> c.Header, c => c.TypeName);
             
             // Collect column names
             IEnumerable<IDictionary<string, object>> rows = objects.OfType<IDictionary<string, object>>();
             IEnumerable<string> columns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase);
             // Generate columns
             WpfDataGrid.Columns.Clear();
-            foreach (string text in columns)
+            foreach (string columnName in columns)
             {
                 // now set up a column and binding for each property
                 var column = new DataGridTextColumn 
                 {
-                    Header = text.Trim().Trim('"'),
-                    Binding = new Binding(text)
+                    Header = FormatHeader(columnName, types[columnName]),
+                    Binding = new Binding(columnName)
                 };
                 WpfDataGrid.Columns.Add(column);
             }

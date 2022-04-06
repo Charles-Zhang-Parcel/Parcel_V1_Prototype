@@ -27,11 +27,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Processor Interface
         public override NodeExecutionResult Execute()
         {
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = _value,
-                DataType = CacheDataType.String 
-            };
+            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(_value);
             return new NodeExecutionResult(true, null);
         }
         #endregion

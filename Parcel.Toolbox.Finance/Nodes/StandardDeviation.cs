@@ -41,12 +41,8 @@ namespace Parcel.Toolbox.Finance.Nodes
                 InputColumnName = columnName
             };
             FinanceHelper.StandardDeviation(parameter);
-            
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = parameter.OutputValue,
-                DataType = CacheDataType.Number 
-            };
+
+            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
 
             Message.Content = $"Standard Deviation={parameter.OutputValue}";
             Message.Type = NodeMessageType.Normal;

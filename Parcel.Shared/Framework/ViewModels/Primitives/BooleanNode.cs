@@ -35,11 +35,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public override OutputConnector MainOutput => TruthOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
-            ProcessorCache[TruthOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = Boolean,
-                DataType = CacheDataType.Boolean 
-            };
+            ProcessorCache[TruthOutput] = new ConnectorCacheDescriptor(Boolean);
             
             return base.Execute();
         }

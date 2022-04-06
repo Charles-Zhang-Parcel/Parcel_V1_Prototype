@@ -3,33 +3,23 @@ using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.DataProcessing.Nodes
+namespace Parcel.Toolbox.Finance.Nodes
 {
-    public class Take: ProcessorNode
+    public class CovarianceMatrix: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
-        {
-            Title = "Column Name",
-        };
-        public readonly BaseConnector RowCountInput = new InputConnector(typeof(double))
-        {
-            Title = "Row Count",
-        };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Data Table Column",
+            Title = "Result",
         };
-        public Take()
+        public CovarianceMatrix()
         {
-            Title = "Take";
+            Title = "Variance";
             Input.Add(DataTableInput);
-            Input.Add(ColumnNameInput);
-            Input.Add(RowCountInput);
             Output.Add(DataTableOutput);
         }
         #endregion
@@ -39,19 +29,15 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public override NodeExecutionResult Execute()
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            string columnName = ColumnNameInput.FetchInputValue<string>();
-            double rowCount = RowCountInput.FetchInputValue<double>();
-            TakeParameter parameter = new TakeParameter()
+            CovarianceMatrixParameter parameter = new CovarianceMatrixParameter()
             {
-                InputTable = dataGrid,
-                InputColumnName = columnName,
-                InputRowCount = (int)rowCount
+                InputTable = dataGrid
             };
-            DataProcessingHelper.Take(parameter);
+            FinanceHelper.CovarianceMatrix(parameter);
 
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = $"{parameter.OutputTable.Rows.Count} Rows";
+            Message.Content = $"{parameter.OutputTable.Columns.Count} Rows {parameter.OutputTable.Columns[0].Length} Columns";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

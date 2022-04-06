@@ -3,9 +3,9 @@ using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.Finance.Nodes
+namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    public class Mean: ProcessorNode
+    public class Sort: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
@@ -16,35 +16,35 @@ namespace Parcel.Toolbox.Finance.Nodes
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector ValueOutput = new OutputConnector(typeof(double))
+        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Value",
+            Title = "Result",
         };
-        public Mean()
+        public Sort()
         {
-            Title = "Mean";
+            Title = "Sort";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
-            Output.Add(ValueOutput);
+            Output.Add(DataTableOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ValueOutput as OutputConnector;
+        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
             string columnName = ColumnNameInput.FetchInputValue<string>();
-            MeanParameter parameter = new MeanParameter()
+            SortParameter parameter = new SortParameter()
             {
                 InputTable = dataGrid,
                 InputColumnName = columnName
             };
-            FinanceHelper.Mean(parameter);
+            DataProcessingHelper.Sort(parameter);
 
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
+            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = $"Mean={parameter.OutputValue}";
+            Message.Content = $"{parameter.OutputTable.RowCount} Rows {parameter.OutputTable.ColumnCount} Columns";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

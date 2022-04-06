@@ -41,12 +41,8 @@ namespace Parcel.Toolbox.Finance.Nodes
                 InputColumnName = columnName
             };
             FinanceHelper.Min(parameter);
-            
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = parameter.OutputValue,
-                DataType = CacheDataType.Number 
-            };
+
+            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
 
             Message.Content = $"Min={parameter.OutputValue}";
             Message.Type = NodeMessageType.Normal;

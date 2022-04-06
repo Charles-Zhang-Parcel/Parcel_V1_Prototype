@@ -128,10 +128,17 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void SpawnPreviewWindow(ProcessorNode node)
         {
-            PreviewWindow preview = new PreviewWindow(this, node);
-            _previewWindows.Add(preview);
-            preview.Closed += (sender, args) => _previewWindows.Remove(sender as PreviewWindow); 
-            preview.Show();
+            if (_previewWindows.ContainsKey(node))
+            {
+                _previewWindows[node].Activate();
+            }
+            else
+            {
+                PreviewWindow preview = new PreviewWindow(this, node);
+                _previewWindows.Add(node, preview);
+                preview.Closed += (sender, args) => _previewWindows.Remove((sender as PreviewWindow)!.Node); 
+                preview.Show();   
+            }
         }
         private void ExecuteAll()
         {
@@ -142,7 +149,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             IExecutionGraph graph = new ExecutionQueue();
             graph.InitializeGraph(processors);
             graph.ExecuteGraph();
-            _previewWindows.ForEach(p => p.Update());
+            foreach (PreviewWindow p in _previewWindows.Values)
+                p.Update();
         }
         private void ShowSearchNodePopup()
         {
@@ -189,7 +197,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region State
-        private readonly List<PreviewWindow> _previewWindows = new List<PreviewWindow>();
+        private readonly Dictionary<ProcessorNode, PreviewWindow> _previewWindows =
+            new Dictionary<ProcessorNode, PreviewWindow>();
         #endregion
 
         #region Interop

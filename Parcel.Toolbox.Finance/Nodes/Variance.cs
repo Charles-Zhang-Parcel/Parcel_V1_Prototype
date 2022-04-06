@@ -41,12 +41,8 @@ namespace Parcel.Toolbox.Finance.Nodes
                 InputColumnName = columnName
             };
             FinanceHelper.Variance(parameter);
-            
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = parameter.OutputValue,
-                DataType = CacheDataType.Number 
-            };
+
+            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
 
             Message.Content = $"Variance={parameter.OutputValue}";
             Message.Type = NodeMessageType.Normal;

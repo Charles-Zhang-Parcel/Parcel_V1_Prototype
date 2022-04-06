@@ -24,6 +24,30 @@ namespace Parcel.Toolbox.DataProcessing
         public int InputRowCount { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class ExtractParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public string[] InputColumnNames { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
+    public class ExcludeParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public string[] InputColumnNames { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
+    public class SortParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public string InputColumnName { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
+    public class AppendParameter
+    {
+        public DataGrid InputTable1 { get; set; }
+        public DataGrid InputTable2 { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
     #endregion
 
     public static class DataProcessingHelper
@@ -54,6 +78,55 @@ namespace Parcel.Toolbox.DataProcessing
             DataGrid newDataGrid = new DataGrid();
             newDataGrid.AddColumnFrom(column, parameter.InputRowCount);
             parameter.OutputTable = newDataGrid;
+        }
+        
+        public static void Extract(ExtractParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputTable != null && parameter.InputColumnNames.Length == 0)
+                throw new ArgumentException("No columns are given for the table.");
+            if (parameter.InputTable != null && parameter.InputColumnNames.Length != 0
+                                             && parameter.InputTable.Columns.Any(c => parameter.InputColumnNames.Contains(c.Header)))
+                throw new ArgumentException("Cannot find column with specified name on data table.");
+            
+            parameter.OutputTable = parameter.InputTable.Extract(parameter.InputColumnNames);
+        }
+        
+        public static void Exclude(ExcludeParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputTable != null && parameter.InputColumnNames.Length == 0)
+                throw new ArgumentException("No columns are given for the table.");
+            if (parameter.InputTable != null && parameter.InputColumnNames.Length != 0
+                                             && parameter.InputTable.Columns.Any(c => parameter.InputColumnNames.Contains(c.Header)))
+                throw new ArgumentException("Cannot find column with specified name on data table.");
+            
+            parameter.OutputTable = parameter.InputTable.Exclude(parameter.InputColumnNames);
+        }
+        
+        public static void Sort(SortParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputTable != null && string.IsNullOrWhiteSpace(parameter.InputColumnName))
+                throw new ArgumentException("No column selection is given for the table");
+            if (parameter.InputTable != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName)
+                                             && parameter.InputTable.Columns.All(c => c.Header != parameter.InputColumnName))
+                throw new ArgumentException("Cannot find column with specified name on data table");
+
+            var newTable = parameter.InputTable.MakeCopy();
+            newTable.Sort(parameter.InputColumnName);
+            parameter.OutputTable = newTable;
+        }
+        
+        public static void Append(AppendParameter parameter)
+        {
+            if (parameter.InputTable1 == null || parameter.InputTable2 == null)
+                throw new ArgumentException("Missing Data Table input.");
+            
+            parameter.OutputTable = parameter.InputTable1.MakeCopy().Append(parameter.InputTable2);
         }
     }
 }

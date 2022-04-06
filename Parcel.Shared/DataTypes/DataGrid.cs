@@ -8,11 +8,26 @@ namespace Parcel.Shared.DataTypes
 {
     public class DataColumn
     {
-        public string Header { get; set; }
+        #region Construction
+        public DataColumn(){}
+        public DataColumn(string header) => Header = header.Trim().Trim('"');
+        public DataColumn(DataColumn other)
+        {
+            Header = other.Header;
+            _columnData = other._columnData.ToList();
+            _columnType = other._columnType;
+        }
+        public DataColumn MakeCopy()
+            => new DataColumn(this);
+        #endregion
+
+        #region Properties
+        public string Header { get; private set; }
         private List<dynamic> _columnData { get; } = new List<dynamic>();
         private Type _columnType { get; set; }
+        #endregion
 
-        #region Accesor
+        #region Accessor
         public void Add<T>(T value)
         {
             if (_columnData.Count == 0)
@@ -90,6 +105,37 @@ namespace Parcel.Shared.DataTypes
             IEnumerable<double> list = _columnData.Cast<double>();
             return list.Sum();
         }
+        public double Correlation(DataColumn other)
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+            if (this.Length != other.Length)
+                throw new InvalidOperationException("Columns are not of same length.");
+
+            double covariance = this.Covariance(other);
+            double std1 = this.STD(true);   // Always use n-1 for population
+            double std2 = other.STD(true);
+            return covariance / (std1 * std2);
+        }
+        public double Covariance(DataColumn other)
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+            if (this.Length != other.Length)
+                throw new InvalidOperationException("Columns are not of same length.");
+
+            double[] values1 = _columnData.Cast<double>().ToArray();
+            double[] values2 = other._columnData.Cast<double>().ToArray();
+            double variance = 0.0;
+            if (values1.Count() > 1)
+            {
+                double avg1 = values1.Average();
+                double avg2 = values1.Average();
+                for (int i = 0; i < values1.Length; i++)
+                    variance += (values1[i] - avg1) * (values2[i] - avg2);
+            }
+            return variance / (values1.Length - 1); // Always use n-1 for population
+        }
         #endregion
     }
     
@@ -107,7 +153,7 @@ namespace Parcel.Shared.DataTypes
                 {
                     headers = line.Headers;
                     foreach (string header in headers)
-                        Columns.Add(new DataColumn() {Header = header});
+                        Columns.Add(new DataColumn(header));
                 }
                 
                 // Add data to columns
@@ -122,18 +168,15 @@ namespace Parcel.Shared.DataTypes
         #endregion
 
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
+        public DataColumn OptionalRowHeaderColumn { get; set; }
 
         #region Accessors
+        public int ColumnCount => Columns.Count;
+        public int RowCount => Columns.First().Length;
         public List<dynamic> Rows
         {
             get
             {
-                string FormatHeader(int index)
-                {
-                    var col = Columns[index];
-                    return $"{col.Header} ({col.TypeName})";
-                }
-
                 int colCount = Columns.Count;
                 int rowCount = Columns.First().Length;
                 List<dynamic> rows = new List<dynamic>();
@@ -141,7 +184,7 @@ namespace Parcel.Shared.DataTypes
                 {
                     dynamic temp = new ExpandoObject();
                     for (int col = 0; col < colCount; col++)
-                        ((IDictionary<String, Object>)temp)[FormatHeader(col)] = Columns[col][row];
+                        ((IDictionary<String, Object>)temp)[Columns[col].Header] = Columns[col][row];
                     rows.Add(temp);
                 }
                 return rows;
@@ -149,7 +192,7 @@ namespace Parcel.Shared.DataTypes
         }
         #endregion
 
-        #region Editors
+        #region Editors (In-Place Operations)
         public void AddRow(params object[] values)
         {
             if (values.Length > Columns.Count)
@@ -162,15 +205,80 @@ namespace Parcel.Shared.DataTypes
         }
         public void AddColumn(string columnName)
         {
-            Columns.Add(new DataColumn(){ Header = columnName});
+            Columns.Add(new DataColumn(columnName));
+        }
+        public void AddOptionalRowHeaderColumn(string columnName)
+        {
+            OptionalRowHeaderColumn = new DataColumn(columnName);
         }
         public void AddColumnFrom(DataColumn refColumn, int rowCount)
         {
-            var column = new DataColumn() {Header = refColumn.Header};
+            var column = new DataColumn(refColumn.Header);
             var count = rowCount == 0 ? refColumn.Length : rowCount;
             for (int i = 0; i < count; i++)
                 column.Add(refColumn[i]);
             Columns.Add(column);
+        }
+        public void Sort(string anchorColumnName)
+        {
+            var result = Rows.OrderBy(r => ((IDictionary<String, Object>) r)[anchorColumnName])
+                .ToArray();
+            var names = Columns.Select(c => c.Header);
+            Columns = names.Select(name =>
+            {
+                var col = new DataColumn(name);
+                foreach (dynamic expando in result)
+                    col.Add(((IDictionary<String, Object>) expando)[name]);
+                return col;
+            }).ToList();
+        }
+        #endregion
+
+        #region Copy Operations
+        public DataGrid MakeCopy()
+        {
+            DataGrid result = new DataGrid();
+            IEnumerable<DataColumn> columnCopies = this.Columns
+                .Select(c => c.MakeCopy());
+            result.Columns = columnCopies.ToList();
+            return result;
+        }
+        public DataGrid Append(DataGrid other)
+        {
+            DataGrid result = MakeCopy();
+            result.Columns.AddRange(other.Columns.Select(c => c.MakeCopy()));
+            return result;
+        }
+        public DataGrid Extract(string[] names)
+        {
+            DataGrid result = new DataGrid();
+            IEnumerable<DataColumn> columnCopies = this.Columns
+                .Where(c => names.Contains(c.Header))
+                .Select(c => c.MakeCopy());
+            result.Columns = columnCopies.ToList();
+            return result;
+        }
+        public DataGrid Exclude(string[] names)
+            => this.Extract(Columns.Select(c => c.Header).Except(names).ToArray());
+        #endregion
+
+        #region Numerical Computation
+        public DataGrid CorrelationMatrix()
+        {
+            DataGrid result = new DataGrid();
+            
+            // Define columns
+            result.AddColumn("(Relation)"); // Add 
+            foreach (DataColumn column in Columns)
+                result.AddColumn(column.Header);
+            // Compute data
+            foreach (DataColumn column in Columns)
+            {
+                OptionalRowHeaderColumn.Add(column.Header);
+                result.AddRow(Columns.Select(other => other.Covariance(column)));
+            }
+            
+            return result;
         }
         #endregion
     }

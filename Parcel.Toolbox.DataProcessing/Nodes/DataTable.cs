@@ -30,12 +30,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             // Read from file
             // ...
-            
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = new DataGrid(),
-                DataType = CacheDataType.ParcelDataGrid 
-            };
+
+            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(new DataGrid());
             return new NodeExecutionResult(true, null);
         }
         #endregion

@@ -5,26 +5,26 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    public class CSV: ProcessorNode
+    public class Append: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector PathInput = new InputConnector(typeof(string))
+        public readonly BaseConnector DataTable1Input = new InputConnector(typeof(DataGrid))
         {
-            Title = "Path",
+            Title = "Data Table 1",
         };
-        public readonly  BaseConnector HeaderInput = new InputConnector(typeof(bool))
+        public readonly BaseConnector DataTable2Input = new InputConnector(typeof(DataGrid))
         {
-            Title = "Contains Header"
+            Title = "Data Table 2",
         };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Data Table"
-        }; 
-        public CSV()
+            Title = "Combined Table",
+        };
+        public Append()
         {
-            Title = "CSV";
-            Input.Add(PathInput);
-            Input.Add(HeaderInput);
+            Title = "Append";
+            Input.Add(DataTable1Input);
+            Input.Add(DataTable2Input);
             Output.Add(DataTableOutput);
         }
         #endregion
@@ -33,16 +33,18 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
-            CSVParameter parameter = new CSVParameter()
+            DataGrid dataGrid1 = DataTable1Input.FetchInputValue<DataGrid>();
+            DataGrid dataGrid2 = DataTable2Input.FetchInputValue<DataGrid>();
+            AppendParameter parameter = new AppendParameter()
             {
-                InputPath = PathInput.FetchInputValue<string>(),
-                InputContainsHeader = HeaderInput.FetchInputValue<bool>()
+                InputTable1 = dataGrid1,
+                InputTable2 = dataGrid2,
             };
-            DataProcessingHelper.CSV(parameter);
+            DataProcessingHelper.Append(parameter);
 
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = "Loaded.";
+            Message.Content = $"{parameter.OutputTable.Columns.Count} Columns";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

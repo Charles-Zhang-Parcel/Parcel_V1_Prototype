@@ -1,35 +1,32 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System;
+using System.Linq;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    public class Take: ProcessorNode
+    public class Extract: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
+        public readonly BaseConnector ColumnNamesInput = new InputConnector(typeof(string))
         {
-            Title = "Column Name",
-        };
-        public readonly BaseConnector RowCountInput = new InputConnector(typeof(double))
-        {
-            Title = "Row Count",
+            Title = "Column Names",
         };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Data Table Column",
+            Title = "Result",
         };
-        public Take()
+        public Extract()
         {
-            Title = "Take";
+            Title = "Extract";
             Input.Add(DataTableInput);
-            Input.Add(ColumnNameInput);
-            Input.Add(RowCountInput);
+            Input.Add(ColumnNamesInput);
             Output.Add(DataTableOutput);
         }
         #endregion
@@ -39,19 +36,19 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public override NodeExecutionResult Execute()
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            string columnName = ColumnNameInput.FetchInputValue<string>();
-            double rowCount = RowCountInput.FetchInputValue<double>();
-            TakeParameter parameter = new TakeParameter()
+            string[] columnNames = ColumnNamesInput.FetchInputValue<string>()
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(cn => cn.Trim()).ToArray();
+            ExtractParameter parameter = new ExtractParameter()
             {
                 InputTable = dataGrid,
-                InputColumnName = columnName,
-                InputRowCount = (int)rowCount
+                InputColumnNames = columnNames,
             };
-            DataProcessingHelper.Take(parameter);
+            DataProcessingHelper.Extract(parameter);
 
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = $"{parameter.OutputTable.Rows.Count} Rows";
+            Message.Content = $"{parameter.OutputTable.Columns.Count} Columns";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

@@ -41,12 +41,8 @@ namespace Parcel.Toolbox.Basic.Nodes
                 InputNumber2 = number2
             };
             BasicHelper.Power(parameter);
-            
-            ProcessorCache[ResultOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = parameter.OutputNumber,
-                DataType = CacheDataType.Number 
-            };
+
+            ProcessorCache[ResultOutput] = new ConnectorCacheDescriptor(parameter.OutputNumber);
 
             Message.Content = $"{number1}^{number2}={parameter.OutputNumber}";
             Message.Type = NodeMessageType.Normal;

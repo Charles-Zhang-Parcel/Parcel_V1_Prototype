@@ -30,11 +30,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public override OutputConnector MainOutput => NumberOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
-            ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = Number,
-                DataType = CacheDataType.Number 
-            };
+            ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor(Number);
             
             return base.Execute();
         }

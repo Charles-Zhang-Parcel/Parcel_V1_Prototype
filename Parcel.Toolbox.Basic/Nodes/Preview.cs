@@ -29,11 +29,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         public override NodeExecutionResult Execute()
         {
             object obj = ObjectInput.FetchInputValue<object>();
-            ProcessorCache[ObjectOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = obj,
-                DataType = CacheDataType.Generic 
-            };
+            ProcessorCache[ObjectOutput] = new ConnectorCacheDescriptor(obj, CacheDataType.Generic);
 
             Message.Content = obj.ToString();
             Message.Type = NodeMessageType.Normal;

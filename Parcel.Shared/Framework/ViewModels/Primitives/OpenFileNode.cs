@@ -30,11 +30,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #region Interface
         public override NodeExecutionResult Execute()
         {
-            ProcessorCache[FilePathOutput] = new ConnectorCacheDescriptor()
-            {
-                DataObject = Path,
-                DataType = CacheDataType.String,
-            };
+            ProcessorCache[FilePathOutput] = new ConnectorCacheDescriptor(Path);
             
             return base.Execute();
         }

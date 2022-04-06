@@ -14,12 +14,12 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("CSV", typeof(CSV)),
             new ToolboxNodeExport("Data Table", typeof(DataTable)),
             null, // Divisor line // High Level Operations
-            new ToolboxNodeExport("Append", typeof(object)),
-            new ToolboxNodeExport("Extract", typeof(object)),
-            new ToolboxNodeExport("Exclude", typeof(object)),   // Opposite of Extract
+            new ToolboxNodeExport("Append", typeof(Append)),
+            new ToolboxNodeExport("Extract", typeof(Extract)),
+            new ToolboxNodeExport("Exclude", typeof(Exclude)),   // Opposite of Extract
             new ToolboxNodeExport("Validate", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Reinterpret", typeof(object)),  // Validate and reinterpret formats
-            new ToolboxNodeExport("Sort", typeof(object)),
+            new ToolboxNodeExport("Sort", typeof(Sort)),
             new ToolboxNodeExport("Take", typeof(Take)),
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
