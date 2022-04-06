@@ -35,7 +35,7 @@ namespace Parcel.Shared.DataTypes
         }
         #endregion
 
-        #region Column Operations
+        #region Column Operations (Math)
         public double Mean()
         {
             if (_columnType != typeof(double))
@@ -43,6 +43,52 @@ namespace Parcel.Shared.DataTypes
 
             IEnumerable<double> list = _columnData.Cast<double>();
             return list.Average();
+        }
+        public double Variance()
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+
+            double[] values = _columnData.Cast<double>().ToArray();
+            double variance = 0.0;
+            if (values.Count() > 1)
+            {
+                double avg = values.Average();
+                variance += values.Sum(value => Math.Pow(value - avg, 2.0));
+            }
+            return variance;
+        }
+        public double STD()
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+
+            IEnumerable<double> list = _columnData.Cast<double>();
+            return Math.Sqrt(Variance());
+        }
+        public double Min()
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+
+            IEnumerable<double> list = _columnData.Cast<double>();
+            return list.Min();
+        }
+        public double Max()
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+
+            IEnumerable<double> list = _columnData.Cast<double>();
+            return list.Max();
+        }
+        public double Sum()
+        {
+            if (_columnType != typeof(double))
+                throw new InvalidOperationException("Column is not of numerical type.");
+
+            IEnumerable<double> list = _columnData.Cast<double>();
+            return list.Sum();
         }
         #endregion
     }
