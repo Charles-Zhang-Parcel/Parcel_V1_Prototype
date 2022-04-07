@@ -8,11 +8,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class CSV: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector PathInput = new InputConnector(typeof(string))
+        public readonly BaseConnector PathInput = new PrimitiveStringInputConnector()
         {
             Title = "Path",
         };
-        public readonly  BaseConnector HeaderInput = new InputConnector(typeof(bool))
+        public readonly  BaseConnector HeaderInput = new PrimitiveBooleanInputConnector()
         {
             Title = "Contains Header"
         };

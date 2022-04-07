@@ -20,6 +20,43 @@ namespace Parcel.Shared.Framework.ViewModels
         Triangle, // Compound data
         Square, // Boolean
     }
+    
+    public class PrimitiveBooleanInputConnector : PrimitiveInputConnector
+    {
+        public PrimitiveBooleanInputConnector() : base(typeof(bool))
+        {
+            Value = false;
+        }
+    }
+    
+    public class PrimitiveStringInputConnector : PrimitiveInputConnector
+    {
+        public PrimitiveStringInputConnector() : base(typeof(string))
+        {
+            Value = string.Empty;
+        }
+    }
+    
+    public class PrimitiveNumberInputConnector : PrimitiveInputConnector
+    {
+        public PrimitiveNumberInputConnector() : base(typeof(double))
+        {
+            Value = 0;
+        }
+    }
+    
+    public class PrimitiveInputConnector : InputConnector
+    {
+        public object Value
+        {
+            get => _defaultDataStorage;
+            set => SetField(ref _defaultDataStorage, value);
+        }
+        
+        public PrimitiveInputConnector(Type dataType) : base(dataType)
+        {
+        }
+    }
 
     public class InputConnector : BaseConnector
     {
@@ -101,7 +138,12 @@ namespace Parcel.Shared.Framework.ViewModels
         /// <summary>
         /// Used for input nodes that haven't had any input yet
         /// </summary>
-        public object DefaultDataStorage { get; set; }
+        public object DefaultDataStorage 
+        { 
+            get => _defaultDataStorage;
+            set => SetField(ref _defaultDataStorage, value);
+        }
+        protected object _defaultDataStorage;
         #endregion
 
         #region Node Framework

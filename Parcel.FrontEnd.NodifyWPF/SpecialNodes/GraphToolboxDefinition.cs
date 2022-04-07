@@ -14,6 +14,7 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
             // Special - Specialized Graph Visualization
             new ToolboxNodeExport("Graph Stats", typeof(GraphStats)),
         };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }
