@@ -23,6 +23,7 @@ namespace Parcel.Toolbox.Finance
             new ToolboxNodeExport("Max", typeof(Max)),
             new ToolboxNodeExport("Sum", typeof(Sum)),
         };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }

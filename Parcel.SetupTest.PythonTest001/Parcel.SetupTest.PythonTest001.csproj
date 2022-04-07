@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Parcel.Python\Parcel.Python.csproj" />
+      <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\BaseTypeTest.py" />
+      <EmbeddedResource Include="Scripts\BaseTypeTest.py" />
+      <None Remove="Scripts\REPL.py" />
+      <EmbeddedResource Include="Scripts\REPL.py" />
+    </ItemGroup>
+
+</Project>

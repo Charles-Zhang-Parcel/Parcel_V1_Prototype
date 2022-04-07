@@ -17,6 +17,7 @@ namespace Parcel.Toolbox.ControlFlow
             null, // Divisor line
             new ToolboxNodeExport("Apply", typeof(object)), // Like Map in JS or Select in C#, takes an Array and a Function node; equivalent as ForEach loop
         };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }

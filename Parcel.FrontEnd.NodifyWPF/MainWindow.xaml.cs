@@ -133,6 +133,8 @@ namespace Parcel.FrontEnd.NodifyWPF
                 }
             }
             
+            // TODO: This is a good chance to auto-save, before anything can crash
+            
             SpawnPreviewWindow(node);
             ExecuteAll();
         }

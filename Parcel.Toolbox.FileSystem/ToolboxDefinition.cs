@@ -9,6 +9,7 @@ namespace Parcel.Toolbox.FileSystem
         public string ToolboxName => "File System";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
         public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[] {};
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }

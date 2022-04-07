@@ -6,6 +6,7 @@ namespace Parcel.Toolbox.DataProcessing
 {
     public class ToolboxDefinition: IToolboxEntry
     {
+        #region Interface
         public string ToolboxName => "Data Processing";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
         public ToolboxNodeExport[] ExportNodes => new[]
@@ -31,5 +32,7 @@ namespace Parcel.Toolbox.DataProcessing
             null, // Divisor line // Data Conversion
             new ToolboxNodeExport("To Matrix", typeof(object)),
         };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
+        #endregion
     }
 }

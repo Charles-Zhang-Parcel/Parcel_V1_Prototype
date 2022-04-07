@@ -31,6 +31,7 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("Modulus", typeof(Module)),
             new ToolboxNodeExport("Power", typeof(Power)),
         };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }
