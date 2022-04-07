@@ -73,6 +73,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         
         #region Interface
         public ToolboxNodeExport ToolSelection { get; set; }
+        public Action<ToolboxNodeExport> ItemSelected { get; set; }
         #endregion
 
         #region View Properties
@@ -93,6 +94,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             if (!(e.Source is MenuItem item) || item.Tag == null) return;
             
             ToolSelection = item.Tag as ToolboxNodeExport;
+            ItemSelected(ToolSelection);
             Close();
         }
         #endregion

@@ -6,7 +6,7 @@
             xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
             mc:Ignorable="d" MouseDown="PreviewWindow_OnMouseDown"
             Title="{Binding Node, Converter={StaticResource ProcessorNodeToNodeFullNameConverter}}" 
-            MinHeight="200" MinWidth="150" SizeToContent="Width"
+            Height="200" MinWidth="150" SizeToContent="Width"
             DataContext="{Binding RelativeSource={RelativeSource self}}">
     <Grid>
         <Grid Visibility="{Binding InfoGridVisibility}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

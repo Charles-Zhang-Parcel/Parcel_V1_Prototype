@@ -83,6 +83,10 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Events
+        private void PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
@@ -185,15 +189,16 @@ namespace Parcel.FrontEnd.NodifyWPF
                 Top = this.WindowState == WindowState.Maximized ? rect.Top : this.Top + cursor.Y,
                 Topmost = true
             };
-            popupTab.Closed += delegate
+            void action(ToolboxNodeExport toolboxNodeExport)
             {
-                if (popupTab.ToolSelection != null)
+                if (toolboxNodeExport != null)
                 {
-                    LastTool = popupTab.ToolSelection;
+                    LastTool = toolboxNodeExport;
                     SpawnNode(LastTool);
                 }
-            };
-            popupTab.MouseLeave += delegate { popupTab.Close(); };
+            }
+            popupTab.ItemSelected += action;
+            popupTab.MouseLeave += delegate { popupTab.Close(); };  // ISSUE: This will cause Closed event being called before the OnClick event
             popupTab.Show();
         }
         private void OpenCanvas()

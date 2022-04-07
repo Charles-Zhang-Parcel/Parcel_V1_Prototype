@@ -330,9 +330,13 @@
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                                         <Button Style="{StaticResource IconButton}"
                                                 Content="{StaticResource PlusIcon}"
+                                                MouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                PreviewMouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
                                                 Command="{Binding AddEntryCommand}" />
                                         <Button Style="{StaticResource IconButton}"
                                                 Content="{StaticResource RemoveKeyIcon}"
+                                                MouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                PreviewMouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
                                                 Command="{Binding RemoveEntryCommand}" />
                                     </StackPanel>
                                     <ListView ItemsSource="{Binding Definitions}">

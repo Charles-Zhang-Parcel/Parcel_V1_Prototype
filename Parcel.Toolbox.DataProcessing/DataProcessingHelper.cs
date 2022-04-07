@@ -49,6 +49,11 @@ namespace Parcel.Toolbox.DataProcessing
         public DataGrid InputTable2 { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class TransposeParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
     #endregion
 
     public static class DataProcessingHelper
@@ -129,6 +134,14 @@ namespace Parcel.Toolbox.DataProcessing
                 throw new ArgumentException("Missing Data Table input.");
             
             parameter.OutputTable = parameter.InputTable1.MakeCopy().Append(parameter.InputTable2);
+        }
+        
+        public static void Transpose(TransposeParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+            
+            parameter.OutputTable = parameter.InputTable.Transpose();
         }
     }
 }

@@ -114,6 +114,8 @@ namespace Parcel.FrontEnd.NodifyWPF
 
             List<dynamic> objects = dataGrid.Rows;
             Dictionary<string, string> types = dataGrid.Columns.ToDictionary(c=> c.Header, c => c.TypeName);
+            if (dataGrid.OptionalRowHeaderColumn != null)
+                types[dataGrid.OptionalRowHeaderColumn.Header] = dataGrid.OptionalRowHeaderColumn.TypeName;
             
             // Collect column names
             IEnumerable<IDictionary<string, object>> rows = objects.OfType<IDictionary<string, object>>();

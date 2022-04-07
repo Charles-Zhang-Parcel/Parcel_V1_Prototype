@@ -197,6 +197,8 @@ namespace Parcel.Shared.DataTypes
                 for (int row = 0; row < rowCount; row++)
                 {
                     dynamic temp = new ExpandoObject();
+                    if (OptionalRowHeaderColumn != null)
+                        ((IDictionary<String, Object>)temp)[OptionalRowHeaderColumn.Header] = OptionalRowHeaderColumn[row];
                     for (int col = 0; col < colCount; col++)
                         ((IDictionary<String, Object>)temp)[Columns[col].Header] = Columns[col][row];
                     rows.Add(temp);
@@ -278,6 +280,25 @@ namespace Parcel.Shared.DataTypes
         }
         public DataGrid Exclude(string[] names)
             => this.Extract(Columns.Select(c => c.Header).Except(names).ToArray());
+        public DataGrid Transpose()
+        {
+            DataGrid result = new DataGrid();
+            // Create optional column to hold existing headers
+            result.AddOptionalRowHeaderColumn("Header");
+            foreach (DataColumn column in this.Columns)
+                result.OptionalRowHeaderColumn.Add(column.Header);
+            
+            // Create data columns
+            for (int i = 0; i < this.Columns.First().Length; i++)
+                result.AddColumn($"Value {i+1}");
+                
+            // Copy values over
+            foreach (DataColumn column in this.Columns)
+                for (int row = 0; row < column.Length; row++)
+                    result.Columns[row].Add(column[row]);
+
+            return result;
+        }
         #endregion
 
         #region Numerical Computation
@@ -290,6 +311,7 @@ namespace Parcel.Shared.DataTypes
             foreach (DataColumn column in Columns)
                 result.AddColumn(column.Header);
             // Compute data
+            AddOptionalRowHeaderColumn(string.Empty);
             foreach (DataColumn column in Columns)
             {
                 OptionalRowHeaderColumn.Add(column.Header);
