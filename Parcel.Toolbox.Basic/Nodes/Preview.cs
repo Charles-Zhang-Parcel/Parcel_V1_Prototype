@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         };
         public Preview()
         {
-            Title = "Preview";
+            Title = NodeTypeName = "Preview";
             Input.Add(ObjectInput);
             Output.Add(ObjectOutput);
         }

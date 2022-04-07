@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Variance()
         {
-            Title = "Variance";
+            Title = NodeTypeName = "Variance";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Output.Add(ValueOutput);

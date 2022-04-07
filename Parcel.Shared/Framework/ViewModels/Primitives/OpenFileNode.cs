@@ -21,7 +21,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         }; 
         public OpenFileNode()
         {
-            Title = "File";
+            Title = NodeTypeName = "File";
             ValueOutput.IsHidden = true;
             Output.Add(FilePathOutput);
         }

@@ -30,7 +30,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Correlation()
         {
-            Title = "Correlation";
+            Title = NodeTypeName = "Correlation";
             Input.Add(DataTableInput1);
             Input.Add(ColumnNameInput1);
             Input.Add(DataTableInput2);

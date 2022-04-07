@@ -24,7 +24,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Extract()
         {
-            Title = "Extract";
+            Title = NodeTypeName = "Extract";
             Input.Add(DataTableInput);
             Input.Add(ColumnNamesInput);
             Output.Add(DataTableOutput);

@@ -24,7 +24,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Exclude()
         {
-            Title = "Exclude";
+            Title = NodeTypeName = "Exclude";
             Input.Add(DataTableInput);
             Input.Add(ColumnNamesInput);
             Output.Add(DataTableOutput);

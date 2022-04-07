@@ -7,7 +7,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
     {
         public StringNode()
         {
-            Title = "String";
+            Title = NodeTypeName = "String";
         }
 
         public override OutputConnector MainOutput => ValueOutput as OutputConnector;

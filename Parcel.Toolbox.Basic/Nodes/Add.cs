@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         };
         public Add()
         {
-            Title = "Add";
+            Title = NodeTypeName = "Add";
             Input.Add(Number1Input);
             Input.Add(Number2Input);
             Output.Add(ResultOutput);

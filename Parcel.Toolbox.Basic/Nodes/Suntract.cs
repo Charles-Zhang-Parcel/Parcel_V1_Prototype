@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         };
         public Subtract()
         {
-            Title = "Subtract";
+            Title = NodeTypeName = "Subtract";
             Input.Add(Number1Input);
             Input.Add(Number2Input);
             Output.Add(ResultOutput);

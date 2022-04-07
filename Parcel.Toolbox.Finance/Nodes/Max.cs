@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Max()
         {
-            Title = "Max";
+            Title = NodeTypeName = "Max";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Output.Add(ValueOutput);

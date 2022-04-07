@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }; 
         public CSV()
         {
-            Title = "CSV";
+            Title = NodeTypeName = "CSV";
             Input.Add(PathInput);
             Input.Add(HeaderInput);
             Output.Add(DataTableOutput);

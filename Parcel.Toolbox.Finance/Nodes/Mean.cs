@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Mean()
         {
-            Title = "Mean";
+            Title = NodeTypeName = "Mean";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Output.Add(ValueOutput);

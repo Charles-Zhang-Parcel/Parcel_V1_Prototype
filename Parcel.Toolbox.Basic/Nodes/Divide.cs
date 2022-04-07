@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         };
         public Divide()
         {
-            Title = "Divide";
+            Title = NodeTypeName = "Divide";
             Input.Add(Number1Input);
             Input.Add(Number2Input);
             Output.Add(ResultOutput);

@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public StandardDeviation()
         {
-            Title = "StandardDeviation";
+            Title = NodeTypeName = "StandardDeviation";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Output.Add(ValueOutput);

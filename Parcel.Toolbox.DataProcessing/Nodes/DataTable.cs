@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }; 
         public DataTable()
         {
-            Title = "Data Table";
+            Title = NodeTypeName = "Data Table";
             Input.Add(PathInput);
             Output.Add(DataTableOutput);
         }

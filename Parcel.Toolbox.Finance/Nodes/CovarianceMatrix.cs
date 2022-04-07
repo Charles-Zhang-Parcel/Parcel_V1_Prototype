@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public CovarianceMatrix()
         {
-            Title = "Variance";
+            Title = NodeTypeName = "Variance";
             Input.Add(DataTableInput);
             Output.Add(DataTableOutput);
         }

@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Append()
         {
-            Title = "Append";
+            Title = NodeTypeName = "Append";
             Input.Add(DataTable1Input);
             Input.Add(DataTable2Input);
             Output.Add(DataTableOutput);

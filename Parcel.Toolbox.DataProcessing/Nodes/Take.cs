@@ -26,7 +26,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Take()
         {
-            Title = "Take";
+            Title = NodeTypeName = "Take";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Input.Add(RowCountInput);

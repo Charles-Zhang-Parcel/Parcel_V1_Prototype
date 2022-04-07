@@ -8,8 +8,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private string _title;
         public string Title
         {
-            get => _title;
+            get => !string.IsNullOrWhiteSpace(_title) ? _title : _NodeTypeName;
             set => SetField(ref _title, value);
+        }
+        private string _NodeTypeName;
+        public string NodeTypeName
+        {
+            get => _NodeTypeName;
+            set => SetField(ref _NodeTypeName, value);
         }
         
         private string _tooltip;

@@ -14,7 +14,7 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
         #region Node Interface
         public GraphStats()
         {
-            Title = "Graph Stats";
+            Title = NodeTypeName = "Graph Stats";
         }
         #endregion
         

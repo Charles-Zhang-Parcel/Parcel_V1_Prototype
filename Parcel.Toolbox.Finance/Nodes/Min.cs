@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Min()
         {
-            Title = "Min";
+            Title = NodeTypeName = "Min";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Output.Add(ValueOutput);

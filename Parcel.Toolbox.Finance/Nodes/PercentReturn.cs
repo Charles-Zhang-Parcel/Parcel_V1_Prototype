@@ -23,7 +23,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public PercentReturn()
         {
-            Title = "PercentReturn";
+            Title = NodeTypeName = "PercentReturn";
             Input.Add(DataTableInput);
             Input.Add(LatestAtTopInput);
             Output.Add(DataTableOutput);

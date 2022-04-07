@@ -20,7 +20,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         }; 
         public NumberNode()
         {
-            Title = "Number";
+            Title = NodeTypeName = "Number";
             ValueOutput.IsHidden = true;
             Output.Add(NumberOutput);
         }

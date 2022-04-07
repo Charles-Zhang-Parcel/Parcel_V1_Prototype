@@ -26,7 +26,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Sort()
         {
-            Title = "Sort";
+            Title = NodeTypeName = "Sort";
             Input.Add(DataTableInput);
             Input.Add(ColumnNameInput);
             Input.Add(ReverseOrderInput);

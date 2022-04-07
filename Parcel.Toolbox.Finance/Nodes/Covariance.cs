@@ -30,7 +30,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public Covariance()
         {
-            Title = "Covariance";
+            Title = NodeTypeName = "Covariance";
             Input.Add(DataTable1Input);
             Input.Add(ColumnName1Input);
             Input.Add(DataTable2Input);
