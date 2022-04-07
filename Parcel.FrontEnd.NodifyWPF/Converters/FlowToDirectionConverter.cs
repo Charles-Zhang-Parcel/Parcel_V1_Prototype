@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using Nodify;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels;
 
 namespace Parcel.FrontEnd.NodifyWPF.Converters

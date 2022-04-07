@@ -54,6 +54,12 @@ namespace Parcel.Toolbox.DataProcessing
         public DataGrid InputTable { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class SQLParameter
+    {
+        public DataGrid[] InputTables { get; set; }
+        public DataGrid OutputTable { get; set; }
+        public ServerConfig OutputConfig { get; set; }
+    }
     #endregion
 
     public static class DataProcessingHelper
@@ -142,6 +148,14 @@ namespace Parcel.Toolbox.DataProcessing
                 throw new ArgumentException("Missing Data Table input.");
             
             parameter.OutputTable = parameter.InputTable.Transpose();
+        }
+        
+        public static void SQL(SQLParameter parameter)
+        {
+            if (parameter.InputTables.Length == 0 || parameter.InputTables == null)
+                throw new ArgumentException("Missing Data Table input.");
+
+            throw new NotImplementedException();
         }
     }
 }

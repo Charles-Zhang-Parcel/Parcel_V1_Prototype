@@ -10,16 +10,6 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    /// <summary>
-    /// This will be a subset of <seealso cref="CacheDataType"/>
-    /// </summary>
-    public enum DictionaryEntryType
-    {
-        Number,
-        String,
-        Boolean
-    }
-    
     public class DictionaryEntryDefinition: ObservableObject
     {
         #region Properties

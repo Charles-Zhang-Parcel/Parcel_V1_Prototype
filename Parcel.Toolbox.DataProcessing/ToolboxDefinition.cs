@@ -32,6 +32,7 @@ namespace Parcel.Toolbox.DataProcessing
             null, // Divisor line // Data Conversion
             // new ToolboxNodeExport("To Matrix", typeof(object)), // TODO: Build all operations directly inside DataGrid
             new ToolboxNodeExport("Transpose", typeof(Transpose)),
+            new ToolboxNodeExport("SQL Query", typeof(object)),
         };
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion

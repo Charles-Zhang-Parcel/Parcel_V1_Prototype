@@ -7,20 +7,6 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
-    public enum ConnectorFlowType
-    {
-        Input,
-        Output,
-        Knot
-    }
-
-    public enum ConnectorShape
-    {
-        Circle, // Default; Primitive (string and number)
-        Triangle, // Compound data
-        Square, // Boolean
-    }
-    
     public class PrimitiveBooleanInputConnector : PrimitiveInputConnector
     {
         public PrimitiveBooleanInputConnector() : base(typeof(bool))
@@ -235,10 +221,12 @@ namespace Parcel.Shared.Framework.ViewModels
         #region Routines
         private readonly Dictionary<Type, ConnectorShape> _mappings = new Dictionary<Type, ConnectorShape>()
         {
-            {typeof(bool), ConnectorShape.Square},
+            {typeof(bool), ConnectorShape.Triangle},
             {typeof(string), ConnectorShape.Circle},
             {typeof(double), ConnectorShape.Circle},
-            {typeof(DataGrid), ConnectorShape.Triangle},
+            {typeof(DataGrid), ConnectorShape.Square},
+            {typeof(ServerConfig), ConnectorShape.RedSquare},
+            {typeof(ControlFlow), ConnectorShape.RightTriangle},
         };
         private ConnectorShape DecideShape(Type dataType)
         {

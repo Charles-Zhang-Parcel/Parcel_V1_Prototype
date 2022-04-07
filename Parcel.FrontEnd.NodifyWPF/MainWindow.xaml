@@ -12,6 +12,7 @@
         xmlns:specialNodes="clr-namespace:Parcel.FrontEnd.NodifyWPF.SpecialNodes"
         xmlns:nodes="clr-namespace:Parcel.Toolbox.DataProcessing.Nodes;assembly=Parcel.Toolbox.DataProcessing"
         xmlns:System="clr-namespace:System;assembly=System.Runtime"
+        xmlns:dataTypes="clr-namespace:Parcel.Shared.DataTypes;assembly=Parcel.Shared"
         mc:Ignorable="d"
         Title="Parcel - Workflow Engine" Height="450" Width="800"
         Background="#1E1E1E"
@@ -76,11 +77,11 @@
         <Style x:Key="ConnectionStyle" TargetType="{x:Type nodify:BaseConnection}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Input.Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                             Value="{x:Static dataTypes:ConnectorShape.Square}">
                     <Setter Property="Stroke" Value="{StaticResource SquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Input.Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                             Value="{x:Static dataTypes:ConnectorShape.Triangle}">
                     <Setter Property="Stroke" Value="{StaticResource TriangleConnectorColor}"></Setter>
                 </DataTrigger>
             </Style.Triggers>
@@ -92,12 +93,12 @@
                BasedOn="{StaticResource {x:Type nodify:NodeInput}}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                             Value="{x:Static dataTypes:ConnectorShape.Square}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                             Value="{x:Static dataTypes:ConnectorShape.Triangle}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource TriangleConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource TriangleConnectorColor}"></Setter>
                 </DataTrigger>
@@ -115,12 +116,12 @@
                BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Square}">
+                             Value="{x:Static dataTypes:ConnectorShape.Square}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Shape}" 
-                             Value="{x:Static viewModels:ConnectorShape.Triangle}">
+                             Value="{x:Static dataTypes:ConnectorShape.Triangle}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource TriangleConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource TriangleConnectorColor}"></Setter>
                 </DataTrigger>
@@ -277,7 +278,7 @@
                                     <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
                                                         ObjectType="{x:Type System:Enum}">
                                         <ObjectDataProvider.MethodParameters>
-                                            <x:Type TypeName="nodes:DictionaryEntryType"/>
+                                            <x:Type TypeName="dataTypes:DictionaryEntryType"/>
                                         </ObjectDataProvider.MethodParameters>
                                     </ObjectDataProvider>
                                     <Rectangle x:Key="PlusIcon"

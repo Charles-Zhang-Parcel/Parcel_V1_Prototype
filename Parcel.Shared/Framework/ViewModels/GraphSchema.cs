@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels
