@@ -53,6 +53,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             InitializeComponent();
             
             EventManager.RegisterClassHandler(typeof(Nodify.BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
+            EventManager.RegisterClassHandler(typeof(Nodify.Node), MouseDoubleClickEvent, new MouseButtonEventHandler(NodeDoubleclick_OpenProperties));
         }
         public NodesCanvas Canvas { get; set; } = new NodesCanvas();
         #endregion

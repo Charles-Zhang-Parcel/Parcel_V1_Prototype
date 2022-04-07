@@ -4,20 +4,6 @@ using Parcel.Shared.DataTypes;
 
 namespace Parcel.Shared.Framework
 {
-    public enum CacheDataType
-    {
-        // Primitive
-        Boolean,
-        Number,
-        String,
-        // Basic Numerical
-        ParcelDataGrid,
-        // Advanced
-        Array,
-        Generic,
-        BatchJob
-    }
-    
     public struct ConnectorCacheDescriptor
     {
         private static readonly Dictionary<Type, CacheDataType> DataTypeMapping = new Dictionary<Type, CacheDataType>()

@@ -13,6 +13,7 @@ namespace Parcel.Toolbox.DataProcessing
             // Data Types and IO
             new ToolboxNodeExport("CSV", typeof(CSV)),
             new ToolboxNodeExport("Data Table", typeof(DataTable)),
+            new ToolboxNodeExport("Dictionary", typeof(Dictionary)),
             null, // Divisor line // High Level Operations
             new ToolboxNodeExport("Append", typeof(Append)),
             new ToolboxNodeExport("Extract", typeof(Extract)),

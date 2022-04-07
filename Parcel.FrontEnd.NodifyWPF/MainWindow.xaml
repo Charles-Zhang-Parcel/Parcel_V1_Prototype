@@ -10,6 +10,8 @@
         xmlns:primitives="clr-namespace:Parcel.Shared.Framework.ViewModels.Primitives;assembly=Parcel.Shared"
         xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
         xmlns:specialNodes="clr-namespace:Parcel.FrontEnd.NodifyWPF.SpecialNodes"
+        xmlns:nodes="clr-namespace:Parcel.Toolbox.DataProcessing.Nodes;assembly=Parcel.Toolbox.DataProcessing"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="Parcel - Workflow Engine" Height="450" Width="800"
         Background="#1E1E1E"
@@ -210,8 +212,7 @@
                                  Input="{Binding Input}"
                                  Output="{Binding Output}"
                                  InputConnectorTemplate="{StaticResource PrimitiveNodeInputConnectorTemplate}"
-                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}"
-                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}">
                         <nodify:Node.Resources>
                             <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                                 <TextBox Text="{Binding Value}"
@@ -240,7 +241,8 @@
                                  Output="{Binding Output}"
                                  Content="{Binding}"
                                  ToolTip="{Binding Tooltip}"
-                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                                 InputConnectorTemplate="{StaticResource PrimitiveNodeInputConnectorTemplate}"
+                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}">
                         <nodify:Node.Resources>
                             <SolidColorBrush Color="MediumPurple" x:Key="PreviewModeBorderColor"></SolidColorBrush>
                             <Style TargetType="{x:Type nodify:Node}">
@@ -250,8 +252,90 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </nodify:Node.Resources>
-                        <nodify:Node.ContentTemplate>
+                            
+                            <DataTemplate DataType="{x:Type nodes:Dictionary}">
+                                <DataTemplate.Resources>
+                                    <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
+                                                        ObjectType="{x:Type System:Enum}">
+                                        <ObjectDataProvider.MethodParameters>
+                                            <x:Type TypeName="nodes:DictionaryEntryType"/>
+                                        </ObjectDataProvider.MethodParameters>
+                                    </ObjectDataProvider>
+                                    <Rectangle x:Key="PlusIcon"
+                                               x:Shared="False"
+                                               Width="16"
+                                               Height="16">
+                                        <Rectangle.Fill>
+                                            <DrawingBrush>
+                                                <DrawingBrush.Drawing>
+                                                    <DrawingGroup>
+                                                        <DrawingGroup.Children>
+                                                            <GeometryDrawing Brush="#00FFFFFF"
+                                                                             Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                            <GeometryDrawing Brush="#FFF6F6F6"
+                                                                             Geometry="F1M6.0003,-0.000199999999999534L6.0003,5.9998 0.000300000000000189,5.9998 0.000300000000000189,9.9998 6.0003,9.9998 6.0003,15.9998 10.0003,15.9998 10.0003,9.9998 16.0003,9.9998 16.0003,5.9998 10.0003,5.9998 10.0003,-0.000199999999999534z" />
+                                                            <GeometryDrawing Brush="#FF424242"
+                                                                             Geometry="F1M15,9L9,9 9,15 7,15 7,9 1,9 1,7 7,7 7,1 9,1 9,7 15,7z" />
+                                                        </DrawingGroup.Children>
+                                                    </DrawingGroup>
+                                                </DrawingBrush.Drawing>
+                                            </DrawingBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle x:Key="RemoveKeyIcon"
+                                               x:Shared="False"
+                                               Width="16"
+                                               Height="16">
+                                        <Rectangle.Fill>
+                                            <DrawingBrush>
+                                                <DrawingBrush.Drawing>
+                                                    <DrawingGroup>
+                                                        <DrawingGroup.Children>
+                                                            <GeometryDrawing Brush="#00FFFFFF"
+                                                                             Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                            <GeometryDrawing Brush="#FFF6F6F6"
+                                                                             Geometry="F1M13,10L4,10 4,6 13,6z" />
+                                                            <GeometryDrawing Brush="#FF414141"
+                                                                             Geometry="F1M12,9L5,9 5,7 12,7z" />
+                                                        </DrawingGroup.Children>
+                                                    </DrawingGroup>
+                                                </DrawingBrush.Drawing>
+                                            </DrawingBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource PlusIcon}"
+                                                Command="{Binding AddEntryCommand}" />
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource RemoveKeyIcon}"
+                                                Command="{Binding RemoveEntryCommand}" />
+                                    </StackPanel>
+                                    <ListView ItemsSource="{Binding Definitions}">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type nodes:DictionaryEntryDefinition}">
+                                                <DockPanel LastChildFill="True" MinWidth="150">
+                                                    <TextBox Text="{Binding Name}"></TextBox>
+                                                    <ComboBox ItemsSource="{Binding Source={StaticResource entriesFromEnum}}"
+                                                              SelectedItem="{Binding Type}"></ComboBox>
+                                                    <TextBox Text="{Binding Value}"></TextBox>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </DockPanel>
+                            </DataTemplate>
+                            
                             <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
                                 <TextBlock Foreground="LightSlateGray" Margin="0" Padding="0" 
                                            MaxWidth="256" TextWrapping="WrapWithOverflow"
@@ -259,21 +343,7 @@
                                            Visibility="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToVisibilityConverter}}">
                                 </TextBlock>
                             </DataTemplate>
-                        </nodify:Node.ContentTemplate>
-                        <nodify:Node.InputConnectorTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
-                                <nodify:NodeInput Header="{Binding Title}"
-                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                  IsConnected="{Binding IsConnected}" />
-                            </DataTemplate>
-                        </nodify:Node.InputConnectorTemplate>
-                        <nodify:Node.OutputConnectorTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
-                                <nodify:NodeOutput Header="{Binding Title}"
-                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
-                                                   IsConnected="{Binding IsConnected}" />
-                            </DataTemplate>
-                        </nodify:Node.OutputConnectorTemplate>
+                        </nodify:Node.Resources>
                         <nodify:Node.HeaderTemplate>
                             <DataTemplate><!--The data type here is just a string-->
                                 <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
@@ -357,8 +427,7 @@
                                  Input="{Binding Input}"
                                  Output="{Binding Output}"
                                  InputConnectorTemplate="{StaticResource PrimitiveNodeInputConnectorTemplate}"
-                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}"
-                                 MouseDoubleClick="NodeDoubleclick_OpenProperties">
+                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}">
                         <nodify:Node.ContentTemplate>
                             <DataTemplate DataType="{x:Type specialNodes:GraphStats}">
                                 <DataTemplate.Resources>

@@ -4,10 +4,22 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
+                  xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
                   mc:Ignorable="d"
-                  Title="PropertyWindow" Height="450" Width="800"
+                  Title="{Binding Processor, Converter={StaticResource ProcessorNodeToNodeFullNameConverter}}" 
+                  MinHeight="100" MinWidth="300" SizeToContent="WidthAndHeight"
                   DataContext="{Binding RelativeSource={RelativeSource self}}">
-    <Grid>
-        
-    </Grid>
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="DarkSlateGray"></Setter>
+        </Style>
+    </Window.Resources>
+    <StackPanel DataContext="{Binding Processor}">
+        <DockPanel LastChildFill="True">
+            <Label Content="Name"></Label>
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </DockPanel>
+        <Separator HorizontalAlignment="Stretch"/>
+        <StackPanel></StackPanel>
+    </StackPanel>
 </local:BaseWindow>

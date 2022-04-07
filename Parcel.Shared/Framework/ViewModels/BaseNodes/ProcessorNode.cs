@@ -8,14 +8,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private string _title;
         public string Title
         {
-            get => !string.IsNullOrWhiteSpace(_title) ? _title : _NodeTypeName;
+            get => !string.IsNullOrWhiteSpace(_title) ? _title : _nodeTypeName;
             set => SetField(ref _title, value);
         }
-        private string _NodeTypeName;
+        private string _nodeTypeName;
         public string NodeTypeName
         {
-            get => _NodeTypeName;
-            set => SetField(ref _NodeTypeName, value);
+            get => _nodeTypeName;
+            set => SetField(ref _nodeTypeName, value);
         }
         
         private string _tooltip;
@@ -38,6 +38,10 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             get => _message;
             set => SetField(ref _message, value);
         }
+        #endregion
+
+        #region Accesor
+        public string FullName => (!string.IsNullOrWhiteSpace(_title) && _title != _nodeTypeName) ? $"({_nodeTypeName}) {_title}" : _nodeTypeName;
         #endregion
 
         #region Connectors

@@ -3,19 +3,18 @@ using System.Windows.Input;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
-    public interface IProcessorNodeCommand : ICommand
-    {
-        void RaiseCanExecuteChanged();
-    }
-
-    public class DelegateCommand : IProcessorNodeCommand
+    public class RequeryCommand : IProcessorNodeCommand
     {
         private readonly Action _action;
         private readonly Func<bool>? _condition;
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
-        public DelegateCommand(Action action, Func<bool>? executeCondition = default)
+        public RequeryCommand(Action action, Func<bool>? executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;
@@ -27,18 +26,21 @@ namespace Parcel.Shared.Framework.ViewModels
         public void Execute(object parameter)
             => _action();
 
-        public void RaiseCanExecuteChanged()
-            => CanExecuteChanged?.Invoke(this, new EventArgs());
+        public void RaiseCanExecuteChanged() { }
     }
 
-    public class DelegateCommand<T> : IProcessorNodeCommand
+    public class RequeryCommand<T> : IProcessorNodeCommand
     {
         private readonly Action<T> _action;
         private readonly Func<T, bool>? _condition;
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
-        public DelegateCommand(Action<T> action, Func<T, bool>? executeCondition = default)
+        public RequeryCommand(Action<T> action, Func<T, bool>? executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;
@@ -66,7 +68,6 @@ namespace Parcel.Shared.Framework.ViewModels
             }
         }
 
-        public void RaiseCanExecuteChanged()
-            => CanExecuteChanged?.Invoke(this, new EventArgs());
+        public void RaiseCanExecuteChanged() { }
     }
 }

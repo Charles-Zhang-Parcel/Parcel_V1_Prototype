@@ -6,6 +6,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -61,6 +63,13 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             GeneratePreviewForOutput();
             UpdateLayout();
+        }
+        #endregion
+
+        #region Events
+        private void PreviewWindow_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
         #endregion
 
@@ -127,5 +136,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
 
         #endregion
+
+        
     }
 }

@@ -12,6 +12,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             InitializeComponent();
         }
 
-        public ProcessorNode Processor { get; set; }
+        #region View Properties
+        public ProcessorNode Processor { get; }
+        #endregion
     }
 }

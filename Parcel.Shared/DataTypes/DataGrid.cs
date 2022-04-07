@@ -144,6 +144,16 @@ namespace Parcel.Shared.DataTypes
     {
         #region Constructors
         public DataGrid(){}
+        public DataGrid(ExpandoObject expando)
+        {
+            var dict = (IDictionary<string, object>)expando;
+            foreach (string key in dict.Keys)
+            {
+                var col = new DataColumn(key);
+                col.Add(dict[key]);
+                Columns.Add(col);
+            }
+        }
         public DataGrid(IEnumerable<ICsvLine> csvLines)
         {
             string[] headers = null;
