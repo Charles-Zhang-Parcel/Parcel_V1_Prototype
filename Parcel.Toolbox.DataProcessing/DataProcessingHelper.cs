@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,6 +10,7 @@ using Csv;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Toolbox.DataProcessing.Nodes;
+using DataTable = System.Data.DataTable;
 
 namespace Parcel.Toolbox.DataProcessing
 {
@@ -57,6 +61,8 @@ namespace Parcel.Toolbox.DataProcessing
     public class SQLParameter
     {
         public DataGrid[] InputTables { get; set; }
+        public string[] InputTableNames { get; set; }
+        public string InputCommand { get; set; }
         public DataGrid OutputTable { get; set; }
         public ServerConfig OutputConfig { get; set; }
     }
@@ -152,10 +158,77 @@ namespace Parcel.Toolbox.DataProcessing
         
         public static void SQL(SQLParameter parameter)
         {
+            void PopulateTable(DataGrid table, string tableName, SQLiteConnection connection)
+            {
+                SQLiteCommand cmd = connection.CreateCommand();
+                cmd.CommandText = $"CREATE TABLE '{tableName}'({string.Join(',', table.Columns.Select(c => $"'{c.Header}'"))})";
+                cmd.ExecuteNonQuery();
+                
+                // Remark: The API is as shitty as it can get
+                
+                SQLiteTransaction transaction = connection.BeginTransaction();
+                
+                string sql = $"select * from '{tableName}' limit 1";
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql,connection);
+                adapter.InsertCommand = new SQLiteCommandBuilder(adapter).GetInsertCommand();
+                
+                DataSet dataSet = new DataSet();
+                adapter.FillSchema(dataSet, SchemaType.Source, tableName); 
+                adapter.Fill(dataSet, tableName);     // Load exiting table data (will be empty) 
+
+                // Insert data
+                DataTable dataTable = dataSet.Tables[tableName];
+                foreach (ExpandoObject row in table.Rows)
+                {
+                    DataRow dataTableRow = dataTable.NewRow();
+                    foreach (KeyValuePair<string,dynamic> pair in (IDictionary<string, dynamic>)row)
+                        dataTableRow[pair.Key]=pair.Value;
+                    dataTable.Rows.Add(dataTableRow);
+                }
+                int result = adapter.Update(dataTable); 
+                
+                transaction.Commit(); 
+                dataSet.AcceptChanges();
+                // Release resources 
+                adapter.Dispose();
+                dataSet.Clear();
+            }
+            
             if (parameter.InputTables.Length == 0 || parameter.InputTables == null)
                 throw new ArgumentException("Missing Data Table input.");
+            
+            using (var connection = new SQLiteConnection("Data Source=:memory:"))
+            {
+                connection.Open();
+                
+                // Initialize
+                for (int i = 0; i < parameter.InputTables.Length; i++)
+                {
+                    PopulateTable(parameter.InputTables[i], parameter.InputTableNames[i], connection);
+                }
 
-            throw new NotImplementedException();
+                // Execute
+                string formattedText = parameter.InputCommand.EndsWith(';')
+                    ? parameter.InputCommand
+                    : parameter.InputCommand + ';';
+                for (int i = 0; i < parameter.InputTables.Length; i++)
+                    formattedText = formattedText.Replace($"@Table{i + 1}", $"'{parameter.InputTableNames[i]}'"); // Table names can't use parameters, so do it manually
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(formattedText, connection);
+                DataSet result = new DataSet();
+                adapter.Fill(result);
+                // using (var reader = command.ExecuteReader())
+                // {
+                //     while (reader.Read())
+                //     {
+                //         var name = reader.GetString(0);
+                //
+                //         Console.WriteLine($"Hello, {name}!");
+                //     }
+                // }
+                
+                parameter.OutputTable = new DataGrid(result);
+                connection.Close();
+            }
         }
     }
 }

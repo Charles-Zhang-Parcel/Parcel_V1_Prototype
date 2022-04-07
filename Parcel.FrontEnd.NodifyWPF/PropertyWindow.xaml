@@ -5,6 +5,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
                   xmlns:converters="clr-namespace:Parcel.FrontEnd.NodifyWPF.Converters"
+                  xmlns:framework="clr-namespace:Parcel.Shared.Framework;assembly=Parcel.Shared"
                   mc:Ignorable="d"
                   Title="{Binding Processor, Converter={StaticResource ProcessorNodeToNodeFullNameConverter}}" 
                   MinHeight="100" MinWidth="300" SizeToContent="WidthAndHeight"
@@ -14,20 +15,35 @@
             <Setter Property="Foreground" Value="DarkSlateGray"></Setter>
         </Style>
     </Window.Resources>
-    <StackPanel DataContext="{Binding Processor}">
-        <DockPanel LastChildFill="True">
-            <Label Content="Name"></Label>
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-        </DockPanel>
-        <Separator HorizontalAlignment="Stretch"/>
-        <StackPanel>
-            <avalonEdit:TextEditor
-                xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                Name="textEditor"
-                SyntaxHighlighting="C#"
-                FontFamily="Consolas"
-                MinHeight="250"
-                FontSize="10pt"/>
+    <DockPanel LastChildFill="True">
+        <StackPanel DataContext="{Binding Processor}" DockPanel.Dock="Top">
+            <DockPanel LastChildFill="True">
+                <Label Content="Name"></Label>
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </DockPanel>
         </StackPanel>
-    </StackPanel>
+        <StackPanel>
+            <Separator HorizontalAlignment="Stretch"/>
+            <ItemsControl ItemsSource="{Binding Editors}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type framework:PropertyEditor}">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock Text="{Binding Name}" Margin="0,5,0,0"></TextBlock>
+                            <avalonEdit:TextEditor
+                                xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                SyntaxHighlighting="{Binding SQLSyntaxHighlighting, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type local:PropertyWindow},Mode=FindAncestor}}" FontSize="10pt"
+                                FontFamily="Consolas" MinHeight="250" Margin="5"
+                                Initialized="AvalonEditor_OnInitialized" TextChanged="AvalonEditor_OnTextChanged"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </DockPanel>
 </local:BaseWindow>

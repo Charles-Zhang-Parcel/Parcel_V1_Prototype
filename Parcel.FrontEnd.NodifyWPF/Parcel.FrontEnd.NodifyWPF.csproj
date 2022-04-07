@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <Folder Include="DataTemplateSelectors" />
-      <Folder Include="PreviewWindows" />
       <Folder Include="PropertyWindows" />
     </ItemGroup>
 
@@ -25,6 +24,11 @@
       <ProjectReference Include="..\Parcel.Toolbox.DataProcessing\Parcel.Toolbox.DataProcessing.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="PreviewWindows\sql.xshd.xml" />
+      <EmbeddedResource Include="PreviewWindows\sql.xshd.xml" />
     </ItemGroup>
 
 </Project>

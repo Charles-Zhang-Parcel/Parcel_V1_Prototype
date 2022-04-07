@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Parcel.Shared.DataTypes;
@@ -26,7 +27,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }
     }
     
-    public class SQL: ProcessorNode
+    public class SQL: ProcessorNode, INodeProperty
     {
         #region Node Interface
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
@@ -39,6 +40,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public SQL()
         {
+            _editors = new List<PropertyEditor>()
+            {
+                new PropertyEditor("Code", PropertyEditorType.Code, () => _code, o => Code = (string)o)
+            };
+            
             Title = NodeTypeName = "SQL";
             Output.Add(DataTableOutput);
             
@@ -54,8 +60,20 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region View Binding/Internal Node Properties
+        public string _code = "select * from @Table1";
+        public string Code
+        {
+            get => _code;
+            set => SetField(ref _code, value);
+        }
         public IProcessorNodeCommand AddEntryCommand { get; }
         public IProcessorNodeCommand RemoveEntryCommand { get; }
+        #endregion
+
+        #region Property Editor Interface
+
+        private readonly List<PropertyEditor> _editors;
+        public List<PropertyEditor> Editors => _editors;
         #endregion
         
         #region Processor Interface
@@ -64,7 +82,15 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             SQLParameter parameter = new SQLParameter()
             {
-                InputTables = Input.Select(i => i.FetchInputValue<DataGrid>()).ToArray(),
+                InputTables = Input.Select(i =>
+                {
+                    DatabaseTableInputConnector connector = i as DatabaseTableInputConnector;
+                    var table = connector!.FetchInputValue<DataGrid>();
+                    // table.TableName = connector.TableName;
+                    return table;
+                }).ToArray(),
+                InputTableNames = Input.Select(i => (i as DatabaseTableInputConnector)!.TableName).ToArray(),
+                InputCommand = Code 
             };
             DataProcessingHelper.SQL(parameter);
 

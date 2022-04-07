@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using Csv;
@@ -179,8 +180,30 @@ namespace Parcel.Shared.DataTypes
                 }
             }
         }
+        public DataGrid(DataSet dataset)
+        {
+            DataTable table = dataset.Tables[0];
+            // TableName = table.TableName;
+
+            // Initialize columns
+            List<string> headers = new List<string>();
+            foreach (System.Data.DataColumn column in table.Columns)
+            {
+                headers.Add(column.Caption);
+                Columns.Add(new DataColumn(column.Caption));
+            }
+            
+            // Populate row data
+            foreach (DataRow row in table.Rows)
+            {
+                // Add data to columns
+                for (var i = 0; i < headers.Count; i++)
+                    Columns[i].Add(row[i]);
+            }
+        }
         #endregion
 
+        // public string TableName { get; set; }
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
         public DataColumn OptionalRowHeaderColumn { get; set; }
 
