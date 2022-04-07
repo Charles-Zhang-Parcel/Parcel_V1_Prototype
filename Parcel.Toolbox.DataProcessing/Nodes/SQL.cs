@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
@@ -7,6 +8,24 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
+    public class DatabaseTableInputConnector: InputConnector
+    {
+        #region Properties
+        private string _tableName = "New Key";
+        public string TableName
+        {
+            get => _tableName;
+            set => SetField(ref _tableName, value);
+        }
+        #endregion
+
+        public DatabaseTableInputConnector(string tableName) : base(typeof(DataGrid))
+        {
+            TableName = tableName;
+            Title = "Data Table";
+        }
+    }
+    
     public class SQL: ProcessorNode
     {
         #region Node Interface
@@ -16,33 +35,25 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public readonly BaseConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
-            Title = "Server Config"
+            Title = "Present"
         };
         public SQL()
         {
             Title = NodeTypeName = "SQL";
             Output.Add(DataTableOutput);
             
-            DataTableInputs = new ObservableCollection<InputConnector>()
-            {
-                new InputConnector(typeof(DataGrid))
-                {
-                    Title = "Data Table"
-                }
-            };
+            Input.Add(new DatabaseTableInputConnector("Table 1"));
             
             AddEntryCommand = new RequeryCommand(
-                () => DataTableInputs.Add(new InputConnector(typeof(DataGrid)){ Title = "Data Table" }),
+                () => Input.Add(new DatabaseTableInputConnector($"Table {Input.Count + 1}")),
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => DataTableInputs.RemoveAt(DataTableInputs.Count - 1),
-                () => DataTableInputs.Count > 1);
+                () => Input.RemoveAt(Input.Count - 1),
+                () => Input.Count > 1);
         }
         #endregion
-        
+
         #region View Binding/Internal Node Properties
-        private ObservableCollection<InputConnector> _dataTableInputs;
-        public ObservableCollection<InputConnector> DataTableInputs { get => _dataTableInputs; set => SetField(ref _dataTableInputs, value); }
         public IProcessorNodeCommand AddEntryCommand { get; }
         public IProcessorNodeCommand RemoveEntryCommand { get; }
         #endregion
@@ -53,7 +64,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             SQLParameter parameter = new SQLParameter()
             {
-                InputTables = DataTableInputs.Select(di => di.FetchInputValue<DataGrid>()).ToArray(),
+                InputTables = Input.Select(i => i.FetchInputValue<DataGrid>()).ToArray(),
             };
             DataProcessingHelper.SQL(parameter);
 

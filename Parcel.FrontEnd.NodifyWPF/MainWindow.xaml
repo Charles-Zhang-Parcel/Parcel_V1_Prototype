@@ -23,6 +23,12 @@
         <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
         <converters:NodeMessageTypeToVisibilityConverter x:Key="NodeMessageTypeToVisibilityConverter" />
+        <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataTypes:DictionaryEntryType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
         
         <!--Grid Background Brushes-->
         <DrawingBrush x:Key="SmallGridLinesDrawingBrush"
@@ -46,6 +52,48 @@
                                  Brush="#515157" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
+        <Rectangle x:Key="PlusIcon"
+                   x:Shared="False"
+                   Width="16"
+                   Height="16">
+            <Rectangle.Fill>
+                <DrawingBrush>
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <DrawingGroup.Children>
+                                <GeometryDrawing Brush="#00FFFFFF"
+                                                 Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                <GeometryDrawing Brush="#FFF6F6F6"
+                                                 Geometry="F1M6.0003,-0.000199999999999534L6.0003,5.9998 0.000300000000000189,5.9998 0.000300000000000189,9.9998 6.0003,9.9998 6.0003,15.9998 10.0003,15.9998 10.0003,9.9998 16.0003,9.9998 16.0003,5.9998 10.0003,5.9998 10.0003,-0.000199999999999534z" />
+                                <GeometryDrawing Brush="#FF424242"
+                                                 Geometry="F1M15,9L9,9 9,15 7,15 7,9 1,9 1,7 7,7 7,1 9,1 9,7 15,7z" />
+                            </DrawingGroup.Children>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle x:Key="RemoveKeyIcon"
+                   x:Shared="False"
+                   Width="16"
+                   Height="16">
+            <Rectangle.Fill>
+                <DrawingBrush>
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <DrawingGroup.Children>
+                                <GeometryDrawing Brush="#00FFFFFF"
+                                                 Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                <GeometryDrawing Brush="#FFF6F6F6"
+                                                 Geometry="F1M13,10L4,10 4,6 13,6z" />
+                                <GeometryDrawing Brush="#FF414141"
+                                                 Geometry="F1M12,9L5,9 5,7 12,7z" />
+                            </DrawingGroup.Children>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
         
         <!--Connector Shapes-->
         <SolidColorBrush x:Key="SquareConnectorColor" Color="MediumSlateBlue"></SolidColorBrush>
@@ -185,6 +233,22 @@
                     <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                         <nodify:NodeInput/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type nodes:DatabaseTableInputConnector}">
+                        <nodify:NodeInput>
+                            <nodify:NodeInput.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type nodes:DatabaseTableInputConnector}">
+                                    <StackPanel Orientation="Horizontal" DataContext="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:NodeInput},Mode=FindAncestor}}">
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="0 0 5 0" />
+                                        <TextBlock Text="Name"
+                                                   Margin="0 0 5 0" />
+                                        <TextBox Text="{Binding TableName}"></TextBox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </nodify:NodeInput.HeaderTemplate>
+                        </nodify:NodeInput>
+                    </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
         </DataTemplate>
@@ -243,7 +307,7 @@
                                 <DockPanel LastChildFill="True">
                                     <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
                                     <TextBox Text="{Binding Path}"
-                                             MinWidth="100"
+                                             MinWidth="100" MaxWidth="180"
                                              Margin="5 0 0 0" />
                                 </DockPanel>
                             </DataTemplate>
@@ -275,54 +339,6 @@
                             
                             <DataTemplate DataType="{x:Type nodes:Dictionary}">
                                 <DataTemplate.Resources>
-                                    <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
-                                                        ObjectType="{x:Type System:Enum}">
-                                        <ObjectDataProvider.MethodParameters>
-                                            <x:Type TypeName="dataTypes:DictionaryEntryType"/>
-                                        </ObjectDataProvider.MethodParameters>
-                                    </ObjectDataProvider>
-                                    <Rectangle x:Key="PlusIcon"
-                                               x:Shared="False"
-                                               Width="16"
-                                               Height="16">
-                                        <Rectangle.Fill>
-                                            <DrawingBrush>
-                                                <DrawingBrush.Drawing>
-                                                    <DrawingGroup>
-                                                        <DrawingGroup.Children>
-                                                            <GeometryDrawing Brush="#00FFFFFF"
-                                                                             Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                            <GeometryDrawing Brush="#FFF6F6F6"
-                                                                             Geometry="F1M6.0003,-0.000199999999999534L6.0003,5.9998 0.000300000000000189,5.9998 0.000300000000000189,9.9998 6.0003,9.9998 6.0003,15.9998 10.0003,15.9998 10.0003,9.9998 16.0003,9.9998 16.0003,5.9998 10.0003,5.9998 10.0003,-0.000199999999999534z" />
-                                                            <GeometryDrawing Brush="#FF424242"
-                                                                             Geometry="F1M15,9L9,9 9,15 7,15 7,9 1,9 1,7 7,7 7,1 9,1 9,7 15,7z" />
-                                                        </DrawingGroup.Children>
-                                                    </DrawingGroup>
-                                                </DrawingBrush.Drawing>
-                                            </DrawingBrush>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Rectangle x:Key="RemoveKeyIcon"
-                                               x:Shared="False"
-                                               Width="16"
-                                               Height="16">
-                                        <Rectangle.Fill>
-                                            <DrawingBrush>
-                                                <DrawingBrush.Drawing>
-                                                    <DrawingGroup>
-                                                        <DrawingGroup.Children>
-                                                            <GeometryDrawing Brush="#00FFFFFF"
-                                                                             Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                            <GeometryDrawing Brush="#FFF6F6F6"
-                                                                             Geometry="F1M13,10L4,10 4,6 13,6z" />
-                                                            <GeometryDrawing Brush="#FF414141"
-                                                                             Geometry="F1M12,9L5,9 5,7 12,7z" />
-                                                        </DrawingGroup.Children>
-                                                    </DrawingGroup>
-                                                </DrawingBrush.Drawing>
-                                            </DrawingBrush>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
                                     <Style TargetType="TextBox">
                                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
                                     </Style>
@@ -357,6 +373,28 @@
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
+                                </DockPanel>
+                            </DataTemplate>
+                            
+                            <DataTemplate DataType="{x:Type nodes:SQL}">
+                                <DataTemplate.Resources>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource PlusIcon}"
+                                                MouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                PreviewMouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                Command="{Binding AddEntryCommand}" />
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource RemoveKeyIcon}"
+                                                MouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                PreviewMouseDoubleClick="PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick"
+                                                Command="{Binding RemoveEntryCommand}" />
+                                    </StackPanel>
                                 </DockPanel>
                             </DataTemplate>
                             

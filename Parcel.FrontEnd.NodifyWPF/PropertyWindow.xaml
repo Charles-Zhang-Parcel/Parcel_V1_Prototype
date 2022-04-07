@@ -20,6 +20,14 @@
             <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </DockPanel>
         <Separator HorizontalAlignment="Stretch"/>
-        <StackPanel></StackPanel>
+        <StackPanel>
+            <avalonEdit:TextEditor
+                xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                Name="textEditor"
+                SyntaxHighlighting="C#"
+                FontFamily="Consolas"
+                MinHeight="250"
+                FontSize="10pt"/>
+        </StackPanel>
     </StackPanel>
 </local:BaseWindow>
