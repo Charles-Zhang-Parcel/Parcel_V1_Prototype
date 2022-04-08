@@ -46,7 +46,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Constructor
         public MainWindow()
         {
-            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool), () => LastTool != null);
+            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), () => LastTool != null);
             SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(), () => Canvas.Nodes.Count != 0);
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             
@@ -136,7 +136,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             // Auto-Generate
             if (node is CSV csvNode && csvNode.PathInput.Connections.Count == 0)
             {
-                OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode))) as OpenFileNode;
+                OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
+                    csvNode.Location + new Vector(-250, -100)) as OpenFileNode;
                 Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput, csvNode.PathInput);
                 
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -156,10 +157,10 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Routine
-        private BaseNode SpawnNode(ToolboxNodeExport tool)
+        private BaseNode SpawnNode(ToolboxNodeExport tool, Point spawnLocation)
         {
             BaseNode node = (BaseNode) Activator.CreateInstance(tool.Type);
-            node!.Location = Editor.MouseLocation;
+            node!.Location = spawnLocation;
             Canvas.Nodes.Add(node);
             return node;
         }
@@ -192,6 +193,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void ShowSearchNodePopup()
         {
             Point cursor = GetCurosrWindowPosition();
+            Point spawnLocation = Editor.MouseLocation;
 
             PopupTab popupTab = new PopupTab(this)
             {
@@ -204,7 +206,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                 if (toolboxNodeExport != null)
                 {
                     LastTool = toolboxNodeExport;
-                    SpawnNode(LastTool);
+                    SpawnNode(LastTool, spawnLocation);
                 }
             }
             popupTab.ItemSelected += action;
