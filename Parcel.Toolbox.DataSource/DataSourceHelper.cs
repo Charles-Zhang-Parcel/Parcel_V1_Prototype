@@ -27,9 +27,18 @@ namespace Parcel.Toolbox.DataSource
                 // Tiemzone info: https://stackoverflow.com/questions/5996320/net-timezoneinfo-from-olson-time-zone
                 // { "America/New_York", "Eastern Standard Time" },
                 var americaNewYorkTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                var newYorkTime = TimeZoneInfo.ConvertTimeFromUtc(input, americaNewYorkTimeZone);
+                var newYorkTime = TimeZoneInfo.ConvertTimeFromUtc(input.AddDays(1), americaNewYorkTimeZone);
                 string timeStamp = ((DateTimeOffset) newYorkTime).ToUnixTimeSeconds().ToString();
                 return timeStamp;   // TODO: NOT WORKING
+                /*Test Info:
+                 Test date: 2014/01/28-2022/04/07
+
+UTC: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390896000&period2=1649314800&interval=1m&events=history&includeAdjustedClose=true
+UTC to Eastern: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390878000&period2=1649300400&interval=1m&events=history&includeAdjustedClose=true
+UTC+1 to Eastern: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390964400&period2=1649386800&interval=1m&events=history&includeAdjustedClose=true
+
+Actual: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390953600&period2=1649376000&interval=1mo&events=history&includeAdjustedClose=true
+America/New_York*/
             }
             
             Dictionary<string, string> validIntervals = new Dictionary<string, string>()

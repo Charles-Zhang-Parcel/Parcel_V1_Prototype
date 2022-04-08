@@ -1,31 +1,33 @@
 ﻿using System;
+using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
+using Parcel.Shared.Framework.ViewModels.Primitives;
 
 namespace Parcel.Toolbox.DataSource.Nodes
 {
     public class YahooFinance: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector SymbolInput = new PrimitiveStringInputConnector()
+        public readonly InputConnector SymbolInput = new PrimitiveStringInputConnector()
         {
             Title = "Symbol",
         };
-        public readonly  BaseConnector StartDateInput = new PrimitiveDateTimeInputConnector()
+        public readonly  InputConnector StartDateInput = new PrimitiveDateTimeInputConnector()
         {
             Title = "Start Date"
         };
-        public readonly  BaseConnector EndDateInput = new PrimitiveDateTimeInputConnector()
+        public readonly  InputConnector EndDateInput = new PrimitiveDateTimeInputConnector()
         {
             Title = "End Date"
         };
-        public readonly BaseConnector IntervalInput = new PrimitiveStringInputConnector()
+        public readonly InputConnector IntervalInput = new PrimitiveStringInputConnector()
         {
             Title = "Internal",
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 
@@ -60,6 +62,18 @@ namespace Parcel.Toolbox.DataSource.Nodes
             
             return new NodeExecutionResult(true, null);
         }
+        #endregion
+
+        #region Auto Connect Interface
+        public override bool ShouldGenerateConnection => SymbolInput.Connections.Count == 0;
+        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
+            new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
+            {
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-250, -100), SymbolInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), SymbolInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), SymbolInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), SymbolInput)
+            };
         #endregion
     }
 }

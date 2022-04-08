@@ -133,9 +133,9 @@ namespace Parcel.FrontEnd.NodifyWPF
             if (!(sender is Button {Tag: ProcessorNode node} button)) return;
 
             node.IsPreview = true;
-            
+
             // Auto-Generate
-            if (node is CSV csvNode && csvNode.PathInput.Connections.Count == 0)
+            if (node is CSV csvNode && csvNode.ShouldGenerateConnection)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
                     csvNode.Location + new Vector(-200, -60)) as OpenFileNode;
@@ -146,6 +146,28 @@ namespace Parcel.FrontEnd.NodifyWPF
                 {
                     filePathNode.Path = openFileDialog.FileName;
                 }
+                
+                e.Handled = true;
+                return;
+            }
+            else if (node is IAutoConnect autoConnect && autoConnect.ShouldGenerateConnection && node.AutoGenerateNodes != null)
+            {
+                foreach (Tuple<ToolboxNodeExport,Vector,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
+                {
+                    BaseNode temp = SpawnNode(generateNode.Item1, node.Location + generateNode.Item2);
+                    if(temp is IMainOutputNode outputNode)
+                        Canvas.Schema.TryAddConnection(outputNode.MainOutput, generateNode.Item3);
+                }
+            }
+            
+            // Connection check
+            if (node.ShouldGenerateConnection && node.AutoGenerateNodes == null)
+            {
+                node.Message.Content = "Require Connection.";
+                node.Message.Type = NodeMessageType.Error;
+                
+                e.Handled = true;
+                return;
             }
             
             // TODO: This is a good chance to auto-save, before anything can crash
@@ -220,7 +242,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             };
             void action(ToolboxNodeExport toolboxNodeExport)
             {
-                if (toolboxNodeExport != null)
+                if (toolboxNodeExport != null 
+                    && toolboxNodeExport.Type != typeof(object)) // Don't do anything for placeholder nodes
                 {
                     LastTool = toolboxNodeExport;
                     SpawnNode(LastTool, spawnLocation);

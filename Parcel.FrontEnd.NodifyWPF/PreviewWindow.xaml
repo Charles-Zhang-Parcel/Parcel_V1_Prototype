@@ -16,14 +16,17 @@
         <DockPanel Visibility="{Binding DataGridVisibility}"
                    LastChildFill="True"
                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel DockPanel.Dock="Bottom">
-                <TextBlock Text="{Binding DataGridDataColumns.Length}"/>
-                <TextBlock Text=" Columns; "/>
-                <TextBlock Text="{Binding DataGridData.Count}"/>
-                <TextBlock Text="Data Rows"/>
-            </StackPanel>
-            <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
-                      AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"></DataGrid>
+            <Grid>
+                <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
+                          AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="4,0,0,2">
+                    <TextBlock Text="{Binding DataGridDataColumns.Length}"/>
+                    <TextBlock Text=" Columns; "/>
+                    <TextBlock Text="{Binding DataGridData.Count}"/>
+                    <TextBlock Text=" Data Rows"/>
+                </StackPanel>
+            </Grid>
         </DockPanel>
         
         <Grid x:Name="WindowGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Grid>

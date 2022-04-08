@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
-    public abstract class ProcessorNode: BaseNode, IProcessor
+    public interface IMainOutputNode
+    {
+        public OutputConnector MainOutput { get; }
+    }
+    public abstract class ProcessorNode: BaseNode, IProcessor, IMainOutputNode, IAutoConnect
     {
         #region Public View Properties
         private string _title;
@@ -68,7 +75,11 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 
         public Dictionary<BaseConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =
             new Dictionary<BaseConnector, ConnectorCacheDescriptor>();
+        #endregion
 
+        #region Auto Connect Interface
+        public virtual bool ShouldGenerateConnection => Input.First().Connections.Count == 0;
+        public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes { get; } = null; // Not available
         #endregion
     }
 }

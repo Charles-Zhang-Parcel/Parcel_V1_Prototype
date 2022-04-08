@@ -1,4 +1,6 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System;
+using System.Windows;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
