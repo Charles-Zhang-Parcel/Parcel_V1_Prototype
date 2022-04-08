@@ -53,7 +53,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             InitializeComponent();
             
             EventManager.RegisterClassHandler(typeof(Nodify.BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
-            EventManager.RegisterClassHandler(typeof(Nodify.Node), MouseDoubleClickEvent, new MouseButtonEventHandler(NodeDoubleclick_OpenProperties));
+            EventManager.RegisterClassHandler(typeof(Nodify.Node), MouseLeftButtonDownEvent, new MouseButtonEventHandler(NodeDoubleclick_OpenProperties));
         }
         public NodesCanvas Canvas { get; set; } = new NodesCanvas();
         #endregion
@@ -83,22 +83,31 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Events
-        private void PrimitiveInputConnectorEntryModificationButton_DisableOnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-        }
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
-               ShowSearchNodePopup();
+            {
+                ShowSearchNodePopup();
+                e.Handled = true;
+            }
         }
         private void Editor_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-            => ShowSearchNodePopup();
+        {
+            ShowSearchNodePopup();
+            e.Handled = true;
+        }
         private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
         {
+            if (e.ClickCount != 2) return;
             if (!(e.Source is Nodify.Node {DataContext: ProcessorNode node})) return;
-            
-            new PropertyWindow(this, node).Show();
+
+            Point cursor = GetCurosrWindowPosition();
+            new PropertyWindow(this, node)
+            {
+                Left = cursor.X,
+                Top = cursor.Y
+            }.Show();
+            e.Handled = true;
         }
         private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
         {
@@ -109,12 +118,14 @@ namespace Parcel.FrontEnd.NodifyWPF
             {
                 node.Path = openFileDialog.FileName;
             }
+            e.Handled = true;
         }
         private void ProcessorNodeTogglePreviewButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is Border {Tag: ProcessorNode node} border)) return;
 
             node.IsPreview = !node.IsPreview;
+            e.Handled = true;
         }
         private void ProcessorNodePreviewButton_Click(object sender, RoutedEventArgs e)
         {
@@ -139,6 +150,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             SpawnPreviewWindow(node);
             ExecuteAll();
+
+            e.Handled = true;
         }
         #endregion
 
@@ -178,13 +191,12 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void ShowSearchNodePopup()
         {
-            var cursor = Mouse.GetPosition(this);
-            var rect = GetWindowRectangle(this);
+            Point cursor = GetCurosrWindowPosition();
 
             PopupTab popupTab = new PopupTab(this)
             {
-                Left = this.WindowState == WindowState.Maximized ? rect.Left : this.Left + cursor.X,
-                Top = this.WindowState == WindowState.Maximized ? rect.Top : this.Top + cursor.Y,
+                Left = cursor.X,
+                Top = cursor.Y,
                 Topmost = true
             };
             void action(ToolboxNodeExport toolboxNodeExport)
@@ -218,6 +230,14 @@ namespace Parcel.FrontEnd.NodifyWPF
                 string path = saveFileDialog.FileName;
                 Canvas.Save(path);
             }
+        }
+
+        private Point GetCurosrWindowPosition()
+        {
+            Point cursor = Mouse.GetPosition(this);
+            RECT rect = GetWindowRectangle(this);
+            return new Point((this.WindowState == WindowState.Maximized ? rect.Left : this.Left) + cursor.X,
+                (this.WindowState == WindowState.Maximized ? rect.Top : this.Top) + cursor.Y);
         }
         #endregion
 
