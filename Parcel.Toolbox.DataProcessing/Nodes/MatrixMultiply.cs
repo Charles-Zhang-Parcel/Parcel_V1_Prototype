@@ -35,8 +35,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Routines
         private void AddInputs()
         {
-            Input.Add(new DatabaseTableInputConnector($"Table {Input.Count / 2 + 1}"));
-            Input.Add(new PrimitiveBooleanInputConnector());
+            Input.Add(new InputConnector(typeof(DataGrid)){Title = $"Table {Input.Count / 2 + 1}"});
+            Input.Add(new PrimitiveBooleanInputConnector() {Title = "Transpose"} );
         }
         private void RemoveInputs()
         {

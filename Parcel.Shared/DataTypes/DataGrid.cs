@@ -143,6 +143,18 @@ namespace Parcel.Shared.DataTypes
     
     public class DataGrid
     {
+        #region Helper
+        public static object Preformatting(string inputValue)
+        {
+            // Perform pre-formatting
+            if (double.TryParse(inputValue, out double number))
+                return number;
+            else if (DateTime.TryParse(inputValue, out DateTime dateTime))
+                return dateTime;
+            else return inputValue;
+        }
+        #endregion
+        
         #region Constructors
         public DataGrid(){}
         public DataGrid(ExpandoObject expando)
@@ -171,12 +183,7 @@ namespace Parcel.Shared.DataTypes
                 // Add data to columns
                 for (var i = 0; i < headers.Length; i++)
                 {
-                    // Perform pre-formatting
-                    if (double.TryParse(line[i], out double number))
-                        Columns[i].Add(number);
-                    else if (DateTime.TryParse(line[i], out DateTime dateTime))
-                        Columns[i].Add(dateTime);
-                    else Columns[i].Add(line[i]);
+                    Columns[i].Add(Preformatting(line[i]));
                 }
             }
         }
@@ -325,6 +332,38 @@ namespace Parcel.Shared.DataTypes
             foreach (DataColumn column in this.Columns)
                 for (int row = 0; row < column.Length; row++)
                     result.Columns[row].Add(column[row]);
+
+            return result;
+        }
+        public DataGrid MatrixMultiply(DataGrid other)
+        {
+            // Make use of only numerical columns
+            var numericalColumns = this.Columns.Where(c => c.Type == typeof(double)).ToArray();
+            var numericalColumnsOther = other.Columns.Where(c => c.Type == typeof(double)).ToArray();
+            int firstMatrixColumnCount = numericalColumns.Length; 
+            int secondMatrixRowCount = other.RowCount;
+
+            if (firstMatrixColumnCount != secondMatrixRowCount)
+                throw new InvalidOperationException("Matrix dimensions don't match for multiplication operation.");
+
+            // Initialize columns
+            DataGrid result = new DataGrid();
+            for (var i = 0; i < numericalColumnsOther.Length; i++)
+                result.AddColumn($"Column {i + 1}");
+            
+            // Compute rows
+            for (int row = 0; row < this.RowCount; row++)
+            {
+                List<double> rowElements = new List<double>();
+                for (int col = 0; col < numericalColumnsOther.Length; col++)
+                {
+                    double sum = 0;
+                    for (int i = 0; i < firstMatrixColumnCount; i++)
+                        sum += this.Columns[i][row] * other.Columns[col][i];
+                    rowElements.Add(sum);
+                }
+                result.AddRow(rowElements.OfType<object>().ToArray());
+            }
 
             return result;
         }

@@ -169,8 +169,13 @@ namespace Parcel.Toolbox.DataProcessing
             if (parameter.InputTables.Any(t => t == null))
                 throw new ArgumentException("Invalid table inputs.");
 
-            throw new NotImplementedException();
-            // parameter.OutputTable = ;
+            DataGrid result = parameter.InputTableShouldTransposes.First() ? parameter.InputTables.First().Transpose() : parameter.InputTables.First();
+            for (int i = 1; i < parameter.InputTables.Length; i++)
+            {
+                bool shouldTranspose = parameter.InputTableShouldTransposes[i];
+                result = result.MatrixMultiply(shouldTranspose ? parameter.InputTables[i].Transpose() : parameter.InputTables[i]);
+            }
+            parameter.OutputTable = result;
         }
         
         public static void SQL(SQLParameter parameter)

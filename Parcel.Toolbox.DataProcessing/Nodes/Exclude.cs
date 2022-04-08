@@ -14,7 +14,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNamesInput = new InputConnector(typeof(string))
+        public readonly BaseConnector ColumnNamesInput = new PrimitiveStringInputConnector()
         {
             Title = "Column Names",
         };

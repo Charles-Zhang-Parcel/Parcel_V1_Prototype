@@ -9,6 +9,9 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
+    /// <summary>
+    /// TODO: Editing for Data Table node is not working yet at this moment due to a transform as Expando object during presentation
+    /// </summary>
     public class DataTableFieldDefinition: ObservableObject
     {
         #region Properties
@@ -79,7 +82,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                     switch (definition.Type)
                     {
                         case DictionaryEntryType.Number:
-                            column.Add(0);
+                            column.Add((double)0.0);
                             break;
                         case DictionaryEntryType.String:
                             column.Add(string.Empty);

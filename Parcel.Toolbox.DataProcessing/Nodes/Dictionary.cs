@@ -20,7 +20,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             set => SetField(ref _name, value);
         }
         private DictionaryEntryType _type = DictionaryEntryType.Number;
-        public DictionaryEntryType Type
+        public DictionaryEntryType Type // TODO: This member is not made use of yet; Currently we are just parsing the string according to heuristics
         {
             get => _type;
             set => SetField(ref _type, value);
@@ -29,7 +29,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public object Value
         {
             get => _value;
-            set => SetField(ref _value, value);
+            set => SetField(ref _value, DataGrid.Preformatting((string)value));
         }
         #endregion
     }
@@ -48,11 +48,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
 
             Definitions = new ObservableCollection<DictionaryEntryDefinition>()
             {
-                new DictionaryEntryDefinition()
+                new DictionaryEntryDefinition() { Name = "Entry 1" }
             };
             
             AddEntryCommand = new RequeryCommand(
-                () => Definitions.Add(new DictionaryEntryDefinition()),
+                () => Definitions.Add(new DictionaryEntryDefinition() {Name = $"Entry {Definitions.Count+1}"} ),
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
                 () => Definitions.RemoveAt(Definitions.Count - 1),
