@@ -13,10 +13,18 @@
             <Label Content="{Binding TestLabel}"></Label>    
         </Grid>
         
-        <Grid Visibility="{Binding DataGridVisibility}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <DockPanel Visibility="{Binding DataGridVisibility}"
+                   LastChildFill="True"
+                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <StackPanel DockPanel.Dock="Bottom">
+                <TextBlock Text="{Binding DataGridDataColumns.Length}"/>
+                <TextBlock Text=" Columns; "/>
+                <TextBlock Text="{Binding DataGridData.Count}"/>
+                <TextBlock Text="Data Rows"/>
+            </StackPanel>
             <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
                       AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"></DataGrid>
-        </Grid>
+        </DockPanel>
         
         <Grid x:Name="WindowGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Grid>
     </Grid>

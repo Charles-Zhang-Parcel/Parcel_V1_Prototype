@@ -53,6 +53,12 @@ namespace Parcel.FrontEnd.NodifyWPF
             set => SetField(ref _dataGridVisibility, value);
         }
 
+        private string[] _dataGridDataColumns;
+        public string[] DataGridDataColumns
+        {
+            get => _dataGridDataColumns;
+            set => SetField(ref _dataGridDataColumns, value);
+        }
         private List<dynamic> _dataGridData;
         public List<dynamic> DataGridData
         {
@@ -128,10 +134,10 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             // Collect column names
             IEnumerable<IDictionary<string, object>> rows = objects.OfType<IDictionary<string, object>>();
-            IEnumerable<string> columns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase);
+            DataGridDataColumns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
             // Generate columns
             WpfDataGrid.Columns.Clear();
-            foreach (string columnName in columns)
+            foreach (string columnName in DataGridDataColumns)
             {
                 // now set up a column and binding for each property
                 var column = new DataGridTextColumn 
