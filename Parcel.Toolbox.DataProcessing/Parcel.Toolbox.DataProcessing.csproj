@@ -10,6 +10,8 @@
 
     <ItemGroup>
       <PackageReference Include="Csv" Version="2.0.67" />
+      <PackageReference Include="ExcelDataReader" Version="3.7.0-develop00310" />
+      <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0-develop00310" />
       <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
     </ItemGroup>
 

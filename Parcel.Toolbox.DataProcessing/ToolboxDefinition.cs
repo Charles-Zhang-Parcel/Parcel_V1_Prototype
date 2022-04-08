@@ -15,6 +15,7 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("CSV", typeof(CSV)),
             new ToolboxNodeExport("Data Table", typeof(DataTable)), // DataTable or matrix initializer
             new ToolboxNodeExport("Dictionary", typeof(Dictionary)),
+            new ToolboxNodeExport("Excel", typeof(Excel)),
             null, // Divisor line // High Level Operations
             new ToolboxNodeExport("Append", typeof(Append)),
             new ToolboxNodeExport("Extract", typeof(Extract)),

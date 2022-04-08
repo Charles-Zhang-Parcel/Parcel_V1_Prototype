@@ -20,7 +20,7 @@
                 <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
                           AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"
                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="4,0,0,2">
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="4,0,0,2" Background="LightGray">
                     <TextBlock Text="{Binding DataGridDataColumns.Length}"/>
                     <TextBlock Text=" Columns; "/>
                     <TextBlock Text="{Binding DataGridData.Count}"/>

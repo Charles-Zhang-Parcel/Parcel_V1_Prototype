@@ -135,20 +135,21 @@ namespace Parcel.FrontEnd.NodifyWPF
             node.IsPreview = true;
 
             // Auto-Generate
-            if (node is CSV csvNode && csvNode.ShouldGenerateConnection)
+            if ((node is CSV || node is Excel) && node.ShouldGenerateConnection)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
-                    csvNode.Location + new Vector(-200, -60)) as OpenFileNode;
-                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput, csvNode.PathInput);
+                    node.Location + new Vector(-200, -60)) as OpenFileNode;
+                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput, node.Input.First());
                 
                 OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (node is CSV)
+                    openFileDialog.Filter = "CSV file (*.csv)|*.csv|All types (*.*)|*.*";
+                else if (node is Excel)
+                    openFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx|All types (*.*)|*.*";
                 if (openFileDialog.ShowDialog() == true)
                 {
                     filePathNode.Path = openFileDialog.FileName;
                 }
-                
-                e.Handled = true;
-                return;
             }
             else if (node is IAutoConnect autoConnect && autoConnect.ShouldGenerateConnection && node.AutoGenerateNodes != null)
             {
@@ -158,6 +159,9 @@ namespace Parcel.FrontEnd.NodifyWPF
                     if(temp is IMainOutputNode outputNode)
                         Canvas.Schema.TryAddConnection(outputNode.MainOutput, generateNode.Item3);
                 }
+                
+                e.Handled = true;
+                return;
             }
             
             // Connection check

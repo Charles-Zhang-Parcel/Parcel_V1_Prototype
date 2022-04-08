@@ -187,25 +187,40 @@ namespace Parcel.Shared.DataTypes
                 }
             }
         }
-        public DataGrid(DataSet dataset)
+        public DataGrid(DataSet dataset, bool forceFirstLineAsHeader = false)
         {
             DataTable table = dataset.Tables[0];
             // TableName = table.TableName;
 
             // Initialize columns
             List<string> headers = new List<string>();
-            foreach (System.Data.DataColumn column in table.Columns)
+            if (!forceFirstLineAsHeader)
             {
-                headers.Add(column.Caption);
-                Columns.Add(new DataColumn(column.Caption));
+                foreach (System.Data.DataColumn column in table.Columns)
+                {
+                    headers.Add(column.Caption);
+                    Columns.Add(new DataColumn(column.Caption));
+                }    
             }
-            
-            // Populate row data
-            foreach (DataRow row in table.Rows)
+            else
             {
+                DataRow row = table.Rows[0];
+                for (int index = 0; index < table.Columns.Count; index++)
+                {
+                    string text = row[index].ToString();
+                    headers.Add(text);
+                    Columns.Add(new DataColumn(text));
+                }
+            }
+
+            // Populate row data
+            int startingIndex = forceFirstLineAsHeader ?  1 : 0;
+            for (int i = startingIndex; i < table.Rows.Count; i++)
+            {
+                DataRow row = table.Rows[i];
                 // Add data to columns
-                for (var i = 0; i < headers.Count; i++)
-                    Columns[i].Add(row[i]);
+                for (var col = 0; col < headers.Count; col++)
+                    Columns[col].Add(row[col]);   
             }
         }
         #endregion

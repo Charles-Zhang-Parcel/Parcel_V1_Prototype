@@ -5,21 +5,25 @@ using System.Data.SQLite;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Csv;
+using ExcelDataReader;
 using Parcel.Shared.DataTypes;
-using Parcel.Shared.Framework;
-using Parcel.Toolbox.DataProcessing.Nodes;
 using DataTable = System.Data.DataTable;
 
 namespace Parcel.Toolbox.DataProcessing
 {
     #region Parameters
-    public class CSVParameter
+    public class TabularFileBaseParameter
     {
         public string InputPath { get; set; }
         public bool InputContainsHeader { get; set; }
-        public DataGrid OutputTable { get; set; }
+        public DataGrid OutputTable { get; set; }   
+    }
+    public class CSVParameter: TabularFileBaseParameter
+    {
+    }
+    public class ExcelParameter: TabularFileBaseParameter
+    {
     }
     public class TakeParameter
     {
@@ -87,6 +91,22 @@ namespace Parcel.Toolbox.DataProcessing
                 HeaderMode = parameter.InputContainsHeader ? HeaderMode.HeaderPresent : HeaderMode.HeaderAbsent
             });
             parameter.OutputTable = new DataGrid(csv);
+        }
+        
+        public static void Excel(ExcelParameter parameter)
+        {
+            if (string.IsNullOrWhiteSpace(parameter.InputPath) || !File.Exists(parameter.InputPath))
+                throw new ArgumentException("Invalid inputs");
+
+            DataSet result = null;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            using (var stream = File.Open(parameter.InputPath, FileMode.Open, FileAccess.Read))
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
+            {
+                result = reader.AsDataSet();
+            }
+          
+            parameter.OutputTable = new DataGrid(result, parameter.InputContainsHeader);
         }
         
         public static void Take(TakeParameter parameter)
