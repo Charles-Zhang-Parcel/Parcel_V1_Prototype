@@ -54,6 +54,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             EventManager.RegisterClassHandler(typeof(Nodify.BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
             EventManager.RegisterClassHandler(typeof(Nodify.Node), MouseLeftButtonDownEvent, new MouseButtonEventHandler(NodeDoubleclick_OpenProperties));
+            EventManager.RegisterClassHandler(typeof(Nodify.GroupingNode), MouseLeftButtonDownEvent, new MouseButtonEventHandler(NodeDoubleclick_OpenProperties));
         }
         public NodesCanvas Canvas { get; set; } = new NodesCanvas();
         #endregion
@@ -99,14 +100,14 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void NodeDoubleclick_OpenProperties(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount != 2) return;
-            if (!(e.Source is Nodify.Node {DataContext: ProcessorNode node})) return;
+            if (!(e.Source is Nodify.Node {DataContext: ProcessorNode processorNode})
+                && !(e.Source is Nodify.GroupingNode {DataContext: CommentNode commentNode})) return;
 
-            Point cursor = GetCurosrWindowPosition();
-            new PropertyWindow(this, node)
-            {
-                Left = cursor.X,
-                Top = cursor.Y
-            }.Show();
+            if (e.Source is Nodify.Node node)
+                SpawnPropertyWindow(node.DataContext as BaseNode);
+            else if (e.Source is Nodify.GroupingNode groupingNode)
+                SpawnPropertyWindow(groupingNode.DataContext as CommentNode);
+            
             e.Handled = true;
         }
         private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
@@ -177,6 +178,22 @@ namespace Parcel.FrontEnd.NodifyWPF
                 preview.Closed += (sender, args) => _previewWindows.Remove((sender as PreviewWindow)!.Node); 
                 preview.Show();   
             }
+        }
+        private void SpawnPropertyWindow(BaseNode node)
+        {
+            Point cursor = GetCurosrWindowPosition();
+            if(node is ProcessorNode processorNode)
+                new PropertyWindow(this, processorNode)
+                {
+                    Left = cursor.X,
+                    Top = cursor.Y
+                }.Show();
+            else if(node is CommentNode commentNode)
+                new CommentWindow(this, commentNode)
+                {
+                    Left = cursor.X,
+                    Top = cursor.Y
+                }.Show();
         }
         private void ExecuteAll()
         {

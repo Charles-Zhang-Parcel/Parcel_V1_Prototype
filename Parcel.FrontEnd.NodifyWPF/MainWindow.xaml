@@ -503,6 +503,7 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:CommentNode}">
                     <nodify:GroupingNode Header="{Binding Title}"
+                                         Content="{Binding Comment}"
                                          ActualSize="{Binding Size}" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type baseNodes:KnotNode}">
