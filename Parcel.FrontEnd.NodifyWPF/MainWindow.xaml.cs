@@ -123,12 +123,10 @@ namespace Parcel.FrontEnd.NodifyWPF
             node.IsPreview = true;
             
             // Auto-Generate
-            if ((node is CSV csvNode && csvNode.PathInput.Connections.Count == 0)
-                || (node is DataTable dataTableNode && dataTableNode.PathInput.Connections.Count == 0))
+            if (node is CSV csvNode && csvNode.PathInput.Connections.Count == 0)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode))) as OpenFileNode;
-                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput,
-                    (node is CSV csv) ? csv.PathInput : (node as DataTable).PathInput);
+                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput, csvNode.PathInput);
                 
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (openFileDialog.ShowDialog() == true)

@@ -248,6 +248,12 @@ namespace Parcel.Shared.DataTypes
             Columns.Add(newColumn);
             return newColumn;
         }
+        public DataColumn RemoveColumn(string extra)
+        {
+            if (Columns.Any(c => c.Header == extra))
+                Columns.Remove(Columns.First(c => c.Header == extra));
+            return null;
+        }
         public void AddOptionalRowHeaderColumn(string columnName)
         {
             OptionalRowHeaderColumn = new DataColumn(columnName);

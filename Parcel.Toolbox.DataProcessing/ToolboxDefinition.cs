@@ -13,7 +13,7 @@ namespace Parcel.Toolbox.DataProcessing
         {
             // Data Types and IO
             new ToolboxNodeExport("CSV", typeof(CSV)),
-            new ToolboxNodeExport("Data Table", typeof(DataTable)),
+            new ToolboxNodeExport("Data Table", typeof(DataTable)), // DataTable or matrix initializer
             new ToolboxNodeExport("Dictionary", typeof(Dictionary)),
             null, // Divisor line // High Level Operations
             new ToolboxNodeExport("Append", typeof(Append)),
@@ -26,6 +26,7 @@ namespace Parcel.Toolbox.DataProcessing
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
             new ToolboxNodeExport("Convert", typeof(object)), // Act on individual columns
+            new ToolboxNodeExport("Matrix Multiply", typeof(MatrixMultiply)), // Dynamic connector sequence, With option to transpose
             null, // Divisor line // Queries
             new ToolboxNodeExport("Names", typeof(object)), // Return string array of headers
             new ToolboxNodeExport("Size", typeof(object)), // Return integer count of rows and columns

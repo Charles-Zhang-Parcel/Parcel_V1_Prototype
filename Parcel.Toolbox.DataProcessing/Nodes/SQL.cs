@@ -27,7 +27,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }
     }
     
-    public class SQL: ProcessorNode, INodeProperty
+    public class SQL: DynamicInputProcessorNode, INodeProperty
     {
         #region Node Interface
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
@@ -47,6 +47,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             
             Title = NodeTypeName = "SQL";
             Output.Add(DataTableOutput);
+            Output.Add(ServerConfigOutput);
             
             Input.Add(new DatabaseTableInputConnector("Table 1"));
             
@@ -66,8 +67,6 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             get => _code;
             set => SetField(ref _code, value);
         }
-        public IProcessorNodeCommand AddEntryCommand { get; }
-        public IProcessorNodeCommand RemoveEntryCommand { get; }
         #endregion
 
         #region Property Editor Interface

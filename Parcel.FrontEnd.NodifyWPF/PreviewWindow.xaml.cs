@@ -9,6 +9,7 @@ using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
+using Parcel.Toolbox.DataProcessing.Nodes;
 using DataGrid = Parcel.Shared.DataTypes.DataGrid;
 
 namespace Parcel.FrontEnd.NodifyWPF
@@ -20,6 +21,10 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             Owner = owner;
             Node = processorNode;
+
+            if (processorNode is DataTable)
+                DataGridIsReadOnly = false;
+            
             InitializeComponent();
 
             GeneratePreviewForOutput();
@@ -53,6 +58,12 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             get => _dataGridData;
             set => SetField(ref _dataGridData, value);
+        }
+        public bool _dataGridIsReadOnly = true;
+        public bool DataGridIsReadOnly
+        {
+            get => _dataGridIsReadOnly;
+            set => SetField(ref _dataGridIsReadOnly, value);   
         }
         #endregion
 

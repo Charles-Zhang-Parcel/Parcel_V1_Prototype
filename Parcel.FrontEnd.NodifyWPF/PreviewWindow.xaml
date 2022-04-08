@@ -14,7 +14,7 @@
         </Grid>
         
         <Grid Visibility="{Binding DataGridVisibility}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <DataGrid x:Name="WpfDataGrid" IsReadOnly="True"
+            <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
                       AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"></DataGrid>
         </Grid>
         

@@ -58,6 +58,12 @@ namespace Parcel.Toolbox.DataProcessing
         public DataGrid InputTable { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class MatrixMultiplyParameter
+    {
+        public DataGrid[] InputTables { get; set; }
+        public bool[] InputTableShouldTransposes { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
     public class SQLParameter
     {
         public DataGrid[] InputTables { get; set; }
@@ -154,6 +160,17 @@ namespace Parcel.Toolbox.DataProcessing
                 throw new ArgumentException("Missing Data Table input.");
             
             parameter.OutputTable = parameter.InputTable.Transpose();
+        }
+        
+        public static void MatrixMultiply(MatrixMultiplyParameter parameter)
+        {
+            if (parameter.InputTables.Length != parameter.InputTableShouldTransposes.Length)
+                throw new ArgumentException("Wrong number of inputs.");
+            if (parameter.InputTables.Any(t => t == null))
+                throw new ArgumentException("Invalid table inputs.");
+
+            throw new NotImplementedException();
+            // parameter.OutputTable = ;
         }
         
         public static void SQL(SQLParameter parameter)
