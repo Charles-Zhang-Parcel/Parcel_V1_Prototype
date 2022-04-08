@@ -15,6 +15,14 @@ namespace Parcel.Shared.Framework.ViewModels
         }
     }
     
+    public class PrimitiveDateTimeInputConnector : PrimitiveInputConnector
+    {
+        public PrimitiveDateTimeInputConnector() : base(typeof(DateTime))
+        {
+            Value = DateTime.Now;
+        }
+    }
+    
     public class PrimitiveStringInputConnector : PrimitiveInputConnector
     {
         public PrimitiveStringInputConnector() : base(typeof(string))
@@ -224,6 +232,7 @@ namespace Parcel.Shared.Framework.ViewModels
             {typeof(bool), ConnectorShape.Triangle},
             {typeof(string), ConnectorShape.Circle},
             {typeof(double), ConnectorShape.Circle},
+            {typeof(DateTime), ConnectorShape.Circle},
             {typeof(DataGrid), ConnectorShape.Square},
             {typeof(ServerConfig), ConnectorShape.RedSquare},
             {typeof(ControlFlow), ConnectorShape.RightTriangle},

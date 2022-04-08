@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,12 +11,9 @@ namespace Parcel.Toolbox.DataSource
 {
     public class YahooFinanceParameter
     {
-        // TODO: For all practical usage, we should all just use the default
         public string InputSymbol { get; set; }
-        // public string[] InputFields { get; set; }
-        // public string InputAPIKey { get; set; } // Yahoo REST API is useless compared to its website, with too many restrictions and too limited capabilities
-        public DateTime InputStartTime { get; set; }
-        public DateTime InputEndTime { get; set; }
+        public DateTime InputStartDate { get; set; }
+        public DateTime InputEndDate { get; set; }
         public string InputInterval { get; set; }
         public DataGrid OutputTable { get; set; }
     }
@@ -24,30 +22,43 @@ namespace Parcel.Toolbox.DataSource
     {
         public static void YahooFinance(YahooFinanceParameter parameter)
         {
+            string ConvertTimeFormat(DateTime input)
+            {
+                // Tiemzone info: https://stackoverflow.com/questions/5996320/net-timezoneinfo-from-olson-time-zone
+                // { "America/New_York", "Eastern Standard Time" },
+                var americaNewYorkTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                var newYorkTime = TimeZoneInfo.ConvertTimeFromUtc(input, americaNewYorkTimeZone);
+                string timeStamp = ((DateTimeOffset) newYorkTime).ToUnixTimeSeconds().ToString();
+                return timeStamp;   // TODO: NOT WORKING
+            }
+            
+            Dictionary<string, string> validIntervals = new Dictionary<string, string>()
+            {
+                {"month", "1m"},
+                {"day", "1d"},
+                {"week", "1w"},
+                {"year", "1y"},
+            };
+            if (parameter.InputStartDate > parameter.InputEndDate)
+                throw new ArgumentException("Wrong date.");
+            if (parameter.InputEndDate > DateTime.Now)
+                throw new ArgumentException("Wrong date.");
+            if (parameter.InputSymbol.Length > 5)
+                throw new ArgumentException("Wrong symbol.");
+            if (!validIntervals.Keys.Contains(parameter.InputInterval.ToLower()))
+                throw new ArgumentException("Wrong interval.");
+
+            string startTime = ConvertTimeFormat(parameter.InputStartDate);
+            string endTime = ConvertTimeFormat(parameter.InputEndDate);
+            string interval = validIntervals[parameter.InputInterval.ToLower()];
             string csvUrl =
-                $"https://query1.finance.yahoo.com/v7/finance/download/{parameter.InputSymbol}?period1=1245196800&period2=1649376000&interval=1d&events=history&includeAdjustedClose=true";
+                $"https://query1.finance.yahoo.com/v7/finance/download/{parameter.InputSymbol}?period1={startTime}&period2={endTime}&interval={interval}&events=history&includeAdjustedClose=true";
             string csvText = new WebClient().DownloadString(csvUrl);
             IEnumerable<ICsvLine> csv = Csv.CsvReader.ReadFromText(csvText, new CsvOptions()
             {
                 HeaderMode = HeaderMode.HeaderPresent
             });
             parameter.OutputTable = new DataGrid(csv);
-        }
-
-        public static void YahooFinanceOLDANDNOTWORKING(YahooFinanceParameter parameter)
-        {
-            var httpClient = new HttpClient();
-                        httpClient.BaseAddress = new Uri("https://yfapi.net/");
-                        httpClient.DefaultRequestHeaders.Add("X-API-KEY", 
-                            /*parameter.InputAPIKey*/"Useless");
-                        httpClient.DefaultRequestHeaders.Add("accept", 
-                            "application/json");
-            
-                        // HttpResponseMessage response = /*await*/ httpClient.GetAsync(
-                        //     $"v11/finance/quoteSummary/{parameter.InputSymbol}?lang=en&region=US&modules=defaultKeyStatistics%2CassetProfile").Result;
-                        HttpResponseMessage response = /*await*/ httpClient.GetAsync(
-                            $"v11/finance/quote/{parameter.InputSymbol}?lang=en&region=US&modules=defaultKeyStatistics%2CassetProfile").Result;
-                        string responseBody = /*await*/ response.Content.ReadAsStringAsync().Result;
         }
     }
 }

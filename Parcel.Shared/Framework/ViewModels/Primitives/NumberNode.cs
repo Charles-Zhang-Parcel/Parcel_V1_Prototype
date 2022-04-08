@@ -6,7 +6,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
     public class NumberNode: PrimitiveNode
     {
         #region View Components
-        public double? Number
+        public double Number
         {
             get => double.Parse(_value);
             set => SetField(ref _value, value.ToString());
@@ -21,6 +21,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public NumberNode()
         {
             Title = NodeTypeName = "Number";
+            Number = 0;
             ValueOutput.IsHidden = true;
             Output.Add(NumberOutput);
         }

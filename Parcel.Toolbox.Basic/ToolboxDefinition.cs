@@ -20,6 +20,7 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("Number", typeof(NumberNode)),
             new ToolboxNodeExport("String", typeof(StringNode)),
             new ToolboxNodeExport("Boolean", typeof(BooleanNode)),
+            new ToolboxNodeExport("DateTime", typeof(DateTimeNode)),
             new ToolboxNodeExport("File", typeof(OpenFileNode)),
             new ToolboxNodeExport("Array", typeof(object)), // Generic array representation of all above types, CANNOT have mixed types
             null, // Divisor line // Queries

@@ -9,10 +9,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Nodes" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Csv" Version="2.0.67" />
     </ItemGroup>
 

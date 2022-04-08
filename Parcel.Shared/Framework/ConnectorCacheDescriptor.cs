@@ -13,6 +13,7 @@ namespace Parcel.Shared.Framework
             {typeof(float), CacheDataType.Number},
             {typeof(bool), CacheDataType.Boolean},
             {typeof(string), CacheDataType.Boolean},
+            {typeof(DateTime), CacheDataType.DateTime},
             {typeof(DataGrid), CacheDataType.ParcelDataGrid},
         };
         

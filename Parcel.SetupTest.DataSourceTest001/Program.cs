@@ -10,7 +10,6 @@ namespace Parcel.SetupTest.DataSourceTest001
             DataSourceHelper.YahooFinance(new YahooFinanceParameter()
             {
                 InputSymbol = "AAPL",
-                // InputAPIKey = APIKey.YahooFinance // Yahoo REST API is useless compared to its website
             });
         }
     }

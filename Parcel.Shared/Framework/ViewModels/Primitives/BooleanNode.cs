@@ -26,6 +26,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public BooleanNode()
         {
             Title = NodeTypeName = "Boolean";
+            Boolean = false;
             ValueOutput.IsHidden = true;
             Output.Add(TruthOutput);
         }

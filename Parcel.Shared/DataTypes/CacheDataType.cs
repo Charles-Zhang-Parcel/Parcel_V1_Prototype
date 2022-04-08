@@ -16,6 +16,7 @@
         Boolean,
         Number,
         String,
+        DateTime,
         // Basic Numerical
         ParcelDataGrid,
         // Advanced

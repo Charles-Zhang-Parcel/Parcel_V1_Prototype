@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Parcel.Shared.Framework;
+using Parcel.Toolbox.DataSource.Nodes;
 
 namespace Parcel.Toolbox.DataSource
 {
@@ -14,7 +15,7 @@ namespace Parcel.Toolbox.DataSource
             new ToolboxNodeExport("MS MDL", typeof(object)),
             new ToolboxNodeExport("PL SQL", typeof(object)),
             null, // Divisor line // Web Services
-            new ToolboxNodeExport("Yahoo Finance", typeof(object)),
+            new ToolboxNodeExport("Yahoo Finance", typeof(YahooFinance)),
         };
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
