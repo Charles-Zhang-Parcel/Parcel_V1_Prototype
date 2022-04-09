@@ -16,7 +16,8 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public readonly  BaseConnector HeaderInput = new PrimitiveBooleanInputConnector()
         {
-            Title = "Contains Header"
+            Title = "Contains Header",
+            Value = true
         };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {

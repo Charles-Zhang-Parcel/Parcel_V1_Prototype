@@ -1,21 +1,14 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Linq;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.DataProcessing.Nodes
 {
-    public class Append: ProcessorNode
+    public class Append: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTable1Input = new InputConnector(typeof(DataGrid))
-        {
-            Title = "Data Table 1",
-        };
-        public readonly BaseConnector DataTable2Input = new InputConnector(typeof(DataGrid))
-        {
-            Title = "Data Table 2",
-        };
         public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Combined Table",
@@ -23,9 +16,27 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public Append()
         {
             Title = NodeTypeName = "Append";
-            Input.Add(DataTable1Input);
-            Input.Add(DataTable2Input);
             Output.Add(DataTableOutput);
+            
+            AddInputs();
+            
+            AddEntryCommand = new RequeryCommand(
+                () => AddInputs(),
+                () => true);
+            RemoveEntryCommand = new RequeryCommand(
+                () => RemoveInputs(),
+                () => Input.Count > 1);
+        }
+        #endregion
+        
+        #region Routines
+        private void AddInputs()
+        {
+            Input.Add(new InputConnector(typeof(DataGrid)){Title = $"Table {Input.Count + 1}"});
+        }
+        private void RemoveInputs()
+        {
+            Input.RemoveAt(Input.Count - 1);
         }
         #endregion
         
@@ -33,12 +44,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
         public override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid1 = DataTable1Input.FetchInputValue<DataGrid>();
-            DataGrid dataGrid2 = DataTable2Input.FetchInputValue<DataGrid>();
             AppendParameter parameter = new AppendParameter()
             {
-                InputTable1 = dataGrid1,
-                InputTable2 = dataGrid2,
+                InputTables = Input
+                    .Where(i => i.Connections.Count != 0)
+                    .Select(input => input.FetchInputValue<DataGrid>()).ToArray(),
             };
             DataProcessingHelper.Append(parameter);
 

@@ -44,6 +44,13 @@ namespace Parcel.Toolbox.DataProcessing
         public string[] InputColumnNames { get; set; }
         public DataGrid OutputTable { get; set; }
     }
+    public class RenameParameter
+    {
+        public DataGrid InputTable { get; set; }
+        public string[] InputColumns { get; set; }
+        public string[] InputColumnNewNames { get; set; }
+        public DataGrid OutputTable { get; set; }
+    }
     public class SortParameter
     {
         public DataGrid InputTable { get; set; }
@@ -53,8 +60,7 @@ namespace Parcel.Toolbox.DataProcessing
     }
     public class AppendParameter
     {
-        public DataGrid InputTable1 { get; set; }
-        public DataGrid InputTable2 { get; set; }
+        public DataGrid[] InputTables { get; set; }
         public DataGrid OutputTable { get; set; }
     }
     public class TransposeParameter
@@ -131,24 +137,49 @@ namespace Parcel.Toolbox.DataProcessing
                 throw new ArgumentException("Missing Data Table input.");
             if (parameter.InputTable != null && parameter.InputColumnNames.Length == 0)
                 throw new ArgumentException("No columns are given for the table.");
-            if (parameter.InputTable != null && parameter.InputColumnNames.Length != 0
-                                             && parameter.InputTable.Columns.Any(c => parameter.InputColumnNames.Contains(c.Header)))
+            
+            Dictionary<string, DataGrid.ColumnInfo> columnInfos = parameter.InputTable.GetColumnInfoForDisplay();
+            if (parameter.InputColumnNames.Any(cn => !columnInfos.ContainsKey(cn)))
                 throw new ArgumentException("Cannot find column with specified name on data table.");
             
-            parameter.OutputTable = parameter.InputTable.Extract(parameter.InputColumnNames);
+            parameter.OutputTable = parameter.InputTable.Extract(parameter.InputColumnNames.Select(cn => columnInfos[cn].ColumnIndex));
         }
         
         public static void Exclude(ExcludeParameter parameter)
         {
             if (parameter.InputTable == null)
                 throw new ArgumentException("Missing Data Table input.");
-            if (parameter.InputTable != null && parameter.InputColumnNames.Length == 0)
+            if (parameter.InputColumnNames.Length == 0)
                 throw new ArgumentException("No columns are given for the table.");
-            if (parameter.InputTable != null && parameter.InputColumnNames.Length != 0
-                                             && parameter.InputTable.Columns.Any(c => parameter.InputColumnNames.Contains(c.Header)))
-                throw new ArgumentException("Cannot find column with specified name on data table.");
             
-            parameter.OutputTable = parameter.InputTable.Exclude(parameter.InputColumnNames);
+            Dictionary<string, DataGrid.ColumnInfo> columnInfos = parameter.InputTable.GetColumnInfoForDisplay();
+            if (parameter.InputColumnNames.Any(cn => !columnInfos.ContainsKey(cn)))
+                throw new ArgumentException("Cannot find column with specified name on data table.");
+
+            parameter.OutputTable = parameter.InputTable.Exclude(parameter.InputColumnNames.Select(cn => columnInfos[cn].ColumnIndex));
+        }
+        
+        public static void Rename(RenameParameter parameter)
+        {
+            if (parameter.InputTable == null)
+                throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputColumns.Any(string.IsNullOrWhiteSpace)
+                || parameter.InputColumnNewNames.Any(string.IsNullOrWhiteSpace))
+                throw new ArgumentException("Empty inputs.");
+
+            Dictionary<string, DataGrid.ColumnInfo> columnInfos = parameter.InputTable.GetColumnInfoForDisplay();
+            if (parameter.InputColumns.Any(c => !columnInfos.ContainsKey(c)))
+                throw new ArgumentException("Input column name doesn't exist on input table.");
+            // TODO: At the moment we are allowing renamed column names to already exist on the table, i.e. columns with same headers
+
+            DataGrid copy = parameter.InputTable.MakeCopy();
+            for (int i = 0; i < parameter.InputColumns.Length; i++)
+            {
+                int oldColumnIndex = columnInfos[parameter.InputColumns[i]].ColumnIndex;
+                string newName = parameter.InputColumnNewNames[i];
+                copy.Columns[oldColumnIndex].RenameHeader(newName);
+            }
+            parameter.OutputTable = copy;
         }
         
         public static void Sort(SortParameter parameter)
@@ -168,10 +199,13 @@ namespace Parcel.Toolbox.DataProcessing
         
         public static void Append(AppendParameter parameter)
         {
-            if (parameter.InputTable1 == null || parameter.InputTable2 == null)
+            if (parameter.InputTables.Any(t => t == null))
                 throw new ArgumentException("Missing Data Table input.");
-            
-            parameter.OutputTable = parameter.InputTable1.MakeCopy().Append(parameter.InputTable2);
+
+            DataGrid result = parameter.InputTables.First();
+            for (int i = 1; i < parameter.InputTables.Length; i++)
+                result = result.MakeCopy().Append(parameter.InputTables[i]);
+            parameter.OutputTable = result;
         }
         
         public static void Transpose(TransposeParameter parameter)

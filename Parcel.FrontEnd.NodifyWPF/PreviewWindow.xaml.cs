@@ -128,10 +128,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
 
             List<dynamic> objects = dataGrid.Rows;
-            Dictionary<string, string> types = dataGrid.Columns.ToDictionary(c=> c.Header, c => c.TypeName);
-            if (dataGrid.OptionalRowHeaderColumn != null)
-                types[dataGrid.OptionalRowHeaderColumn.Header] = dataGrid.OptionalRowHeaderColumn.TypeName;
-            
+            Dictionary<string, DataGrid.ColumnInfo> columnInfo = dataGrid.GetColumnInfoForDisplay();
+
             // Collect column names
             IEnumerable<IDictionary<string, object>> rows = objects.OfType<IDictionary<string, object>>();
             DataGridDataColumns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
@@ -142,7 +140,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                 // now set up a column and binding for each property
                 var column = new DataGridTextColumn 
                 {
-                    Header = FormatHeader(columnName, types[columnName]),
+                    Header = FormatHeader(columnName, columnInfo[columnName].TypeName),
                     Binding = new Binding(columnName)
                 };
                 WpfDataGrid.Columns.Add(column);

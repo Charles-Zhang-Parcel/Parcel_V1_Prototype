@@ -206,7 +206,7 @@ namespace Parcel.Toolbox.Finance
             if (parameter.InputTable == null)
                 throw new ArgumentException("Missing Data Table input.");
 
-            parameter.OutputTable = parameter.InputTable.CorrelationMatrix();   
+            parameter.OutputTable = parameter.InputTable.CovarianceMatrix();   
         }
         
         public static void PercentReturn(PercentReturnParameter parameter)

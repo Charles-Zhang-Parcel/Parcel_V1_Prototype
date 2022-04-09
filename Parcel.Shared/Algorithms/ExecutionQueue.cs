@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Algorithms
@@ -16,8 +18,23 @@ namespace Parcel.Shared.Algorithms
             foreach (ProcessorNode processorNode in targetNodes)
                 UpdateNodePosition(null, processorNode);
         }
+
         public void ExecuteGraph()
-            => Queue.ForEach(n => n.Execute());
+        {
+            foreach (ProcessorNode node in Queue)
+            {
+                try
+                {
+                    node.Execute();
+                }
+                catch (Exception e)
+                {
+                    node.Message.Content = e.Message;
+                    node.Message.Type = NodeMessageType.Error;
+                    break;
+                }
+            }
+        }
         #endregion
 
         #region Routines

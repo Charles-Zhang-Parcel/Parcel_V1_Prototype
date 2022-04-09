@@ -20,6 +20,8 @@ namespace Parcel.Shared.DataTypes
         }
         public DataColumn MakeCopy()
             => new DataColumn(this);
+        public void RenameHeader(string newName)
+            => Header = newName;
         #endregion
 
         #region Properties
@@ -238,14 +240,16 @@ namespace Parcel.Shared.DataTypes
             {
                 int colCount = Columns.Count;
                 int rowCount = Columns.First().Length;
+                string[] columnHeaders = Columns.Select(c => c.Header).ToArray();
                 List<dynamic> rows = new List<dynamic>();
                 for (int row = 0; row < rowCount; row++)
                 {
+                    Dictionary<string, int> repeatNameCounter = new Dictionary<string, int>();
                     dynamic temp = new ExpandoObject();
                     if (OptionalRowHeaderColumn != null)
-                        ((IDictionary<String, Object>)temp)[OptionalRowHeaderColumn.Header] = OptionalRowHeaderColumn[row];
+                        ((IDictionary<String, Object>)temp)[PreProcessColumnNameForDisplay(OptionalRowHeaderColumn.Header, repeatNameCounter)] = OptionalRowHeaderColumn[row];
                     for (int col = 0; col < colCount; col++)
-                        ((IDictionary<String, Object>)temp)[Columns[col].Header] = Columns[col][row];
+                        ((IDictionary<String, Object>)temp)[PreProcessColumnNameForDisplay(columnHeaders[col], repeatNameCounter)] = Columns[col][row];
                     rows.Add(temp);
                 }
                 return rows;
@@ -320,6 +324,13 @@ namespace Parcel.Shared.DataTypes
             result.Columns.AddRange(other.Columns.Select(c => c.MakeCopy()));
             return result;
         }
+        public DataGrid Extract(IEnumerable<int> columnIndex)
+        {
+            DataGrid result = new DataGrid();
+            IEnumerable<DataColumn> columnCopies = columnIndex.Select(i => this.Columns[i].MakeCopy());
+            result.Columns = columnCopies.ToList();
+            return result;
+        }
         public DataGrid Extract(string[] names)
         {
             DataGrid result = new DataGrid();
@@ -329,6 +340,8 @@ namespace Parcel.Shared.DataTypes
             result.Columns = columnCopies.ToList();
             return result;
         }
+        public DataGrid Exclude(IEnumerable<int> columnIndex)
+            => this.Extract(Columns.Select((c, i) => i).Except(columnIndex));
         public DataGrid Exclude(string[] names)
             => this.Extract(Columns.Select(c => c.Header).Except(names).ToArray());
         public DataGrid Transpose()
@@ -385,23 +398,71 @@ namespace Parcel.Shared.DataTypes
         #endregion
 
         #region Numerical Computation
-        public DataGrid CorrelationMatrix()
+        public DataGrid CovarianceMatrix()
         {
             DataGrid result = new DataGrid();
+            DataColumn[] numericalColumns = Columns.Where(c => c.Type == typeof(double)).ToArray();
             
             // Define columns
-            result.AddColumn("(Relation)"); // Add 
-            foreach (DataColumn column in Columns)
+            result.AddOptionalRowHeaderColumn("Relation");
+            foreach (DataColumn column in numericalColumns)
                 result.AddColumn(column.Header);
             // Compute data
-            AddOptionalRowHeaderColumn(string.Empty);
-            foreach (DataColumn column in Columns)
+            foreach (DataColumn column in numericalColumns)
             {
-                OptionalRowHeaderColumn.Add(column.Header);
-                result.AddRow(Columns.Select(other => other.Covariance(column)));
+                result.OptionalRowHeaderColumn.Add(column.Header);
+                result.AddRow(numericalColumns.Select(other => other.Covariance(column)).OfType<object>().ToArray());
             }
             
             return result;
+        }
+        #endregion
+
+        #region Routines
+        public struct ColumnInfo
+        {
+            public string NewKey { get; set; }
+            public string OriginalHeader { get; set; }
+            public int ColumnIndex { get; set; }
+            public string TypeName { get; set; }
+        }
+        public Dictionary<string, ColumnInfo> GetColumnInfoForDisplay()
+        {
+            Dictionary<string, int> nameCounter = new Dictionary<string, int>();
+            IEnumerable<Tuple<string, string, int, string>> infoTuple = Columns.Select((c, i)=> 
+                new Tuple<string, string, int, string>(
+                    PreProcessColumnNameForDisplay(c.Header, nameCounter),
+                    c.Header, 
+                    i,
+                    c.TypeName));
+            Dictionary<string, ColumnInfo> dict = infoTuple.ToDictionary(
+                t => t.Item1, 
+                t => new ColumnInfo()
+                {
+                    NewKey = t.Item1,
+                    OriginalHeader = t.Item2,
+                    ColumnIndex = t.Item3,
+                    TypeName = t.Item4
+                });
+            if (OptionalRowHeaderColumn != null)
+                dict[OptionalRowHeaderColumn.Header] = new ColumnInfo()
+                {
+                    NewKey = OptionalRowHeaderColumn.Header, 
+                    OriginalHeader = OptionalRowHeaderColumn.Header, 
+                    ColumnIndex = -1,
+                    TypeName = OptionalRowHeaderColumn.TypeName
+                };
+            return dict;
+        }
+        private string PreProcessColumnNameForDisplay(string original, Dictionary<string, int> nameCounter)
+        {
+            if (!nameCounter.ContainsKey(original))
+                nameCounter[original] = 1;
+            else 
+                nameCounter[original] = nameCounter[original] + 1;
+
+            return
+                $"{original}{(nameCounter[original] == 1 ? string.Empty : $"{nameCounter[original]}")}";
         }
         #endregion
     }

@@ -23,6 +23,7 @@
         <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
         <converters:NodeMessageTypeToVisibilityConverter x:Key="NodeMessageTypeToVisibilityConverter" />
+        <converters:NodeMessageTypeToBrushColorConverter x:Key="NodeMessageTypeToBrushColorConverter" />
         <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -420,12 +421,19 @@
                                         <Button Style="{StaticResource IconButton}"
                                                 Content="{StaticResource RemoveKeyIcon}"
                                                 Command="{Binding RemoveEntryCommand}" />
+                                        <TextBlock Foreground="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToBrushColorConverter}}" 
+                                                   Margin="0" Padding="0" 
+                                                   MaxWidth="256" TextWrapping="WrapWithOverflow"
+                                                   Text="{Binding Message.Content}"
+                                                   Visibility="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToVisibilityConverter}}">
+                                        </TextBlock>
                                     </StackPanel>
                                 </DockPanel>
                             </DataTemplate>
                             
                             <DataTemplate DataType="{x:Type baseNodes:ProcessorNode}">
-                                <TextBlock Foreground="LightSlateGray" Margin="0" Padding="0" 
+                                <TextBlock Foreground="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToBrushColorConverter}}" 
+                                           Margin="0" Padding="0" 
                                            MaxWidth="256" TextWrapping="WrapWithOverflow"
                                            Text="{Binding Message.Content}"
                                            Visibility="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToVisibilityConverter}}">

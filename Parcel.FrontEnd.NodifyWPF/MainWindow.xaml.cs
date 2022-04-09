@@ -132,10 +132,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             if (!(sender is Button {Tag: ProcessorNode node} button)) return;
 
-            node.IsPreview = true;
-
             // Auto-Generate
-            if ((node is CSV || node is Excel) && node.ShouldGenerateConnection)
+            if ((node is CSV || node is Excel) && node.ShouldHaveConnection)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
                     node.Location + new Vector(-200, -60)) as OpenFileNode;
@@ -151,7 +149,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                     filePathNode.Path = openFileDialog.FileName;
                 }
             }
-            else if (node is IAutoConnect autoConnect && autoConnect.ShouldGenerateConnection && node.AutoGenerateNodes != null)
+            else if (node is IAutoConnect autoConnect && autoConnect.ShouldHaveConnection && node.AutoGenerateNodes != null)
             {
                 foreach (Tuple<ToolboxNodeExport,Vector,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
                 {
@@ -165,7 +163,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             
             // Connection check
-            if (node.ShouldGenerateConnection && node.AutoGenerateNodes == null)
+            if (node.ShouldHaveConnection && node.AutoGenerateNodes == null)
             {
                 node.Message.Content = "Require Connection.";
                 node.Message.Type = NodeMessageType.Error;
@@ -176,6 +174,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             // TODO: This is a good chance to auto-save, before anything can crash
             
+            node.IsPreview = true;
             SpawnPreviewWindow(node);
             ExecuteAll();
 

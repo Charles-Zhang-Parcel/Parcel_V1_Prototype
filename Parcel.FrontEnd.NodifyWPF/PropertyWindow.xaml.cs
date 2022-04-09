@@ -24,13 +24,16 @@ namespace Parcel.FrontEnd.NodifyWPF
             Processor = processor;
             Owner = owner;
             if (processor is INodeProperty nodeProperty)
-                Editors = nodeProperty.Editors; 
+                Editors = nodeProperty.Editors;
+            if (processor is PrimitiveNode primitiveNode)
+                PrimitivePreviewText = primitiveNode.Value;
             InitializeComponent();
         }
 
         #region View Properties
         public ProcessorNode Processor { get; }
         public List<PropertyEditor> Editors { get; }
+        public string PrimitivePreviewText { get; }
         #endregion
         
         #region Syntax Highlighter

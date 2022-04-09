@@ -13,7 +13,7 @@ namespace Parcel.Toolbox.Finance.Nodes
             Title = "Data Table",
         };
 
-        public readonly BaseConnector LatestAtTopInput = new InputConnector(typeof(bool))
+        public readonly BaseConnector LatestAtTopInput = new PrimitiveBooleanInputConnector()
         {
             Title = "Latest At Top"
         };

@@ -20,6 +20,7 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Append", typeof(Append)),
             new ToolboxNodeExport("Extract", typeof(Extract)),
             new ToolboxNodeExport("Exclude", typeof(Exclude)),   // Opposite of Extract
+            new ToolboxNodeExport("Rename", typeof(Rename)),
             new ToolboxNodeExport("Validate", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Reinterpret", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Sort", typeof(Sort)),

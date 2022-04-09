@@ -15,6 +15,12 @@
             <TextBox></TextBox>
         </DockPanel>
         
-        <ListView x:Name="modulesList"/>
+        <ListView x:Name="modulesList">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
     </DockPanel>
 </local:BaseWindow>

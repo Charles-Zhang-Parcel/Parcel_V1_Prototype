@@ -22,6 +22,9 @@
                 <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </DockPanel>
         </StackPanel>
+        <TextBox Text="{Binding PrimitivePreviewText, Mode=OneWay}" 
+                 Padding="2" BorderThickness="0" IsReadOnly="True"
+                 TextWrapping="Wrap" Background="Transparent"/>
         <StackPanel>
             <Separator HorizontalAlignment="Stretch"/>
             <ItemsControl ItemsSource="{Binding Editors}">

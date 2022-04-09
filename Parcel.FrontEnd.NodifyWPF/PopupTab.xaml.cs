@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Parcel.FrontEnd.NodifyWPF.SpecialNodes;
 using Parcel.Shared;
 using Parcel.Shared.Framework;
@@ -37,10 +38,14 @@ namespace Parcel.FrontEnd.NodifyWPF
             
             foreach (string toolbox in registry.Toolboxes.Keys.OrderBy(k => k))
             {
-                var menu = new Menu();
+                var menu = new Menu()
+                {
+                    // Margin = new Thickness(1)
+                };
                 var topMenu = new MenuItem()
                 {
-                    Header = toolbox
+                    // Padding = new Thickness(4),
+                    Header = toolbox,
                 };
                 topMenu.Width = this.Width * 0.8;
                 menu.Items.Add(topMenu);
