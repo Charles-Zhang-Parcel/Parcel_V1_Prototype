@@ -35,34 +35,46 @@ namespace Parcel.WebHost
                     Address = hostAddress,
                     ShouldLog = configuration.ServerDebugPrint,
                 };
-
+            
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
 
-                // Build host
-                IHost host = Host.CreateDefaultBuilder()
+                Host.CreateDefaultBuilder()
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
-                        // webBuilder.UseWebRoot("wwwroot"); // TODO: Potential Path-Breaking
-                        webBuilder.UseKestrel();
                         webBuilder.UseStartup<Startup>();
-                    })
-                    .ConfigureLogging((context, logging) =>
-                    {
-                        logging.ClearProviders();
-                        if (WebHostRuntime.Singleton.ShouldLog)
-                        {
-                            logging.AddConsole();
-                            logging.AddDebug();
-                        }
-                    })
-                    .UseContentRoot(Directory.GetCurrentDirectory())    // TODO: Potential Path-Breaking; Might require manual copying
-                    .Build();
-                // Start host
-                host.Run();
+                    }).Build().Run();
             }).Start();
+
+            // new Thread(() =>
+            // {
+            //     Thread.CurrentThread.IsBackground = true;
+            //
+            //     // Build host
+            //     IHost host = Host.CreateDefaultBuilder()
+            //         .ConfigureWebHostDefaults(webBuilder =>
+            //         {
+            //             webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
+            //             webBuilder.UseWebRoot("wwwroot"); // TODO: Potential Path-Breaking
+            //             webBuilder.UseKestrel();
+            //             webBuilder.UseStartup<Startup>();
+            //         })
+            //         .ConfigureLogging((context, logging) =>
+            //         {
+            //             logging.ClearProviders();
+            //             if (WebHostRuntime.Singleton.ShouldLog)
+            //             {
+            //                 logging.AddConsole();
+            //                 logging.AddDebug();
+            //             }
+            //         })
+            //         .UseContentRoot(Directory.GetCurrentDirectory())    // TODO: Potential Path-Breaking; Might require manual copying
+            //         .Build();
+            //     // Start host
+            //     host.Run();
+            // }).Start();
         }
     }
 }

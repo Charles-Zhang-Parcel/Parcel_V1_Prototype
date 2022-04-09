@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel", "Parcel\Parcel.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Shared", "Parcel.Shared\Parcel.Shared.csproj", "{E5D16B50-136C-4090-BF3B-4AE8A153FC60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.WebHost", "Parcel.WebHost\Parcel.WebHost.csproj", "{E25026CD-DE76-404F-8B5B-F0E387DF99EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.FileSystem", "Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj", "{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolboxes", "Toolboxes", "{B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}"
@@ -46,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.SetupTest.DataSource
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Plotting", "Parcel.Toolbox.Plotting\Parcel.Toolbox.Plotting.csproj", "{57B2182B-2A80-437E-B85C-5377663921F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.WebHost", "Parcel.WebHost\Parcel.WebHost.csproj", "{D62804D4-528C-4A9E-B953-DF6E332146F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +60,6 @@ Global
 		{E5D16B50-136C-4090-BF3B-4AE8A153FC60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5D16B50-136C-4090-BF3B-4AE8A153FC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5D16B50-136C-4090-BF3B-4AE8A153FC60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E25026CD-DE76-404F-8B5B-F0E387DF99EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E25026CD-DE76-404F-8B5B-F0E387DF99EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E25026CD-DE76-404F-8B5B-F0E387DF99EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E25026CD-DE76-404F-8B5B-F0E387DF99EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -124,6 +120,10 @@ Global
 		{57B2182B-2A80-437E-B85C-5377663921F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57B2182B-2A80-437E-B85C-5377663921F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57B2182B-2A80-437E-B85C-5377663921F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62804D4-528C-4A9E-B953-DF6E332146F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62804D4-528C-4A9E-B953-DF6E332146F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62804D4-528C-4A9E-B953-DF6E332146F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62804D4-528C-4A9E-B953-DF6E332146F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}

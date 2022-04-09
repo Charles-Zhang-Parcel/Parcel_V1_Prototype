@@ -52,7 +52,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
 
-            WebAccessPointUrl = WebHostRuntime.Singleton.BaseUrl;
+            WebAccessPointUrl = WebHostRuntime.Singleton?.BaseUrl;
             
             InitializeComponent();
             
