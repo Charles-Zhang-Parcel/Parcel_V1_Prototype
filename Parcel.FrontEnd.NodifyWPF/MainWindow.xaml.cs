@@ -33,6 +33,7 @@ using Parcel.Toolbox.DataProcessing;
 using Parcel.Toolbox.DataProcessing.Nodes;
 using Parcel.Toolbox.FileSystem;
 using Parcel.Toolbox.Finance;
+using Parcel.WebHost.Models;
 using BaseConnection = Parcel.Shared.Framework.ViewModels.BaseConnection;
 using PendingConnection = Parcel.Shared.Framework.ViewModels.PendingConnection;
 
@@ -49,6 +50,9 @@ namespace Parcel.FrontEnd.NodifyWPF
             RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), () => LastTool != null);
             SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(), () => Canvas.Nodes.Count != 0);
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
+            OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
+
+            WebAccessPointUrl = WebHostRuntime.Singleton.BaseUrl;
             
             InitializeComponent();
             
@@ -64,6 +68,12 @@ namespace Parcel.FrontEnd.NodifyWPF
         public ICommand RepeatLastCommand { get; }
         public ICommand SaveCanvasCommand { get; }
         public ICommand OpenCanvasCommand { get; }
+        public ICommand OpenWebHostCommand { get; }
+        #endregion
+
+        #region View Properties
+        private string _webAccessPointUrl;
+        public string WebAccessPointUrl { get => _webAccessPointUrl; set => SetField(ref _webAccessPointUrl, value); }
         #endregion
 
         #region Advanced Node Graph Behaviors
@@ -178,6 +188,11 @@ namespace Parcel.FrontEnd.NodifyWPF
             SpawnPreviewWindow(node);
             ExecuteAll();
 
+            e.Handled = true;
+        }
+        private void WebAccessUrlDisplayElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WebHostRuntime.Singleton.Open();
             e.Handled = true;
         }
         #endregion

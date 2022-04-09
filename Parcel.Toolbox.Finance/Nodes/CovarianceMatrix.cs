@@ -5,6 +5,10 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.Finance.Nodes
 {
+    /// <remarks>
+    /// If wanted, the option for population vs sample (n-1) vs n choice can be exposed as property inside property window,
+    /// instead of exposing as pins. To avoid clustering the view. 
+    /// </remarks>
     public class CovarianceMatrix: ProcessorNode
     {
         #region Node Interface
@@ -18,7 +22,7 @@ namespace Parcel.Toolbox.Finance.Nodes
         };
         public CovarianceMatrix()
         {
-            Title = NodeTypeName = "Variance";
+            Title = NodeTypeName = "Covariance Matrix";
             Input.Add(DataTableInput);
             Output.Add(DataTableOutput);
         }

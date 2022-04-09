@@ -64,7 +64,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
 
             ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
 
-            Message.Content = $"{parameter.OutputTable.Columns.Count} Columns";
+            Message.Content = $"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

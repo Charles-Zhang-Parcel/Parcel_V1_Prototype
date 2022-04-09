@@ -4,7 +4,7 @@
     {
         public bool AlwaysLaunchInCLI { get; set; } = true;
 
-        public bool ServerDebugPrint { get; set; } = false;
+        public bool ServerDebugPrint { get; set; } = true;
         public int? ServerPort { get; set; } = 5001;
         public string ServerAddress { get; set; } = "localhost";
         

@@ -8,6 +8,7 @@ using System.Linq;
 using Csv;
 using ExcelDataReader;
 using Parcel.Shared.DataTypes;
+using DataColumn = Parcel.Shared.DataTypes.DataColumn;
 using DataTable = System.Data.DataTable;
 
 namespace Parcel.Toolbox.DataProcessing
@@ -28,7 +29,6 @@ namespace Parcel.Toolbox.DataProcessing
     public class TakeParameter
     {
         public DataGrid InputTable { get; set; }
-        public string InputColumnName { get; set; }
         public int InputRowCount { get; set; }
         public DataGrid OutputTable { get; set; }
     }
@@ -119,15 +119,16 @@ namespace Parcel.Toolbox.DataProcessing
         {
             if (parameter.InputTable == null)
                 throw new ArgumentException("Missing Data Table input.");
-            if (parameter.InputTable != null && string.IsNullOrWhiteSpace(parameter.InputColumnName))
-                throw new ArgumentException("No column selection is given for the table");
-            if (parameter.InputTable != null && !string.IsNullOrWhiteSpace(parameter.InputColumnName)
-                                             && parameter.InputTable.Columns.All(c => c.Header != parameter.InputColumnName))
-                throw new ArgumentException("Cannot find column with specified name on data table");
-
-            var column = parameter.InputTable.Columns.Single(c => c.Header == parameter.InputColumnName);
+            if (parameter.InputRowCount <= 0)
+                throw new ArgumentException("Invalid take amount");
+            if (parameter.InputRowCount > parameter.InputTable.RowCount)
+                throw new ArgumentException("Take amount is more than amount of rows in table.");
+            if (parameter.InputRowCount == parameter.InputTable.RowCount)
+                throw new ArgumentException("Take amount is the same as the amount of rows in table.");
+            
             DataGrid newDataGrid = new DataGrid();
-            newDataGrid.AddColumnFrom(column, parameter.InputRowCount);
+            foreach (DataColumn inputTableColumn in parameter.InputTable.Columns)
+                newDataGrid.AddColumnFrom(inputTableColumn, parameter.InputRowCount);
             parameter.OutputTable = newDataGrid;
         }
         
@@ -201,6 +202,8 @@ namespace Parcel.Toolbox.DataProcessing
         {
             if (parameter.InputTables.Any(t => t == null))
                 throw new ArgumentException("Missing Data Table input.");
+            if (parameter.InputTables.Select(t => t.RowCount).Distinct().Count() != 1)
+                throw new ArgumentException("Data Table size are not equal (there might be bad data).");
 
             DataGrid result = parameter.InputTables.First();
             for (int i = 1; i < parameter.InputTables.Length; i++)

@@ -21,7 +21,6 @@ namespace Parcel.Shared
         
         #region Settings and Temporary Data
         public ApplicationConfiguration Configuration { get; set; }
-        public WebHostInfo WebHostInfo { get; set; }
         #endregion
         
         #region Opened Database

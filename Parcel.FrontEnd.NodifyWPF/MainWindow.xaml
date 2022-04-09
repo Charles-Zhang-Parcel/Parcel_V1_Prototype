@@ -258,6 +258,10 @@
         </DataTemplate>
     </Window.Resources>
     <Grid Background="{StaticResource LargeGridLinesDrawingBrush}">
+        <TextBlock Margin="1" Padding="2" Text="{Binding WebAccessPointUrl}"
+                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                   Background="Transparent"
+                   Foreground="#94A8A8A8" FontSize="16" FontWeight="Bold"/>
         <nodify:NodifyEditor HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                              x:Name="Editor" DisableAutoPanning="True"
                              Background="{StaticResource SmallGridLinesDrawingBrush}"
@@ -288,6 +292,8 @@
                             Command="{Binding SaveCanvasCommand}" />
                 <KeyBinding Key="O" Modifiers="Control"
                             Command="{Binding OpenCanvasCommand}" />
+                <KeyBinding Key="F2"
+                            Command="{Binding OpenWebHostCommand}" />
             </nodify:NodifyEditor.InputBindings>
             <nodify:NodifyEditor.Resources>
                 <!--Node Type Data Templates-->

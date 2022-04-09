@@ -12,10 +12,6 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
-        {
-            Title = "Column Name",
-        };
         public readonly BaseConnector RowCountInput = new InputConnector(typeof(double))
         {
             Title = "Row Count",
@@ -28,7 +24,6 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             Title = NodeTypeName = "Take";
             Input.Add(DataTableInput);
-            Input.Add(ColumnNameInput);
             Input.Add(RowCountInput);
             Output.Add(DataTableOutput);
         }
@@ -39,12 +34,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public override NodeExecutionResult Execute()
         {
             DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            string columnName = ColumnNameInput.FetchInputValue<string>();
             double rowCount = RowCountInput.FetchInputValue<double>();
             TakeParameter parameter = new TakeParameter()
             {
                 InputTable = dataGrid,
-                InputColumnName = columnName,
                 InputRowCount = (int)rowCount
             };
             DataProcessingHelper.Take(parameter);

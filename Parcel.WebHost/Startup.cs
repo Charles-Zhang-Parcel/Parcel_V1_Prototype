@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Parcel.WebHost.Models;
+using Parcel.WebHost.Utils;
 
 namespace Parcel.WebHost
 {
-    public class Startup
+    internal class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -26,10 +30,23 @@ namespace Parcel.WebHost
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSingleton<WebHostRuntime>(WebHostRuntime.Singleton);
+            
+            // services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");  // TODO: Potential Path-Breaking
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Custom first-level routing
+            app.Use(async (context, next) =>
+            {
+                // Example
+                // await context.Response.WriteAsync("Hello, world!");
+
+                // Continue next routings
+                await next();
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -43,13 +60,22 @@ namespace Parcel.WebHost
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
+            // Automatic endpoints
             app.UseEndpoints(endpoints =>
             {
+                // endpoints.MapGet("/Items", WebHostEndpoints.EndpointGetItems);
+                // endpoints.MapGet("/Notes", WebHostEndpoints.EndpointGetNotes);
+                
+                // Blazor
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+            });
+            
+            // Final catch-all
+            app.Use(async (context, next) => {
+                await context.Response.WriteAsync("Cannot find target endpoint.");
             });
         }
         #endregion

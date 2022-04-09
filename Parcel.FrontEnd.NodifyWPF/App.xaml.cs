@@ -5,6 +5,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Parcel.Shared;
+using Parcel.WebHost;
+using Parcel.WebHost.Models;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
@@ -13,5 +16,11 @@ namespace Parcel.FrontEnd.NodifyWPF
     /// </summary>
     public partial class App : Application
     {
+        #region Events
+        private void ParcelApplicationInitialize(object sender, StartupEventArgs e)
+        {
+            Entrance.SetupAndRunWebHost();
+        }
+        #endregion
     }
 }
