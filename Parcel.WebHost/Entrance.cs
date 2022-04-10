@@ -18,6 +18,7 @@ namespace Parcel.WebHost
         /// <summary>
         /// Debug Use
         /// </summary>
+        [STAThread]
         public static void Main(string[] args)
         {
             // var task = Host.CreateDefaultBuilder()
@@ -27,28 +28,31 @@ namespace Parcel.WebHost
             //     }).Build().RunAsync();
             // task.Wait();
 
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                
-                int port = NetworkHelper.FindFreeTcpPort();
-                string hostAddress = $"http://localhost:{port}";
-                if (WebHostRuntime.Singleton == null)
-                    new WebHostRuntime()
-                    {
-                        Port = port,
-                        Address = hostAddress,
-                        ShouldLog = true,
-                    };
-
-                Host.CreateDefaultBuilder()
-                    .ConfigureWebHostDefaults(webBuilder =>
-                    {
-                        webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
-                        webBuilder.UseStartup<Startup>();
-                    }).Build().Run();
-            }).Start();
-            Thread.Sleep(500000);
+            // new Thread(() =>
+            // {
+            //     Thread.CurrentThread.IsBackground = true;
+            //     
+            //     int port = NetworkHelper.FindFreeTcpPort();
+            //     string hostAddress = $"http://localhost:{port}";
+            //     if (WebHostRuntime.Singleton == null)
+            //         new WebHostRuntime()
+            //         {
+            //             Port = port,
+            //             Address = hostAddress,
+            //             ShouldLog = true,
+            //         };
+            //
+            //     Host.CreateDefaultBuilder()
+            //         .ConfigureWebHostDefaults(webBuilder =>
+            //         {
+            //             webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
+            //             webBuilder.UseStartup<Startup>();
+            //         }).Build().Run();
+            // }).Start();
+            // Thread.Sleep(500000);
+            
+            SetupAndRunWebHost();
+            Parcel.FrontEnd.NodifyWPF.Program.Main(null);
         }
         public static void SetupAndRunWebHost()
         {

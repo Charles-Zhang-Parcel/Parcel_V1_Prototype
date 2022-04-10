@@ -4,6 +4,9 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <UseWPF>true</UseWPF>
+
+        <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
+        <StartupObject>Parcel.FrontEnd.NodifyWPF.Program</StartupObject>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,7 +30,6 @@
       <ProjectReference Include="..\Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.Plotting\Parcel.Toolbox.Plotting.csproj" />
-      <ProjectReference Include="..\Parcel.WebHost\Parcel.WebHost.csproj" />
     </ItemGroup>
 
     <ItemGroup>

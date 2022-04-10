@@ -10,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Parcel.FrontEnd.NodifyWPF\Parcel.FrontEnd.NodifyWPF.csproj" />
         <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
     </ItemGroup>
 
