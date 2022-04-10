@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Parcel.Shared;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
@@ -7,17 +8,37 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.Present.Nodes
 {
-    public class PresentOnline: ProcessorNode, IWebPreviewProcessorNode
+    public class PresentOnline: DynamicInputProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector ServerConfigInput = new WebConfigInputConnector()
+        public readonly PrimitiveStringInputConnector PresentNameInput = new PrimitiveStringInputConnector()
         {
-            Title = "Content",
+            Title = "Name",
         };
         public PresentOnline()
         {
             Title = NodeTypeName = "Present";
-            Input.Add(ServerConfigInput);
+            Input.Add(PresentNameInput);
+            
+            AddInputs();
+            
+            AddEntryCommand = new RequeryCommand(
+                () => AddInputs(),
+                () => true);
+            RemoveEntryCommand = new RequeryCommand(
+                () => RemoveInputs(),
+                () => Input.Count > 1);
+        }
+        #endregion
+        
+        #region Routines
+        private void AddInputs()
+        {
+            Input.Add(new WebConfigInputConnector(){ Title = "Content" });
+        }
+        private void RemoveInputs()
+        {
+            Input.RemoveAt(Input.Count - 1);
         }
         #endregion
         
@@ -25,17 +46,16 @@ namespace Parcel.Toolbox.Present.Nodes
         public override OutputConnector MainOutput => null;
         public override NodeExecutionResult Execute()
         {
-            ServerConfig oldConfig = ServerConfigInput.FetchInputValue<ServerConfig>();
-            ServerConfig newConfig = new ServerConfig()
+            ServerConfig config = new ServerConfig()
             {
-                Children = new List<ServerConfig>() {oldConfig},
+                Children = Input.Skip(1).Select(i => i.FetchInputValue<ServerConfig>()).ToList(),
                 LayoutSpec = LayoutElementType.Presentation
             };
             
             Message.Content = $"Presenting...";
             Message.Type = NodeMessageType.Normal;
             
-            WebHostRuntime.Singleton.CurrentLayout = newConfig;
+            WebHostRuntime.Singleton.CurrentLayout = config;
             ((IWebPreviewProcessorNode)this).OpenPreview("Present");
             return new NodeExecutionResult(true, null);
         }
