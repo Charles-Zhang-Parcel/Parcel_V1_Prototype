@@ -542,7 +542,31 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="Nodes: "></Label>
                                         <Label Content="{Binding Graph.Nodes.Count}"></Label>
-                                        <Label Content="(Including comments and this node)"></Label>
+                                        <Label Content="(Including comments and all nodes)"></Label>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </nodify:Node.ContentTemplate>
+                    </nodify:Node>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type specialNodes:HostAddress}">
+                    <nodify:Node Header="{Binding Title}"
+                                 Content="{Binding}"
+                                 Input="{Binding Input}"
+                                 Output="{Binding Output}"
+                                 InputConnectorTemplate="{StaticResource PrimitiveNodeInputConnectorTemplate}"
+                                 OutputConnectorTemplate="{StaticResource PrimitiveNodeOutputConnectorTemplate}">
+                        <nodify:Node.ContentTemplate>
+                            <DataTemplate DataType="{x:Type specialNodes:HostAddress}">
+                                <DataTemplate.Resources>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="White"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding WebAccessPointUrl}" MouseDown="HostAddressNodeUIElement_OnMouseDown"></Label>
+                                        <Label Content="{Binding LocalIPUrl}" MouseDown="HostAddressNodeUIElement_OnMouseDown"></Label>
                                     </StackPanel>
                                 </DockPanel>
                             </DataTemplate>

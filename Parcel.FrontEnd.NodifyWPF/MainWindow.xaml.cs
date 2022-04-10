@@ -51,7 +51,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
 
-            WebAccessPointUrl = WebHostRuntime.Singleton?.BaseUrl;
+            // WebAccessPointUrl = WebHostRuntime.Singleton?.BaseUrl;
             
             InitializeComponent();
             
@@ -192,6 +192,11 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void WebAccessUrlDisplayElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             WebHostRuntime.Singleton.Open();
+            e.Handled = true;
+        }
+        private void HostAddressNodeUIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WebHostRuntime.Singleton.Open((sender as Label).Content as string);
             e.Handled = true;
         }
         #endregion

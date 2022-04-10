@@ -37,7 +37,17 @@ namespace Parcel.Shared
                 }
             }.Start();
         }
-        public void Open(string target)
+        public void Open(string adress)
+        {
+            new Process
+            {
+                StartInfo = new ProcessStartInfo(adress)
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
+        }
+        public void OpenTarget(string target)
         {
             new Process
             {

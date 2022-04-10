@@ -11,7 +11,7 @@
             if (WebHostRuntime.Singleton != null)
             {
                 WebHostRuntime.Singleton.LastNode = this;
-                WebHostRuntime.Singleton.Open("Preview");
+                WebHostRuntime.Singleton.OpenTarget("Preview");
             }
         }
         #endregion
