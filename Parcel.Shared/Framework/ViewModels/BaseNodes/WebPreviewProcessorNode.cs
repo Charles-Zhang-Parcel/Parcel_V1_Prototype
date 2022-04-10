@@ -8,8 +8,11 @@
         #region Interface
         public void OpenPreview()
         {
-            if(WebHostRuntime.Singleton != null)
+            if (WebHostRuntime.Singleton != null)
+            {
+                WebHostRuntime.Singleton.LastNode = this;
                 WebHostRuntime.Singleton.Open("Preview");
+            }
         }
         #endregion
     }

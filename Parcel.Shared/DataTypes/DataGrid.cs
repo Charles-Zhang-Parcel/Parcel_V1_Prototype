@@ -42,6 +42,7 @@ namespace Parcel.Shared.DataTypes
         }
         public int Length => _columnData.Count;
         public dynamic this[int index] => _columnData[index];
+        public IEnumerable<T> GetDataAs<T>() => _columnData.OfType<T>();
         public string TypeName
         {
             get
