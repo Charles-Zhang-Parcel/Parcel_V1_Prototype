@@ -1,4 +1,5 @@
-﻿using Parcel.Shared;
+﻿using System.Collections.Generic;
+using Parcel.Shared;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -24,12 +25,17 @@ namespace Parcel.Toolbox.Present.Nodes
         public override OutputConnector MainOutput => null;
         public override NodeExecutionResult Execute()
         {
-            ServerConfig config = ServerConfigInput.FetchInputValue<ServerConfig>();
-            WebHostRuntime.Singleton.CurrentLayout = config;
+            ServerConfig oldConfig = ServerConfigInput.FetchInputValue<ServerConfig>();
+            ServerConfig newConfig = new ServerConfig()
+            {
+                Children = new List<ServerConfig>() {oldConfig},
+                LayoutSpec = LayoutElementType.Presentation
+            };
             
             Message.Content = $"Presenting...";
             Message.Type = NodeMessageType.Normal;
             
+            WebHostRuntime.Singleton.CurrentLayout = newConfig;
             ((IWebPreviewProcessorNode)this).OpenPreview("Present");
             return new NodeExecutionResult(true, null);
         }

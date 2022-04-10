@@ -4,6 +4,7 @@ namespace Parcel.Shared.DataTypes
 {
     public enum LayoutElementType
     {
+        Presentation, // The entire presentation
         Page,
         Section,
         Header,
@@ -15,17 +16,18 @@ namespace Parcel.Shared.DataTypes
     public enum ChartType
     {
         Line,
-        Bar
+        Bar,
+        Table
     }
     
     public class ServerConfig
     {
         #region Charting
-        public ChartType ChartType { get; set; }
+        public ChartType? ChartType { get; set; }
         #endregion
         
         #region Content Payload
-        public CacheDataType ContentType { get; set; }
+        public CacheDataType? ContentType { get; set; }
         public DataGrid DataGridContent { get; set; }
         public object ObjectContent { get; set; }
         #endregion
@@ -39,7 +41,7 @@ namespace Parcel.Shared.DataTypes
         #endregion
 
         #region Hierarchy
-        public List<ServerConfig> Children { get; set; }
+        public List<ServerConfig> Children { get; set; } = new List<ServerConfig>();
         #endregion
     }
 }

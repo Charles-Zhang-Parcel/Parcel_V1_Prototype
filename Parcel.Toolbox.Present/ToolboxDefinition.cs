@@ -14,8 +14,8 @@ namespace Parcel.Toolbox.Present
             new ToolboxNodeExport("Present", typeof(PresentOnline)),
             null, // Divisor line
             new ToolboxNodeExport("Header", typeof(object)),
-            new ToolboxNodeExport("Page", typeof(object)),
-            new ToolboxNodeExport("Section", typeof(object)),
+            new ToolboxNodeExport("Page", typeof(Page)),
+            new ToolboxNodeExport("Section", typeof(Section)),
             new ToolboxNodeExport("Panel", typeof(object)),
             new ToolboxNodeExport("Paragraph", typeof(object)),
             null, // Advanced Layout

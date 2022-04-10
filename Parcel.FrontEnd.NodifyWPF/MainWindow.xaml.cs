@@ -251,6 +251,11 @@ namespace Parcel.FrontEnd.NodifyWPF
             graph.ExecuteGraph();
             foreach (PreviewWindow p in _previewWindows.Values)
                 p.Update();
+
+            foreach (var webNode in Canvas.Nodes.Where(n => n is IWebPreviewProcessorNode))
+            {
+                (webNode as ProcessorNode).IsPreview = false;
+            }
         }
         private void ShowSearchNodePopup()
         {

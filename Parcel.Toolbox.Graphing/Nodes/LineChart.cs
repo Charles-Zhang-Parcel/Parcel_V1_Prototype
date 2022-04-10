@@ -15,6 +15,10 @@ namespace Parcel.Toolbox.Graphing.Nodes
         {
             Title = "Data Table"
         };
+        public readonly InputConnector TableNameInput = new PrimitiveStringInputConnector()
+        {
+            Title = "Display Name"
+        };
         public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Present"
@@ -23,11 +27,12 @@ namespace Parcel.Toolbox.Graphing.Nodes
         {
             _editors = new List<PropertyEditor>()
             {
-                new PropertyEditor("Code", PropertyEditorType.TextBox, () => _chartTitle, v => _chartTitle = (string)v)
+                new PropertyEditor("Parameters", PropertyEditorType.TextBox, () => _chartTitle, v => _chartTitle = (string)v)
             };
             
             Title = NodeTypeName = ChartTitle = "LineChart";
             Input.Add(DataTableInput);
+            Input.Add(TableNameInput);
             Output.Add(ServerConfigOutput);
         }
         #endregion
@@ -55,13 +60,16 @@ namespace Parcel.Toolbox.Graphing.Nodes
             {
                 ChartType = ChartType.Line,
                 ContentType = CacheDataType.ParcelDataGrid,
+                LayoutSpec = LayoutElementType.GridGraph,
                 DataGridContent = DataTableInput.FetchInputValue<DataGrid>(),
+                ObjectContent = TableNameInput.FetchInputValue<string>()
             };
-            WebHostRuntime.Singleton.CurrentLayout = config;
 
+            ProcessorCache[ServerConfigOutput] = new ConnectorCacheDescriptor(config);
             Message.Content = $"Ready.";
             Message.Type = NodeMessageType.Normal;
             
+            WebHostRuntime.Singleton.CurrentLayout = config;
             ((IWebPreviewProcessorNode)this).OpenPreview("Present");
             return new NodeExecutionResult(true, null);
         }
