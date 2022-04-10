@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.WebHost.Models
+namespace Parcel.Shared
 {
     public class WebHostRuntime
     {
@@ -22,7 +23,6 @@ namespace Parcel.WebHost.Models
         public int Port { get; set; }
         public string Address { get; set; }
         public bool ShouldLog { get; set; }
-
         #endregion
 
         #region Accessor - Endpoints
@@ -37,6 +37,20 @@ namespace Parcel.WebHost.Models
                 }
             }.Start();
         }
+        public void Open(string target)
+        {
+            new Process
+            {
+                StartInfo = new ProcessStartInfo($"{Address}/{target}")
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
+        }
+        #endregion
+
+        #region Interoperation
+        public ProcessorNode LastNode { get; set; }
         #endregion
     }
 }

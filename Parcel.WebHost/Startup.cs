@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Parcel.Shared;
 using Parcel.WebHost.Data;
-using Parcel.WebHost.Models;
 
 namespace Parcel.WebHost
 {

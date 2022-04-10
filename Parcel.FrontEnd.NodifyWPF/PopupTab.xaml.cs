@@ -32,6 +32,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             registry.RegisterToolbox("Finance", Assembly.GetAssembly(typeof(FinanceHelper)));
             registry.RegisterToolbox("Special", Assembly.GetAssembly(typeof(GraphToolboxDefinition)));
             registry.RegisterToolbox("Data Source", Assembly.GetAssembly(typeof(Parcel.Toolbox.DataSource.ToolboxDefinition)));
+            registry.RegisterToolbox("Plotting", Assembly.GetAssembly(typeof(Parcel.Toolbox.Plotting.ToolboxDefinition)));
 
             Owner = owner;
             InitializeComponent();

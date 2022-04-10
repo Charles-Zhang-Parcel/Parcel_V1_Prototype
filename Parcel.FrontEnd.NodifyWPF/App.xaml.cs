@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Parcel.Shared;
 using Parcel.WebHost;
-using Parcel.WebHost.Models;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {

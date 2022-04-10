@@ -9,13 +9,47 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Parcel.Shared;
-using Parcel.WebHost.Models;
 using Parcel.WebHost.Utils;
 
 namespace Parcel.WebHost
 {
     public static class Entrance
     {
+        /// <summary>
+        /// Debug Use
+        /// </summary>
+        public static void Main(string[] args)
+        {
+            // var task = Host.CreateDefaultBuilder()
+            //     .ConfigureWebHostDefaults(webBuilder =>
+            //     {
+            //         webBuilder.UseStartup<Startup>();
+            //     }).Build().RunAsync();
+            // task.Wait();
+
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                
+                int port = NetworkHelper.FindFreeTcpPort();
+                string hostAddress = $"http://localhost:{port}";
+                if (WebHostRuntime.Singleton == null)
+                    new WebHostRuntime()
+                    {
+                        Port = port,
+                        Address = hostAddress,
+                        ShouldLog = true,
+                    };
+
+                Host.CreateDefaultBuilder()
+                    .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
+                        webBuilder.UseStartup<Startup>();
+                    }).Build().Run();
+            }).Start();
+            Thread.Sleep(500000);
+        }
         public static void SetupAndRunWebHost()
         {
             var config = new ApplicationConfiguration();
@@ -35,7 +69,7 @@ namespace Parcel.WebHost
                     Address = hostAddress,
                     ShouldLog = configuration.ServerDebugPrint,
                 };
-            
+
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
@@ -47,8 +81,9 @@ namespace Parcel.WebHost
                         webBuilder.UseStartup<Startup>();
                     }).Build().Run();
             }).Start();
+            
 
-            // new Thread(() =>
+            // Thread thread = new Thread(() =>
             // {
             //     Thread.CurrentThread.IsBackground = true;
             //
@@ -74,7 +109,9 @@ namespace Parcel.WebHost
             //         .Build();
             //     // Start host
             //     host.Run();
-            // }).Start();
+            // });
+            // thread.SetApartmentState(ApartmentState.STA);
+            // thread.Start();
         }
     }
 }
