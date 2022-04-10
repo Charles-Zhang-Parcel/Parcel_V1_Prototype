@@ -81,7 +81,7 @@ namespace Parcel.WebHost
                 Host.CreateDefaultBuilder()
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
-                        webBuilder.UseUrls(WebHostRuntime.Singleton.Address);
+                        webBuilder.UseUrls(WebHostRuntime.Singleton.Address, $"http://0.0.0.0:{port}");
                         webBuilder.UseStartup<Startup>();
                     }).Build().Run();
             }).Start();
