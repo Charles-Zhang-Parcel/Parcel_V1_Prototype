@@ -16,10 +16,13 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
         public HostAddress()
         {
             Title = NodeTypeName = "Host Address";
-            
-            WebAccessPointUrl = WebHostRuntime.Singleton?.BaseUrl;
-            if (_webAccessPointUrl.ToLower().Contains("localhost"))
-                LocalIPUrl = _webAccessPointUrl.ToLower().Replace("localhost", GetLocalIPAddress());
+
+            if (WebHostRuntime.Singleton != null)
+            {
+                WebAccessPointUrl = WebHostRuntime.Singleton.BaseUrl;
+                if (_webAccessPointUrl != WebHostRuntime.Singleton.LocalIPUrl)
+                    LocalIPUrl = WebHostRuntime.Singleton.LocalIPUrl;   
+            }
         }
         #endregion
         
@@ -38,21 +41,6 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);
-        }
-        #endregion
-
-        #region Routile
-        private string GetLocalIPAddress()
-        {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
         #endregion
     }

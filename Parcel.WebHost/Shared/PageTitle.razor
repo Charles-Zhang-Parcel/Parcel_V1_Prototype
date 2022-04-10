@@ -1,0 +1,17 @@
+﻿@inject IJSRuntime JsRuntime;
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) SetTitle();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task SetTitle()
+    {
+        await JsRuntime.InvokeVoidAsync("setTitle", Title);
+    }
+}

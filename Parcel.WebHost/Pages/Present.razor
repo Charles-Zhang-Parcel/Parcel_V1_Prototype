@@ -16,6 +16,18 @@
 @using Parcel.Shared.Framework.ViewModels.BaseNodes
 @using System.Drawing
 @page "/present"
+@inject NavigationManager _myNavigationManager
+
+@if (_myNavigationManager.Uri.Contains("localhost"))
+{
+    string address = _myNavigationManager.Uri.Replace("localhost", WebHostRuntime.Singleton.LocalIPAddress);
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <span>Share this link with others: </span>
+        <a class="navbar-brand" href="@address">@address</a>
+    </nav>
+}
+
+<PageTitle Title="Dashboard"/>
 
 @if (WebHostRuntime.Singleton.CurrentLayout != null)
 {

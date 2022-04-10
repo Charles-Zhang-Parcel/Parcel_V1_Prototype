@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using Parcel.Shared.DataTypes;
+using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared
@@ -22,17 +25,20 @@ namespace Parcel.Shared
 
         #region Properties
         public int Port { get; set; }
-        public string Address { get; set; }
+        public string Url { get; set; }
         public bool ShouldLog { get; set; }
         #endregion
 
         #region Accessor - Endpoints
-        public string BaseUrl => Address;
+        public string BaseUrl => Url;
+        public string LocalIPUrl =>
+            BaseUrl.Contains("localhost") ? BaseUrl.Replace("localhost", GetLocalIPAddress()) : BaseUrl;
+        public string LocalIPAddress => GetLocalIPAddress();
         public void Open()
         {
             new Process
             {
-                StartInfo = new ProcessStartInfo(Address)
+                StartInfo = new ProcessStartInfo(Url)
                 {
                     UseShellExecute = true
                 }
@@ -52,7 +58,7 @@ namespace Parcel.Shared
         {
             new Process
             {
-                StartInfo = new ProcessStartInfo($"{Address}/{target}")
+                StartInfo = new ProcessStartInfo($"{Url}/{target}")
                 {
                     UseShellExecute = true
                 }
@@ -63,6 +69,21 @@ namespace Parcel.Shared
         #region Interoperation
         public ProcessorNode LastNode { get; set; }
         public ServerConfig CurrentLayout { get; set; }
+        #endregion
+        
+        #region Routile
+        private string GetLocalIPAddress()
+        {
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
         #endregion
     }
 }

@@ -28,7 +28,14 @@ namespace Parcel.Toolbox.DataProcessing
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
             new ToolboxNodeExport("Convert", typeof(object)), // Act on individual columns
+            new ToolboxNodeExport("Column Add", typeof(object)),
+            new ToolboxNodeExport("Column Subtract", typeof(object)),
+            new ToolboxNodeExport("Column Multiply", typeof(object)),
+            new ToolboxNodeExport("Column Divide", typeof(object)),
+            null, // Divisor line // Matrix Operations
             new ToolboxNodeExport("Matrix Multiply", typeof(MatrixMultiply)), // Dynamic connector sequence, With option to transpose
+            new ToolboxNodeExport("Matrix Scaling", typeof(object)), // Multiplication by a constant
+            new ToolboxNodeExport("Matrix Addition", typeof(object)), // Add or subtract by a constant
             null, // Divisor line // Queries
             new ToolboxNodeExport("Names", typeof(object)), // Return string array of headers
             new ToolboxNodeExport("Size", typeof(object)), // Return integer count of rows and columns

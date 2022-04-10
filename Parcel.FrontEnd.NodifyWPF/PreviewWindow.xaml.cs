@@ -84,7 +84,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Events
         private void PreviewWindow_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if(e.LeftButton == MouseButtonState.Pressed)
+                this.DragMove();    // Allow only LMB, since RMB can cause an exception
         }
         #endregion
 

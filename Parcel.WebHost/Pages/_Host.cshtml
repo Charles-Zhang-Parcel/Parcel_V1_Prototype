@@ -33,6 +33,13 @@
 
 <script src="_framework/blazor.server.js"></script>
 
+<!--Parcel Setup (Interop)-->
+<script>
+    window.setTitle = (title) => {
+        document.title = title;
+    }
+</script>
+
 <!--Library: ChartJS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
