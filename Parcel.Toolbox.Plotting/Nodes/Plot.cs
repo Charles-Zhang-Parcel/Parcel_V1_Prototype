@@ -5,7 +5,7 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.Plotting.Nodes
 {
-    public class Plot: WebPreviewProcessorNode
+    public class Plot: ProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
@@ -35,7 +35,7 @@ namespace Parcel.Toolbox.Plotting.Nodes
             Message.Content = $"Plotting...";
             Message.Type = NodeMessageType.Normal;
             
-            OpenPreview();
+            ((IWebPreviewProcessorNode)this).OpenPreview();
             return new NodeExecutionResult(true, null);
         }
         #endregion

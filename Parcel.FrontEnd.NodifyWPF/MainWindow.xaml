@@ -97,6 +97,7 @@
         </Rectangle>
         
         <!--Connector Shapes-->
+        <SolidColorBrush x:Key="RedSquareConnectorColor" Color="OrangeRed"></SolidColorBrush>
         <SolidColorBrush x:Key="SquareConnectorColor" Color="MediumSlateBlue"></SolidColorBrush>
         <SolidColorBrush x:Key="TriangleConnectorColor" Color="MediumVioletRed"></SolidColorBrush>
         <ControlTemplate x:Key="SquareConnector" TargetType="Control">
@@ -110,7 +111,6 @@
                        Fill="{TemplateBinding Background}"
                        StrokeThickness="2" />
         </ControlTemplate>
-
         <ControlTemplate x:Key="TriangleConnector" TargetType="Control">
             <Polygon Width="14"
                      Height="14"
@@ -130,6 +130,10 @@
                     <Setter Property="Stroke" Value="{StaticResource SquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Input.Shape}" 
+                             Value="{x:Static dataTypes:ConnectorShape.RedSquare}">
+                    <Setter Property="Stroke" Value="{StaticResource RedSquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Input.Shape}" 
                              Value="{x:Static dataTypes:ConnectorShape.Triangle}">
                     <Setter Property="Stroke" Value="{StaticResource TriangleConnectorColor}"></Setter>
                 </DataTrigger>
@@ -145,6 +149,11 @@
                              Value="{x:Static dataTypes:ConnectorShape.Square}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static dataTypes:ConnectorShape.RedSquare}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource RedSquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Shape}" 
                              Value="{x:Static dataTypes:ConnectorShape.Triangle}">
@@ -168,6 +177,11 @@
                              Value="{x:Static dataTypes:ConnectorShape.Square}">
                     <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
                     <Setter Property="BorderBrush" Value="{StaticResource SquareConnectorColor}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Shape}" 
+                             Value="{x:Static dataTypes:ConnectorShape.RedSquare}">
+                    <Setter Property="ConnectorTemplate" Value="{StaticResource SquareConnector}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource RedSquareConnectorColor}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Shape}" 
                              Value="{x:Static dataTypes:ConnectorShape.Triangle}">

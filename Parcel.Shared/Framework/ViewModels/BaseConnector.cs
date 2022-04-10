@@ -52,6 +52,13 @@ namespace Parcel.Shared.Framework.ViewModels
         }
     }
 
+    public class WebConfigInputConnector : BaseConnector
+    {
+        public WebConfigInputConnector() : base(typeof(ServerConfig))
+        {
+        }
+    }
+
     public class InputConnector : BaseConnector
     {
         public InputConnector(Type dataType) : base(dataType)

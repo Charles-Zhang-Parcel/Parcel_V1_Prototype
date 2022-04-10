@@ -1,24 +1,45 @@
-﻿namespace Parcel.Shared.DataTypes
+﻿using System.Collections.Generic;
+
+namespace Parcel.Shared.DataTypes
 {
-    public struct PresentationLayout
+    public enum LayoutElementType
     {
-        
+        Page,
+        Section,
+        Header,
+        GridPanel,
+        GridLabelElement,
+        GridGraph
     }
 
-    public struct ContentFunction
+    public enum ChartType
     {
-        
-    }
-
-    public struct EndpointDescription
-    {
-        
+        Line,
+        Bar
     }
     
-    public struct ServerConfig
+    public class ServerConfig
     {
-        public ContentFunction Content { get; set; }
-        public PresentationLayout Layout { get; set; }
-        public EndpointDescription Endpoint { get; set; }
+        #region Charting
+        public ChartType ChartType { get; set; }
+        #endregion
+        
+        #region Content Payload
+        public CacheDataType ContentType { get; set; }
+        public DataGrid DataGridContent { get; set; }
+        public object ObjectContent { get; set; }
+        #endregion
+
+        #region Endpoint Configuration
+        public string CustomEndpointName { get; set; }
+        #endregion
+
+        #region Layout
+        public LayoutElementType LayoutSpec { get; set; }
+        #endregion
+
+        #region Hierarchy
+        public List<ServerConfig> Children { get; set; }
+        #endregion
     }
 }

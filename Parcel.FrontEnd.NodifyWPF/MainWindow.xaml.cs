@@ -184,7 +184,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             // TODO: This is a good chance to auto-save, before anything can crash
             
             node.IsPreview = true;
-            SpawnPreviewWindow(node);
+            if (!(node is IWebPreviewProcessorNode))
+                SpawnPreviewWindow(node);
             ExecuteAll();
 
             e.Handled = true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared
@@ -61,6 +62,7 @@ namespace Parcel.Shared
 
         #region Interoperation
         public ProcessorNode LastNode { get; set; }
+        public ServerConfig CurrentLayout { get; set; }
         #endregion
     }
 }
