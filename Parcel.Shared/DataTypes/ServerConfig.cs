@@ -17,7 +17,7 @@ namespace Parcel.Shared.DataTypes
     {
         Line,
         Bar,
-        Table
+        Table // Plain table of data, ideally searchable
     }
     
     public class ServerConfig

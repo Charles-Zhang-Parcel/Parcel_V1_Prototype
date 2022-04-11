@@ -46,7 +46,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Constructor
         public MainWindow()
         {
-            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), () => LastTool != null);
+            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), 
+                () => LastTool != null && !(FocusManager.GetFocusedElement(this) is TextBox) && !(Keyboard.FocusedElement is TextBox));
             SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(), () => Canvas.Nodes.Count != 0);
             OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);

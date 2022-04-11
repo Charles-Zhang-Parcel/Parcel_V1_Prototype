@@ -12,6 +12,8 @@ namespace Parcel.Toolbox.Graphing
         public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[] 
         {
             new ToolboxNodeExport("Line Chart", typeof(LineChart)),
+            new ToolboxNodeExport("Bar Chart", typeof(object)),
+            new ToolboxNodeExport("Data Table", typeof(object)),
         };
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
