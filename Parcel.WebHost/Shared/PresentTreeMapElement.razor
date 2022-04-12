@@ -1,0 +1,55 @@
+﻿@using Parcel.Shared.DataTypes
+@using ChartJs.Blazor
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.Common.Time
+@using ChartJs.Blazor.LineChart
+@using ChartJs.Blazor.Util
+@using System.Drawing
+@inject IJSRuntime _js
+
+@if (Element != null)
+{
+    ConfigBase chartConfig = InitializeChart(Element);
+}
+
+<canvas id="canvas"></canvas>
+
+<button @onclick="Test">Test</button>
+
+@code {
+    #region Parameters
+    [Parameter] public ServerConfig Element { get; set; }
+    #endregion
+
+    #region Lifecycle
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var targetUrl = "component/drawTreeMap.js";
+        await _js.InvokeVoidAsync("loadJs", targetUrl);
+    }
+    #endregion
+
+    #region Events
+    async Task Test()
+    {
+        await _js.InvokeVoidAsync("swal", "Success!", "Script loaded", "success");
+    }
+    #endregion
+    
+    
+    #region Routines
+    private ConfigBase InitializeChart(ServerConfig config)
+    {
+        if (config.ContentType != CacheDataType.ParcelDataGrid)
+            return null;
+        DataGrid dataGrid = config.DataGridContent;
+
+        return null;
+    }
+    #endregion
+
+    #region Helpers
+    #endregion
+}

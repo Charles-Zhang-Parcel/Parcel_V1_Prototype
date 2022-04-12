@@ -8,7 +8,7 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Toolbox.Graphing.Nodes
 {
-    public class LineChart: ProcessorNode, IWebPreviewProcessorNode, INodeProperty
+    public class TreeMap: ProcessorNode, IWebPreviewProcessorNode, INodeProperty
     {
         #region Node Interface
         public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
@@ -23,14 +23,14 @@ namespace Parcel.Toolbox.Graphing.Nodes
         {
             Title = "Present"
         };
-        public LineChart()
+        public TreeMap()
         {
             _editors = new List<PropertyEditor>()
             {
                 new PropertyEditor("Parameters", PropertyEditorType.TextBox, () => _chartTitle, v => _chartTitle = (string)v)
             };
             
-            Title = NodeTypeName = ChartTitle = "Line Chart";
+            Title = NodeTypeName = ChartTitle = "Tree Map";
             Input.Add(DataTableInput);
             Input.Add(TableNameInput);
             Output.Add(ServerConfigOutput);
@@ -58,7 +58,7 @@ namespace Parcel.Toolbox.Graphing.Nodes
         {
             ServerConfig config = new ServerConfig()
             {
-                ChartType = ChartType.Line,
+                ChartType = ChartType.TreeMap,
                 ContentType = CacheDataType.ParcelDataGrid,
                 LayoutSpec = LayoutElementType.GridGraph,
                 DataGridContent = DataTableInput.FetchInputValue<DataGrid>(),
