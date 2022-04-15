@@ -41,41 +41,52 @@ function drawCanvas(canvasSettings){
     const ctx = canvas.getContext('2d');
     canvas.width = canvasSettings.width;
     canvas.height = canvasSettings.height;
-
-    ctx.textBaseline = "top";
-    ctx.textAlign = 'start';
+    
+    // Background
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvasSettings.width, canvasSettings.height);
+    ctx.strokeStyle = 'black';
     
-    const level1LabelHeight = 24
+    // Level 1
     const aggregateLevel1 = aggregate(canvasSettings.dataSource, ['outer'], 'value')
     const level1Max = Math.max.apply(Math, aggregateLevel1.map(o => o.value))
     const level1Min = Math.min.apply(Math, aggregateLevel1.map(o => o.value))
     computeTreeMap(aggregateLevel1, canvasSettings.width, canvasSettings.height).forEach(element => {
+        // Level 1 Background
         ctx.fillStyle = interpColor((element.data.value - level1Min) / level1Max)
-        ctx.strokeStyle = 'black';
-        ctx.font = '24px serif';
-        
+        ctx.lineWidth = 4;
         ctx.fillRect(element.x, element.y, element.width, element.height)
         ctx.strokeRect(element.x, element.y, element.width, element.height)
 
+        // Level 1 Label
+        const level1LabelHeight = 12
+        ctx.fillStyle = "gray"
+        ctx.fillRect(element.x, element.y, element.width, level1LabelHeight)
+        ctx.font = '12px serif';
+        ctx.textBaseline = "top";
+        ctx.textAlign = 'start';
         ctx.fillStyle = 'white';
         ctx.fillText(element.data.outer, element.x + /*Gap*/ 3, element.y);
+        ctx.lineWidth = 2;
         ctx.strokeRect(element.x, element.y, element.width, level1LabelHeight)
 
+        // Level 2
         const aggregationLevel2 = canvasSettings.dataSource.filter(ds => ds.outer === element.data.outer)
         const level2Max = Math.max.apply(Math, aggregationLevel2.map(o => o.value))
         const level2Min = Math.min.apply(Math, aggregationLevel2.map(o => o.value))
         computeTreeMap(aggregationLevel2, element.width, element.height - level1LabelHeight).forEach(child => {
+            // Level 2 Background
             ctx.fillStyle = interpColor((child.data.value - level2Min) / level2Max)
-            ctx.font = '12px serif';
-
+            ctx.lineWidth = 1;
             ctx.fillRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, child.height)
             ctx.strokeRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, child.height)
 
-            ctx.fillStyle = 'white';
-            ctx.fillText(child.data.inner, element.x + child.x + /*Gap*/ 3, element.y + child.y + level1LabelHeight);
-            ctx.strokeRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, 12) // Child label
+            // Level 2 Label
+            ctx.font = '12px serif';
+            ctx.textBaseline = "middle";
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'black';
+            ctx.fillText(child.data.inner, element.x + child.x + /*Gap*/ 3 + child.width / 2, element.y + child.y + level1LabelHeight + child.height / 2);
         })
     });
 }
