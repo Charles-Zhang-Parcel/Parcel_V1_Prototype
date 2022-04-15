@@ -6,4 +6,5 @@
     &lt;TestId&gt;NUnit3x::2091A380-446C-4F4E-B142-ABEB60321687::.NETCoreApp,Version=v3.1::Parcel.Test.CoreTests.SharedFramework.Tests.DataGridCorrectColumnTypes&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::2091A380-446C-4F4E-B142-ABEB60321687::.NETCoreApp,Version=v3.1::Parcel.Test.CoreTests.SharedFramework.Tests.DataGridConsistentTypesRequirement&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>

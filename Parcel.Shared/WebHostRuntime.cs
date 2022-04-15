@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -69,6 +70,7 @@ namespace Parcel.Shared
         #region Interoperation
         public ProcessorNode LastNode { get; set; }
         public ServerConfig CurrentLayout { get; set; }
+        public Dictionary<string, DataGrid> DataTableEndPoints { get; set; } = new Dictionary<string, DataGrid>();
         #endregion
         
         #region Routile

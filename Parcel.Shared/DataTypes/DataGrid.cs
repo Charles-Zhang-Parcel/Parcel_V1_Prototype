@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
+using System.Text;
 using Csv;
 
 namespace Parcel.Shared.DataTypes
@@ -228,9 +229,11 @@ namespace Parcel.Shared.DataTypes
         }
         #endregion
 
+        #region Members
         // public string TableName { get; set; }
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
         public DataColumn OptionalRowHeaderColumn { get; set; }
+        #endregion
 
         #region Accessors
         public int ColumnCount => Columns.Count;
@@ -239,22 +242,41 @@ namespace Parcel.Shared.DataTypes
         {
             get
             {
-                int colCount = Columns.Count;
-                int rowCount = Columns.First().Length;
                 string[] columnHeaders = Columns.Select(c => c.Header).ToArray();
                 List<dynamic> rows = new List<dynamic>();
-                for (int row = 0; row < rowCount; row++)
+                for (int row = 0; row < RowCount; row++)
                 {
                     Dictionary<string, int> repeatNameCounter = new Dictionary<string, int>();
                     dynamic temp = new ExpandoObject();
                     if (OptionalRowHeaderColumn != null)
                         ((IDictionary<String, Object>)temp)[PreProcessColumnNameForDisplay(OptionalRowHeaderColumn.Header, repeatNameCounter)] = OptionalRowHeaderColumn[row];
-                    for (int col = 0; col < colCount; col++)
+                    for (int col = 0; col < ColumnCount; col++)
                         ((IDictionary<String, Object>)temp)[PreProcessColumnNameForDisplay(columnHeaders[col], repeatNameCounter)] = Columns[col][row];
                     rows.Add(temp);
                 }
                 return rows;
             }
+        }
+
+        public string ToCSV()
+        {
+            Dictionary<string, int> repeatNameCounter = new Dictionary<string, int>();
+            StringBuilder builder = new StringBuilder();
+            if (OptionalRowHeaderColumn != null) builder.Append($"{PreProcessColumnNameForDisplay(OptionalRowHeaderColumn.Header, repeatNameCounter)},");
+            builder.AppendLine(string.Join(',', Columns.Select(c => PreProcessColumnNameForDisplay(c.Header, repeatNameCounter))));
+            
+            for (int row = 0; row < RowCount; row++)
+            {
+                if (OptionalRowHeaderColumn != null)
+                    builder.Append(OptionalRowHeaderColumn[row].ToString() + ',');
+                for (int col = 0; col < ColumnCount; col++)
+                    builder.Append(Columns[col][row].ToString() + ',');
+                
+                builder.Remove(builder.Length - 1, 1);
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
         }
         #endregion
 

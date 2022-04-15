@@ -56,12 +56,13 @@ namespace Parcel.Toolbox.Graphing.Nodes
         public override OutputConnector MainOutput => ServerConfigOutput;
         public override NodeExecutionResult Execute()
         {
+            var dataGrid = DataTableInput.FetchInputValue<DataGrid>();
             ServerConfig config = new ServerConfig()
             {
                 ChartType = ChartType.TreeMap,
                 ContentType = CacheDataType.ParcelDataGrid,
                 LayoutSpec = LayoutElementType.GridGraph,
-                DataGridContent = DataTableInput.FetchInputValue<DataGrid>(),
+                DataGridContent = dataGrid,
                 ObjectContent = TableNameInput.FetchInputValue<string>()
             };
 
@@ -70,6 +71,7 @@ namespace Parcel.Toolbox.Graphing.Nodes
             Message.Type = NodeMessageType.Normal;
             
             WebHostRuntime.Singleton.CurrentLayout = config;
+            WebHostRuntime.Singleton.DataTableEndPoints.Add("TreeMap", dataGrid);
             ((IWebPreviewProcessorNode)this).OpenPreview("Present");
             return new NodeExecutionResult(true, null);
         }

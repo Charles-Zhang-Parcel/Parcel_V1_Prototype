@@ -21,6 +21,7 @@ namespace Parcel.Toolbox.Finance
             new ToolboxNodeExport("Covariance Matrix", typeof(CovarianceMatrix)), // This one operates on multiple columns
             new ToolboxNodeExport("Min", typeof(Min)),
             new ToolboxNodeExport("Max", typeof(Max)),
+            new ToolboxNodeExport("Range", typeof(object)), // Outputs Min, Max, and Max-Min; Also displays those numbers in three lines in the node message content
             new ToolboxNodeExport("Sum", typeof(Sum)),
         };
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
