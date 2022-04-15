@@ -13,23 +13,70 @@
 }
 
 function randomColor() {
-    return Math.floor(Math.random()*16777215).toString(16);
+    const string = Math.floor(Math.random()*16777215).toString(16) 
+    return `#` + string
 }
 
-function drawCanvas(canvasSettings){
-    const aggregateLevel1 = aggregate(canvasSettings.dataSource, ['outer'], 'value')
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function interpColor(ratio) { // Ratio between 0-1
+    const red = {r: 255, g: 0, b: 0}
+    const green = {r: 0, g: 255, b: 0}
     
+    const r = red.r * (1 - ratio) + green.r * ratio;
+    const g = red.g * (1 - ratio) + green.g * ratio;
+    const b = red.b * (1 - ratio) + green.b * ratio;
+    return rgbToHex(Math.floor(r), Math.floor(g), Math.floor(b));
+}
+
+function drawCanvas(canvasSettings){    
     const canvas = document.getElementById(canvasSettings.id);
     const ctx = canvas.getContext('2d');
     canvas.width = canvasSettings.width;
     canvas.height = canvasSettings.height;
 
+    ctx.textBaseline = "top";
+    ctx.textAlign = 'start';
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvasSettings.width, canvasSettings.height);
     
+    const level1LabelHeight = 24
+    const aggregateLevel1 = aggregate(canvasSettings.dataSource, ['outer'], 'value')
+    const level1Max = Math.max.apply(Math, aggregateLevel1.map(o => o.value))
+    const level1Min = Math.min.apply(Math, aggregateLevel1.map(o => o.value))
     computeTreeMap(aggregateLevel1, canvasSettings.width, canvasSettings.height).forEach(element => {
-        ctx.fillStyle = `#${randomColor()}`;
-        ctx.fillRect(element.x, element.y, element.width, element.height);
+        ctx.fillStyle = interpColor((element.data.value - level1Min) / level1Max)
+        ctx.strokeStyle = 'black';
+        ctx.font = '24px serif';
+        
+        ctx.fillRect(element.x, element.y, element.width, element.height)
+        ctx.strokeRect(element.x, element.y, element.width, element.height)
+
+        ctx.fillStyle = 'white';
+        ctx.fillText(element.data.outer, element.x + /*Gap*/ 3, element.y);
+        ctx.strokeRect(element.x, element.y, element.width, level1LabelHeight)
+
+        const aggregationLevel2 = canvasSettings.dataSource.filter(ds => ds.outer === element.data.outer)
+        const level2Max = Math.max.apply(Math, aggregationLevel2.map(o => o.value))
+        const level2Min = Math.min.apply(Math, aggregationLevel2.map(o => o.value))
+        computeTreeMap(aggregationLevel2, element.width, element.height - level1LabelHeight).forEach(child => {
+            ctx.fillStyle = interpColor((child.data.value - level2Min) / level2Max)
+            ctx.font = '12px serif';
+
+            ctx.fillRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, child.height)
+            ctx.strokeRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, child.height)
+
+            ctx.fillStyle = 'white';
+            ctx.fillText(child.data.inner, element.x + child.x + /*Gap*/ 3, element.y + child.y + level1LabelHeight);
+            ctx.strokeRect(element.x + child.x, element.y + child.y + level1LabelHeight, child.width, 12) // Child label
+        })
     });
 }
 
