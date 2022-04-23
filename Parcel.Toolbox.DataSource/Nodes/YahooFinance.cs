@@ -25,7 +25,7 @@ namespace Parcel.Toolbox.DataSource.Nodes
         };
         public readonly InputConnector IntervalInput = new PrimitiveStringInputConnector()
         {
-            Title = "Internal",
+            Title = "Interval",
         };
         public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
@@ -70,9 +70,9 @@ namespace Parcel.Toolbox.DataSource.Nodes
             new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
             {
                 new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-250, -100), SymbolInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), SymbolInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), SymbolInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), SymbolInput)
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), StartDateInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), EndDateInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), IntervalInput)
             };
         #endregion
     }

@@ -13,7 +13,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             {
                 if (DateTime.TryParse(_value, out DateTime result))
                     return result;
-                return DateTime.Now;
+                return DateTime.Now.Date;
             }
             set => SetField(ref _value, value.ToString());
         }
@@ -27,7 +27,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         public DateTimeNode()
         {
             Title = NodeTypeName = "DateTime";
-            DateTime = DateTime.Now;
+            DateTime = DateTime.Now.Date;
             ValueOutput.IsHidden = true;
             Output.Add(DateTimeOutput);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,26 +25,14 @@ namespace Parcel.Toolbox.DataSource
         {
             string ConvertTimeFormat(DateTime input)
             {
-                // Tiemzone info: https://stackoverflow.com/questions/5996320/net-timezoneinfo-from-olson-time-zone
-                // { "America/New_York", "Eastern Standard Time" },
-                var americaNewYorkTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                var newYorkTime = TimeZoneInfo.ConvertTimeFromUtc(input.AddDays(1), americaNewYorkTimeZone);
-                string timeStamp = ((DateTimeOffset) newYorkTime).ToUnixTimeSeconds().ToString();
-                return timeStamp;   // TODO: NOT WORKING
-                /*Test Info:
-                 Test date: 2014/01/28-2022/04/07
-
-UTC: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390896000&period2=1649314800&interval=1m&events=history&includeAdjustedClose=true
-UTC to Eastern: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390878000&period2=1649300400&interval=1m&events=history&includeAdjustedClose=true
-UTC+1 to Eastern: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390964400&period2=1649386800&interval=1m&events=history&includeAdjustedClose=true
-
-Actual: https://query1.finance.yahoo.com/v7/finance/download/AAPL?period1=1390953600&period2=1649376000&interval=1mo&events=history&includeAdjustedClose=true
-America/New_York*/
+                input = input.Date; // Clear out time, set to 0
+                string timeStamp = (input - new DateTime(1970, 01, 01)).TotalSeconds.ToString(CultureInfo.InvariantCulture);
+                return timeStamp;
             }
             
             Dictionary<string, string> validIntervals = new Dictionary<string, string>()
             {
-                {"month", "1m"},
+                {"month", "1mo"},
                 {"day", "1d"},
                 {"week", "1w"},
                 {"year", "1y"},

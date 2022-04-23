@@ -229,7 +229,7 @@ namespace Parcel.Toolbox.Finance
                         if (sourceColumn.Type == typeof(double))
                             resultColumn.Add((sourceColumn[i] - sourceColumn[i+1]) / sourceColumn[i+1]);
                         else 
-                            resultColumn.Add(sourceColumn[i]);
+                            resultColumn.Add(sourceColumn[i]); // Ignore non-numerical column
                     }    
                 }
                 else
@@ -239,7 +239,7 @@ namespace Parcel.Toolbox.Finance
                         if (sourceColumn.Type == typeof(double))
                             resultColumn.Add((sourceColumn[i] - sourceColumn[i-1]) / sourceColumn[i-1]);
                         else 
-                            resultColumn.Add(sourceColumn[i]);
+                            resultColumn.Add(sourceColumn[i]); // Ignore non-numerical column
                     }    
                 }
             }

@@ -19,7 +19,7 @@ namespace Parcel.Shared.Framework.ViewModels
     {
         public PrimitiveDateTimeInputConnector() : base(typeof(DateTime))
         {
-            Value = DateTime.Now;
+            Value = DateTime.Now.Date;
         }
     }
     
