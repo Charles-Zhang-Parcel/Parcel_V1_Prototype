@@ -1,9 +1,21 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
     public class CommentNode: BaseNode
     {
+        #region Construction
+        public CommentNode()
+        {
+            MemberSerialization = new List<NodeSerializationRoutine>()
+            {
+                new NodeSerializationRoutine("Comment", () => _comment, value => _comment = value as string)
+            };
+        }
+        #endregion
+        
         #region View Components
         private string? _title = "Comment";
         public string? Title
@@ -25,6 +37,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             get => _size;
             set => SetField(ref _size, value);
         }
+        #endregion
+
+        #region Serialization
+        public sealed override List<NodeSerializationRoutine> MemberSerialization { get; set; }
+        public override int GetOutputPinID(BaseConnector connector) => throw new InvalidOperationException();
+        public override int GetInputPinID(BaseConnector connector) => throw new InvalidOperationException();
+        public override BaseConnector GetOutputPin(int id) => throw new InvalidOperationException();
+        public override BaseConnector GetInputPin(int id) => throw new InvalidOperationException();
         #endregion
     }
 }

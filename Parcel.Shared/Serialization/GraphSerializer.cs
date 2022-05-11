@@ -59,7 +59,7 @@ namespace Parcel.Shared.Serialization
             // Deserialize nodes
             List<BaseNode> nodes = graph.Nodes.Select(n =>
             {
-                BaseNode deserialized = n.Deserialize();
+                BaseNode deserialized = n.Deserialize(canvas);
                 nodeMapping[n] = deserialized;
                 return deserialized;
             }).ToList();

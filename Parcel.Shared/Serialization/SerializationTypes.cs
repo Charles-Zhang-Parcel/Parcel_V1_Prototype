@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Serialization
@@ -31,9 +32,16 @@ namespace Parcel.Shared.Serialization
         public Type NodeType { get; set; }
         public Dictionary<string, object> NodeMembers { get; set; }
 
-        public BaseNode Deserialize()
+        public BaseNode Deserialize(NodesCanvas canvas)
         {
-            throw new NotImplementedException();
+            BaseNode node = (BaseNode)Activator.CreateInstance(NodeType);
+            if (node != null)
+            {
+                node.Deserialize(NodeMembers, canvas);
+                return node;
+            }
+
+            return null;
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Parcel.Shared.DataTypes;
 
@@ -29,6 +30,17 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         public IEnumerable<BaseNode> Next => Connector.Connections
             .Where(c => c.Input.Node == this || c.Output.IsConnected)
             .Select(c => c.Output.Node);
+        #endregion
+
+        #region Serialization
+        public override List<NodeSerializationRoutine> MemberSerialization { get; set; } =
+            new List<NodeSerializationRoutine>();
+        public override int GetOutputPinID(BaseConnector connector) =>
+            connector == Connector ? 0 : throw new ArgumentException("Invalid connector.");
+        public override int GetInputPinID(BaseConnector connector) =>
+            connector == Connector ? 0 : throw new ArgumentException("Invalid connector.");
+        public override BaseConnector GetOutputPin(int id) => Connector;
+        public override BaseConnector GetInputPin(int id) => Connector;
         #endregion
     }
 }
