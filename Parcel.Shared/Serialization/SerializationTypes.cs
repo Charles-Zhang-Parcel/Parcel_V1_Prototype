@@ -33,7 +33,14 @@ namespace Parcel.Shared.Serialization
 
         public BaseNode Deserialize()
         {
-            throw new NotImplementedException();
+            BaseNode node = (BaseNode)Activator.CreateInstance(NodeType);
+            if (node != null)
+            {
+                node.Deserialize(NodeMembers);
+                return node;
+            }
+
+            return null;
         }
     }
 

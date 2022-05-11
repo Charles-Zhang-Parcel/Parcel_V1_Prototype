@@ -81,5 +81,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         public virtual bool ShouldHaveConnection => Input.Count != 0 && Input.First().Connections.Count == 0;
         public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes { get; } = null; // Not available
         #endregion
+
+        #region Serialization
+        public override List<NodeSerializationRoutine> MemberSerialization { get; set; } =
+            new List<NodeSerializationRoutine>();
+        public override int GetOutputPinID(BaseConnector connector) => Output.IndexOf(connector);
+        public override int GetInputPinID(BaseConnector connector) => Input.IndexOf(connector);
+        public override BaseConnector GetOutputPin(int id) => Output[id];
+        public override BaseConnector GetInputPin(int id) => Input[id];
+        #endregion
     }
 }
