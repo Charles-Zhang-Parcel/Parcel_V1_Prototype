@@ -1,11 +1,10 @@
-﻿using Parcel.Shared.DataTypes;
-using Parcel.Shared.Framework;
+﻿using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.Basic.Nodes
+namespace Parcel.Toolbox.Math.Nodes
 {
-    public class Subtract: ProcessorNode
+    public class Divide: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector Number1Input = new InputConnector(typeof(double))
@@ -20,9 +19,9 @@ namespace Parcel.Toolbox.Basic.Nodes
         {
             Title = "Result",
         };
-        public Subtract()
+        public Divide()
         {
-            Title = NodeTypeName = "Subtract";
+            Title = NodeTypeName = "Divide";
             Input.Add(Number1Input);
             Input.Add(Number2Input);
             Output.Add(ResultOutput);
@@ -35,16 +34,16 @@ namespace Parcel.Toolbox.Basic.Nodes
         {
             double number1 = Number1Input.FetchInputValue<double>();
             double number2 = Number2Input.FetchInputValue<double>();
-            SubtractParameter parameter = new SubtractParameter()
+            DivideParameter parameter = new DivideParameter()
             {
                 InputNumber1 = number1,
                 InputNumber2 = number2
             };
-            BasicHelper.Subtract(parameter);
+            MathHelper.Divide(parameter);
 
             ProcessorCache[ResultOutput] = new ConnectorCacheDescriptor(parameter.OutputNumber);
 
-            Message.Content = $"{number1}-{number2}={parameter.OutputNumber}";
+            Message.Content = $"{number1}÷{number2}={parameter.OutputNumber}";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

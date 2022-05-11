@@ -1,11 +1,10 @@
-﻿using Parcel.Shared.DataTypes;
-using Parcel.Shared.Framework;
+﻿using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.Basic.Nodes
+namespace Parcel.Toolbox.Math.Nodes
 {
-    public class Divide: ProcessorNode
+    public class Modulus: ProcessorNode
     {
         #region Node Interface
         public readonly BaseConnector Number1Input = new InputConnector(typeof(double))
@@ -20,9 +19,9 @@ namespace Parcel.Toolbox.Basic.Nodes
         {
             Title = "Result",
         };
-        public Divide()
+        public Modulus()
         {
-            Title = NodeTypeName = "Divide";
+            Title = NodeTypeName = "Modulus";
             Input.Add(Number1Input);
             Input.Add(Number2Input);
             Output.Add(ResultOutput);
@@ -35,16 +34,16 @@ namespace Parcel.Toolbox.Basic.Nodes
         {
             double number1 = Number1Input.FetchInputValue<double>();
             double number2 = Number2Input.FetchInputValue<double>();
-            DivideParameter parameter = new DivideParameter()
+            ModulusParameter parameter = new ModulusParameter()
             {
                 InputNumber1 = number1,
                 InputNumber2 = number2
             };
-            BasicHelper.Divide(parameter);
+            MathHelper.Modulus(parameter);
 
             ProcessorCache[ResultOutput] = new ConnectorCacheDescriptor(parameter.OutputNumber);
 
-            Message.Content = $"{number1}÷{number2}={parameter.OutputNumber}";
+            Message.Content = $"{number1}%{number2}={parameter.OutputNumber}";
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);

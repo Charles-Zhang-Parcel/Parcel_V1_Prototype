@@ -25,13 +25,6 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("Array", typeof(object)), // Generic array representation of all above types, CANNOT have mixed types
             null, // Divisor line // Queries
             new ToolboxNodeExport("Count", typeof(object)), // Return count of an array
-            null, // Divisor line // Basic Operations - Number
-            new ToolboxNodeExport("Add", typeof(Add)),
-            new ToolboxNodeExport("Subtract", typeof(Subtract)),
-            new ToolboxNodeExport("Multiply", typeof(Multiply)),
-            new ToolboxNodeExport("Divide", typeof(Divide)),
-            new ToolboxNodeExport("Modulus", typeof(Module)),
-            new ToolboxNodeExport("Power", typeof(Power)),
         };
         // Test
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[]

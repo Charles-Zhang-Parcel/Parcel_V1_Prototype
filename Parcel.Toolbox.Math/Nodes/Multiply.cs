@@ -1,9 +1,8 @@
-﻿using Parcel.Shared.DataTypes;
-using Parcel.Shared.Framework;
+﻿using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.Basic.Nodes
+namespace Parcel.Toolbox.Math.Nodes
 {
     public class Multiply: ProcessorNode
     {
@@ -40,7 +39,7 @@ namespace Parcel.Toolbox.Basic.Nodes
                 InputNumber1 = number1,
                 InputNumber2 = number2
             };
-            BasicHelper.Multiply(parameter);
+            MathHelper.Multiply(parameter);
 
             ProcessorCache[ResultOutput] = new ConnectorCacheDescriptor(parameter.OutputNumber);
 
