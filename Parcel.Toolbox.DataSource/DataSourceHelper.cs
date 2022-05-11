@@ -49,7 +49,7 @@ namespace Parcel.Toolbox.DataSource
             string startTime = ConvertTimeFormat(parameter.InputStartDate);
             string endTime = ConvertTimeFormat(parameter.InputEndDate);
             string interval = validIntervals[parameter.InputInterval.ToLower()];
-            string csvUrl =
+            string csvUrl = // Remark: In the past the unaccessible entity error was caused by a typo in the url, not caused by UNIX timestamp; The server is able to handle quite generic timestamp
                 $"https://query1.finance.yahoo.com/v7/finance/download/{parameter.InputSymbol}?period1={startTime}&period2={endTime}&interval={interval}&events=history&includeAdjustedClose=true";
             string csvText = new WebClient().DownloadString(csvUrl);
             IEnumerable<ICsvLine> csv = Csv.CsvReader.ReadFromText(csvText, new CsvOptions()

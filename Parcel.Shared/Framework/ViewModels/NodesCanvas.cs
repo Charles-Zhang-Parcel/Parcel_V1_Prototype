@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
+using Parcel.Shared.Serialization;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
@@ -84,8 +85,7 @@ namespace Parcel.Shared.Framework.ViewModels
         #region Interface
         public void Open(string path)
         {
-            string text = File.ReadAllText(path);
-            CanvasSerialization loaded = new YamlDotNet.Serialization.Deserializer().Deserialize<CanvasSerialization>(text);
+            CanvasSerialization loaded = new GraphSerializer().Deserialize(path, this);
             
             SelectedNodes.Clear();
             Nodes.Clear(); Nodes.AddRange(loaded.Nodes);
@@ -94,12 +94,11 @@ namespace Parcel.Shared.Framework.ViewModels
 
         public void Save(string path)
         {
-            string text = new YamlDotNet.Serialization.Serializer().Serialize(new CanvasSerialization()
+            new GraphSerializer().Serialize(path, new CanvasSerialization()
             {
-                Nodes = new List<BaseNode>(Nodes),
-                Connections = new List<BaseConnection>(Connections)
+                Nodes = this.Nodes.ToList(),
+                Connections = this.Connections.ToList()
             });
-            File.WriteAllText(path, text);
         }
         #endregion
 

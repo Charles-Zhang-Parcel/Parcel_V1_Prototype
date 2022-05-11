@@ -48,8 +48,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), 
                 () => LastTool != null && !(FocusManager.GetFocusedElement(this) is TextBox) && !(Keyboard.FocusedElement is TextBox));
-            SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(), () => Canvas.Nodes.Count != 0);
-            OpenCanvasCommand = new DelegateCommand(() => OpenCanvas(), () => true);
+            SaveCanvasCommand = new DelegateCommand(SaveCanvas, () => true);
+            OpenCanvasCommand = new DelegateCommand(OpenCanvas, () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
 
             // WebAccessPointUrl = WebHostRuntime.Singleton?.BaseUrl;
@@ -294,8 +294,10 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void SaveCanvas()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml"
+            };
             if (saveFileDialog.ShowDialog() == true)
             {
                 string path = saveFileDialog.FileName;
