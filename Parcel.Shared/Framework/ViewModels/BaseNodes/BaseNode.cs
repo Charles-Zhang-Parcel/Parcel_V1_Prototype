@@ -41,7 +41,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Serialization Interface
-        public abstract List<NodeSerializationRoutine> MemberSerialization { get; set; }
+        public abstract List<NodeSerializationRoutine> MemberSerialization { get; }
         #endregion
 
         #region Serialization
@@ -54,7 +54,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 
             return new NodeData()
             {
-                NodeType = this.GetType(),
+                NodeType = this.GetType().AssemblyQualifiedName,
                 NodeMembers = members 
             };
         }

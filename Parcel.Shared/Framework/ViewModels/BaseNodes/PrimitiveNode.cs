@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
@@ -14,12 +15,17 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Node Interface
-        protected BaseConnector ValueOutput = new OutputConnector(typeof(string))
+        protected readonly BaseConnector ValueOutput = new OutputConnector(typeof(string))
         {
             Title = "Value"
-        }; 
-        public PrimitiveNode()
+        };
+        protected PrimitiveNode()
         {
+            ProcessorNodeMemberSerialization = new List<NodeSerializationRoutine>()
+            {
+                new NodeSerializationRoutine(nameof(Value), () => _value, value => _value = value as string)
+            };
+            
             Output.Add(ValueOutput);
         }
         #endregion
@@ -30,6 +36,11 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(_value);
             return new NodeExecutionResult(true, null);
         }
+        #endregion
+        
+        
+        #region Serialization
+        protected override List<NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
         #endregion
     }
 }

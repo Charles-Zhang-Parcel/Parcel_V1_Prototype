@@ -29,12 +29,15 @@ namespace Parcel.Shared.Serialization
     [Serializable]
     internal class NodeData
     {
-        public Type NodeType { get; set; }
+        /// <summary>
+        /// Full name of corresponding type
+        /// </summary>
+        public string NodeType { get; set; }
         public Dictionary<string, object> NodeMembers { get; set; }
 
         public BaseNode Deserialize(NodesCanvas canvas)
         {
-            BaseNode node = (BaseNode)Activator.CreateInstance(NodeType);
+            BaseNode node = (BaseNode)Activator.CreateInstance(Type.GetType(NodeType));
             if (node != null)
             {
                 node.Deserialize(NodeMembers, canvas);

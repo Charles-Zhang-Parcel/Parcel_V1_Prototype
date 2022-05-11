@@ -33,7 +33,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Serialization
-        public override List<NodeSerializationRoutine> MemberSerialization { get; set; } =
+        public override List<NodeSerializationRoutine> MemberSerialization { get; } =
             new List<NodeSerializationRoutine>();
         public override int GetOutputPinID(BaseConnector connector) =>
             connector == Connector ? 0 : throw new ArgumentException("Invalid connector.");
