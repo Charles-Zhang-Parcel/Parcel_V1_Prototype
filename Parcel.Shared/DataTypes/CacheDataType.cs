@@ -1,4 +1,6 @@
-﻿namespace Parcel.Shared.DataTypes
+﻿using System;
+
+namespace Parcel.Shared.DataTypes
 {
     /// <summary>
     /// This will be a subset of <seealso cref="CacheDataType"/>

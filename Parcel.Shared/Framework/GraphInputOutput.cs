@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -24,7 +27,7 @@ namespace Parcel.Shared.Framework
         public object DefaultValue
         {
             get => _defaultValue;
-            set => SetField(ref _defaultValue, DataGrid.Preformatting((string)value));  // Currently we are not making use of Type property
+            set => SetField(ref _defaultValue, value is string s ? DataGrid.Preformatting(s) : value);  // Currently we are not making use of Type property
         }
         #endregion
     }
@@ -36,14 +39,18 @@ namespace Parcel.Shared.Framework
         {
             Title = NodeTypeName = "Graph Input Output";
 
-            AddEntry();
-            
             AddEntryCommand = new RequeryCommand(
                 () => AddEntry(),
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
                 () => RemoveEntry(),
                 () => Definitions.Count > 1);
+            
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            {
+                {"Entries", new NodeSerializationRoutine(() => SerializeEntries(),
+                    source => DeserializeEntries((List<Tuple<string, int, object>>)source))}
+            };
         }
         #endregion
 
@@ -62,6 +69,24 @@ namespace Parcel.Shared.Framework
         #region Processor Interface
         public override OutputConnector MainOutput => Output.Count == 0 ? null : Output[0] as OutputConnector;
         public abstract override NodeExecutionResult Execute();
+        #endregion
+        
+        #region Serialization
+        protected sealed override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        private List<Tuple<string, int, object>> SerializeEntries()
+            => Definitions.Select(def => new Tuple<string, int, object>(def.Name, (int) def.Type, def.DefaultValue))
+                .ToList();
+        private void DeserializeEntries(List<Tuple<string, int, object>> source)
+        {
+            Definitions.AddRange(source.Select(tuple => new GraphInputOutputDefinition()
+            {
+                Name = tuple.Item1,
+                Type = (DictionaryEntryType) tuple.Item2,
+                DefaultValue = tuple.Item3
+            }));
+            DeserializeFinalize();
+        }
+        protected abstract void DeserializeFinalize();
         #endregion
     }
 }

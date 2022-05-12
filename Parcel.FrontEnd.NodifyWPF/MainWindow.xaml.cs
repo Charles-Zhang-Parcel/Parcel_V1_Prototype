@@ -48,7 +48,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), 
                 () => LastTool != null && !(FocusManager.GetFocusedElement(this) is TextBox) && !(Keyboard.FocusedElement is TextBox));
-            SaveCanvasCommand = new DelegateCommand(SaveCanvas, () => true);
+            SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(false), () => true);
+            NewCanvasCommand = new DelegateCommand(() => SaveCanvas(true), () => true);
             OpenCanvasCommand = new DelegateCommand(OpenCanvas, () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
 
@@ -67,6 +68,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         private ToolboxNodeExport LastTool { get; set; }
         public ICommand RepeatLastCommand { get; }
         public ICommand SaveCanvasCommand { get; }
+        public ICommand NewCanvasCommand { get; }
         public ICommand OpenCanvasCommand { get; }
         public ICommand OpenWebHostCommand { get; }
         #endregion
@@ -74,6 +76,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region View Properties
         private string _webAccessPointUrl;
         public string WebAccessPointUrl { get => _webAccessPointUrl; set => SetField(ref _webAccessPointUrl, value); }
+        private string _currentFilePath;
+        public string CurrentFilePath { get => _currentFilePath; set => SetField(ref _currentFilePath, value); }
         #endregion
 
         #region Advanced Node Graph Behaviors
@@ -288,23 +292,25 @@ namespace Parcel.FrontEnd.NodifyWPF
             openFileDialog.Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
             if (openFileDialog.ShowDialog() == true)
             {
-                string path = openFileDialog.FileName;
-                Canvas.Open(path);
+                CurrentFilePath = openFileDialog.FileName;
+                Canvas.Open(CurrentFilePath);
             }
         }
-        private void SaveCanvas()
+        private void SaveCanvas(bool createNewFile = false)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
+            if (createNewFile || CurrentFilePath == null || !System.IO.File.Exists(CurrentFilePath))
             {
-                Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml"
-            };
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                string path = saveFileDialog.FileName;
-                Canvas.Save(path);
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml"
+                };
+                if (saveFileDialog.ShowDialog() == true)
+                    CurrentFilePath = saveFileDialog.FileName;
+                else return;
             }
-        }
 
+            Canvas.Save(CurrentFilePath);
+        }
         private Point GetCurosrWindowPosition()
         {
             Point cursor = Mouse.GetPosition(this);

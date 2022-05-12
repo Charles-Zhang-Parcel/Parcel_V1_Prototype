@@ -62,10 +62,10 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Interface
         public ProcessorNode()
         {
-            BaseProcessorMemberSerialization = new List<NodeSerializationRoutine>()
+            BaseProcessorMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                new NodeSerializationRoutine(nameof(Title), () => _title, value => _title = value as string),
-                new NodeSerializationRoutine(nameof(IsPreview), () => _isPreview, value => _isPreview = (bool)value),
+                {nameof(Title), new NodeSerializationRoutine(() => _title, value => _title = value as string)},
+                {nameof(IsPreview), new NodeSerializationRoutine(() => _isPreview, value => _isPreview = (bool)value)},
             };
             
             Input.WhenAdded(c => c.Node = this)
@@ -92,11 +92,13 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Serialization
-        public sealed override List<NodeSerializationRoutine> MemberSerialization =>
-            BaseProcessorMemberSerialization.Union(ProcessorNodeMemberSerialization).ToList();
-        private List<NodeSerializationRoutine> BaseProcessorMemberSerialization { get; }
-        protected virtual List<NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
-            new List<NodeSerializationRoutine>();
+        public sealed override Dictionary<string, NodeSerializationRoutine> MemberSerialization =>
+            BaseProcessorMemberSerialization.Select(d => d)
+                .Union(ProcessorNodeMemberSerialization.Select(d => d))
+                .ToDictionary(d => d.Key, d => d.Value);
+        private Dictionary<string, NodeSerializationRoutine> BaseProcessorMemberSerialization { get; }
+        protected virtual Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            new Dictionary<string, NodeSerializationRoutine>();
         public override int GetOutputPinID(OutputConnector connector) => Output.IndexOf(connector);
         public override int GetInputPinID(InputConnector connector) => Input.IndexOf(connector);
         public override BaseConnector GetOutputPin(int id) => Output[id];

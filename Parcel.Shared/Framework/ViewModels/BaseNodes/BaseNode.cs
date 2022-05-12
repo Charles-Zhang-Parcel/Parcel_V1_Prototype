@@ -8,13 +8,11 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
     public class NodeSerializationRoutine
     {
-        public string Key { get; set; }
         public Func<object> Serialize { get; set; }
         public Action<object> Deserialize { get; set; }
 
-        public NodeSerializationRoutine(string key, Func<object> serialize, Action<object> deserialize)
+        public NodeSerializationRoutine(Func<object> serialize, Action<object> deserialize)
         {
-            Key = key;
             Serialize = serialize;
             Deserialize = deserialize;
         }
@@ -41,14 +39,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Serialization Interface
-        public abstract List<NodeSerializationRoutine> MemberSerialization { get; }
+        public abstract Dictionary<string, NodeSerializationRoutine> MemberSerialization { get; }
         #endregion
 
         #region Serialization
         internal NodeData Serialize()
         {
             // Instance members
-            Dictionary<string, object> members = MemberSerialization.ToDictionary(ms => ms.Key, ms => ms.Serialize());
+            Dictionary<string, object> members = MemberSerialization.ToDictionary(ms => ms.Key, ms => ms.Value.Serialize());
             // Base members
             members[nameof(Location)] = _location;
 
@@ -66,7 +64,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             _location = (Point)members[nameof(Location)];
             
             // Instance members
-            Dictionary<string, NodeSerializationRoutine> instanceMembers = MemberSerialization.ToDictionary(ms => ms.Key, ms => ms);
+            Dictionary<string, NodeSerializationRoutine> instanceMembers = MemberSerialization;
             foreach ((string key, object data) in members)
             {
                 if(instanceMembers.ContainsKey(key))

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.Linq;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -20,10 +22,13 @@ namespace Parcel.Toolbox.Basic.Nodes
         #region Routines
         protected sealed override void AddEntry()
         {
-            Definitions.Add(new GraphInputOutputDefinition() {Name = $"Output {Definitions.Count + 1}"});
-            Input.Add(new InputConnector(typeof(DataGrid))
+            var name = $"Output {Definitions.Count + 1}";
+            var def = new GraphInputOutputDefinition() {Name = name};
+            
+            Definitions.Add(def);
+            Input.Add(new InputConnector(def.DefaultValue.GetType())
             {
-                Title = $"Output {Definitions.Count}"
+                Title = name
             });
         }
         protected sealed override void RemoveEntry()
@@ -46,6 +51,17 @@ namespace Parcel.Toolbox.Basic.Nodes
             Message.Type = NodeMessageType.Normal;
             
             return new NodeExecutionResult(true, null);
+        }
+        #endregion
+
+        #region Serialization
+        protected override void DeserializeFinalize()
+        {
+            foreach (GraphInputOutputDefinition definition in Definitions)
+                Input.Add(new InputConnector(definition.GetType())
+                {
+                    Title = definition.Name
+                });
         }
         #endregion
     }

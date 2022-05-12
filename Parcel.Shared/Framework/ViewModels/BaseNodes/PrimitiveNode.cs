@@ -21,9 +21,9 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         };
         protected PrimitiveNode()
         {
-            ProcessorNodeMemberSerialization = new List<NodeSerializationRoutine>()
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                new NodeSerializationRoutine(nameof(Value), () => _value, value => _value = value as string)
+                {nameof(Value), new NodeSerializationRoutine( () => _value, value => _value = value as string)}
             };
             
             Output.Add(ValueOutput);
@@ -37,10 +37,9 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             return new NodeExecutionResult(true, null);
         }
         #endregion
-        
-        
+
         #region Serialization
-        protected override List<NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
         #endregion
     }
 }

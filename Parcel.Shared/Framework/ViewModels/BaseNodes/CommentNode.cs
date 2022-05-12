@@ -9,9 +9,9 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Construction
         public CommentNode()
         {
-            MemberSerialization = new List<NodeSerializationRoutine>()
+            MemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                new NodeSerializationRoutine("Comment", () => _comment, value => _comment = value as string)
+                {nameof(Comment), new NodeSerializationRoutine(() => _comment, value => _comment = value as string)}
             };
         }
         #endregion
@@ -40,7 +40,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Serialization
-        public sealed override List<NodeSerializationRoutine> MemberSerialization { get; }
+        public sealed override Dictionary<string, NodeSerializationRoutine> MemberSerialization { get; }
         public override int GetOutputPinID(OutputConnector connector) => throw new InvalidOperationException();
         public override int GetInputPinID(InputConnector connector) => throw new InvalidOperationException();
         public override BaseConnector GetOutputPin(int id) => throw new InvalidOperationException();
