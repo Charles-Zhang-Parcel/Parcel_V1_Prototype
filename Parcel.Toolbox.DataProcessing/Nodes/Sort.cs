@@ -8,19 +8,19 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Sort: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnNameInput = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector ReverseOrderInput = new InputConnector(typeof(bool))
+        public readonly InputConnector ReverseOrderInput = new InputConnector(typeof(bool))
         {
             Title = "Reverse Order",
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
         };

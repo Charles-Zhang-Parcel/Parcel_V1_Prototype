@@ -9,7 +9,7 @@ namespace Parcel.Shared.Framework
     {
         public OutputConnector MainOutput { get; }
         public NodeExecutionResult Execute();
-        public Dictionary<BaseConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; }
+        public Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; }
     }
 
     public struct AutomaticNodeDescriptor

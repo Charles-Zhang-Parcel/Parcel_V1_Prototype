@@ -1,0 +1,52 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Dynamic;
+using Parcel.Shared.DataTypes;
+using Parcel.Shared.Framework;
+using Parcel.Shared.Framework.ViewModels;
+using Parcel.Shared.Framework.ViewModels.BaseNodes;
+
+namespace Parcel.Toolbox.Basic.Nodes
+{
+    public class GraphOutput: GraphInputOutputNodeBase
+    {
+        #region Node Interface
+        public GraphOutput()
+        {
+            Title = NodeTypeName = "Graph Output";
+        }
+        #endregion
+        
+        #region Routines
+        protected sealed override void AddEntry()
+        {
+            Definitions.Add(new GraphInputOutputDefinition() {Name = $"Output {Definitions.Count + 1}"});
+            Input.Add(new InputConnector(typeof(DataGrid))
+            {
+                Title = $"Output {Definitions.Count}"
+            });
+        }
+        protected sealed override void RemoveEntry()
+        {
+            Definitions.RemoveAt(Definitions.Count - 1);
+            Input.RemoveAt(Input.Count - 1);
+        }
+        #endregion
+        
+        #region Processor Interface
+        public override NodeExecutionResult Execute()
+        {
+            for (int index = 0; index < Definitions.Count; index++)
+            {
+                GraphInputOutputDefinition definition = Definitions[index];
+                ProcessorCache[Output[index]] = new ConnectorCacheDescriptor(definition.DefaultValue);
+            }
+
+            Message.Content = $"{Definitions.Count} Outputs.";
+            Message.Type = NodeMessageType.Normal;
+            
+            return new NodeExecutionResult(true, null);
+        }
+        #endregion
+    }
+}

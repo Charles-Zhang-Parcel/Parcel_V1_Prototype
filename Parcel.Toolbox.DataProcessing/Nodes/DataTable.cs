@@ -33,7 +33,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class DataTable: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 

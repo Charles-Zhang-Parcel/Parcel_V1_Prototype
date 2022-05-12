@@ -148,6 +148,9 @@ namespace Parcel.Shared.DataTypes
     public class DataGrid
     {
         #region Helper
+        /// <summary>
+        /// Automatically parse a string value to plausible strongly typed objects
+        /// </summary>
         public static object Preformatting(string inputValue)
         {
             // Perform pre-formatting

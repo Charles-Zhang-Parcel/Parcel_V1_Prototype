@@ -30,11 +30,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class SQL: DynamicInputProcessorNode, INodeProperty
     {
         #region Node Interface
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result"
         };
-        public readonly BaseConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Present"
         };

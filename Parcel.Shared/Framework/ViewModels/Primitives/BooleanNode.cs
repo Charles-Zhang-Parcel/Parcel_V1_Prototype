@@ -20,7 +20,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected BaseConnector TruthOutput = new OutputConnector(typeof(bool))
+        protected OutputConnector TruthOutput = new OutputConnector(typeof(bool))
         {
             Title = "Truth"
         }; 

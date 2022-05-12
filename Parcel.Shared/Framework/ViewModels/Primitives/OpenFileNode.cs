@@ -15,7 +15,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        public readonly BaseConnector FilePathOutput = new OutputConnector(typeof(string))
+        public readonly OutputConnector FilePathOutput = new OutputConnector(typeof(string))
         {
             Title = "File"
         }; 

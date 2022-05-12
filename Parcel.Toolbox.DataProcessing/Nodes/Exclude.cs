@@ -13,11 +13,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Exclude: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
         };

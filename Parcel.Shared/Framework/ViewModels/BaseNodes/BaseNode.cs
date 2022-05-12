@@ -74,8 +74,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             }
         }
 
-        public abstract int GetOutputPinID(BaseConnector connector);
-        public abstract int GetInputPinID(BaseConnector connector);
+        public abstract int GetOutputPinID(OutputConnector connector);
+        public abstract int GetInputPinID(InputConnector connector);
         public abstract BaseConnector GetOutputPin(int id);
         public abstract BaseConnector GetInputPin(int id);
         #endregion

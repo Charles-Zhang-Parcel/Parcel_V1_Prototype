@@ -39,6 +39,7 @@ namespace Parcel.Toolbox.DataProcessing
             null, // Divisor line // Queries
             new ToolboxNodeExport("Names", typeof(object)), // Return string array of headers
             new ToolboxNodeExport("Size", typeof(object)), // Return integer count of rows and columns
+            new ToolboxNodeExport("Count", typeof(object)), // Return count of an array
             null, // Divisor line // Data Conversion
             // new ToolboxNodeExport("To Matrix", typeof(object)), // TODO: Build all operations directly inside DataGrid
             new ToolboxNodeExport("Transpose", typeof(Transpose)),

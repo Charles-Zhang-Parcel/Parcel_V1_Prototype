@@ -24,7 +24,7 @@ namespace Parcel.Shared.Framework.ViewModels
             }
             else if (source.AllowsNewConnections() && target is ProcessorNode node)
             {
-                var allConnectors = source.FlowType == ConnectorFlowType.Input ? node.Output : node.Input;
+                IEnumerable<BaseConnector> allConnectors = source.FlowType == ConnectorFlowType.Input ? node.Output.Cast<BaseConnector>() : node.Input;
                 return allConnectors.Any(c => c.AllowsNewConnections());
             }
 
@@ -64,7 +64,7 @@ namespace Parcel.Shared.Framework.ViewModels
 
         private void AddConnection(BaseConnector connector1, ProcessorNode target)
         {
-            var allConnectors = connector1.FlowType == ConnectorFlowType.Input ? target.Output : target.Input;
+            var allConnectors = connector1.FlowType == ConnectorFlowType.Input ? target.Output.Cast<BaseConnector>() : target.Input;
             var connector = allConnectors.First(c => c.AllowsNewConnections());
 
             AddConnection(connector1, connector);

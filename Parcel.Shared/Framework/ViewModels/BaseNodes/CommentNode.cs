@@ -41,8 +41,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 
         #region Serialization
         public sealed override List<NodeSerializationRoutine> MemberSerialization { get; }
-        public override int GetOutputPinID(BaseConnector connector) => throw new InvalidOperationException();
-        public override int GetInputPinID(BaseConnector connector) => throw new InvalidOperationException();
+        public override int GetOutputPinID(OutputConnector connector) => throw new InvalidOperationException();
+        public override int GetInputPinID(InputConnector connector) => throw new InvalidOperationException();
         public override BaseConnector GetOutputPin(int id) => throw new InvalidOperationException();
         public override BaseConnector GetInputPin(int id) => throw new InvalidOperationException();
         #endregion

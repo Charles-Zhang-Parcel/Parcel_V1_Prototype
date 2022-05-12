@@ -30,9 +30,9 @@ namespace Parcel.Shared.Serialization
                 return new ConnectionData()
                 {
                     Source = nodeMapping[c.Input.Node],
-                    SourcePin = c.Input.Node.GetOutputPinID(c.Input),
+                    SourcePin = c.Input.Node.GetOutputPinID(c.Input as OutputConnector),
                     Destination = nodeMapping[c.Output.Node],
-                    DestinationPin = c.Output.Node.GetInputPinID(c.Output)
+                    DestinationPin = c.Output.Node.GetInputPinID(c.Output as InputConnector)
                 };
             }).ToList();
             

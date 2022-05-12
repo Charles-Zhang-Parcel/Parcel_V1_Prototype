@@ -7,15 +7,15 @@ namespace Parcel.Toolbox.Math.Nodes
     public class Divide: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector Number1Input = new InputConnector(typeof(double))
+        public readonly InputConnector Number1Input = new InputConnector(typeof(double))
         {
             Title = "Number 1",
         };
-        public readonly BaseConnector Number2Input = new InputConnector(typeof(double))
+        public readonly InputConnector Number2Input = new InputConnector(typeof(double))
         {
             Title = "Number 2",
         };
-        public readonly BaseConnector ResultOutput = new OutputConnector(typeof(double))
+        public readonly OutputConnector ResultOutput = new OutputConnector(typeof(double))
         {
             Title = "Result",
         };

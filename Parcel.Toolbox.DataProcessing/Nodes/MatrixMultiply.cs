@@ -12,7 +12,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class MatrixMultiply: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result"
         };

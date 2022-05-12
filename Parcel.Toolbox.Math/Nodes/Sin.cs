@@ -7,11 +7,11 @@ namespace Parcel.Toolbox.Math.Nodes
     public class Sin: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector AngleInput = new InputConnector(typeof(double))
+        public readonly InputConnector AngleInput = new InputConnector(typeof(double))
         {
             Title = "Angle",
         };
-        public readonly BaseConnector ResultOutput = new OutputConnector(typeof(double))
+        public readonly OutputConnector ResultOutput = new OutputConnector(typeof(double))
         {
             Title = "Result",
         };

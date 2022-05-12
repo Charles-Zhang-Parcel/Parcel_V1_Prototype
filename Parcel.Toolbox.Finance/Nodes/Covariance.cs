@@ -8,23 +8,23 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Covariance: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTable1Input = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTable1Input = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 1",
         };
-        public readonly BaseConnector ColumnName1Input = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnName1Input = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector DataTable2Input = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTable2Input = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 2",
         };
-        public readonly BaseConnector ColumnName2Input = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnName2Input = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector ValueOutput = new OutputConnector(typeof(double))
+        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };

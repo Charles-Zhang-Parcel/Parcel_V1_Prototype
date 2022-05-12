@@ -8,15 +8,15 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Sum: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly BaseConnector ColumnNameInput = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnNameInput = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector ValueOutput = new OutputConnector(typeof(double))
+        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };

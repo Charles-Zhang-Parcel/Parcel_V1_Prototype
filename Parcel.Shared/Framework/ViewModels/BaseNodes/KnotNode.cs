@@ -35,9 +35,9 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Serialization
         public override List<NodeSerializationRoutine> MemberSerialization { get; } =
             new List<NodeSerializationRoutine>();
-        public override int GetOutputPinID(BaseConnector connector) =>
+        public override int GetOutputPinID(OutputConnector connector) =>
             connector == Connector ? 0 : throw new ArgumentException("Invalid connector.");
-        public override int GetInputPinID(BaseConnector connector) =>
+        public override int GetInputPinID(InputConnector connector) =>
             connector == Connector ? 0 : throw new ArgumentException("Invalid connector.");
         public override BaseConnector GetOutputPin(int id) => Connector;
         public override BaseConnector GetInputPin(int id) => Connector;

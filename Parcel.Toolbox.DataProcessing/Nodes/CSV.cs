@@ -10,16 +10,16 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class CSV: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector PathInput = new PrimitiveStringInputConnector()
+        public readonly InputConnector PathInput = new PrimitiveStringInputConnector()
         {
             Title = "Path",
         };
-        public readonly  BaseConnector HeaderInput = new PrimitiveBooleanInputConnector()
+        public readonly  InputConnector HeaderInput = new PrimitiveBooleanInputConnector()
         {
             Title = "Contains Header",
             Value = true
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 

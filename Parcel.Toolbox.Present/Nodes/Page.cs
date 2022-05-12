@@ -13,7 +13,7 @@ namespace Parcel.Toolbox.Present.Nodes
     public class Page: ProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector ServerConfigInput = new WebConfigInputConnector()
+        public readonly InputConnector ServerConfigInput = new WebConfigInputConnector()
         {
             Title = "Content",
         };

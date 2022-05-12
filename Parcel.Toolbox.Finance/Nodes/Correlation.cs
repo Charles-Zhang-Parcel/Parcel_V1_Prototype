@@ -8,23 +8,23 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Correlation: ProcessorNode
     {
         #region Node Interface
-        public readonly BaseConnector DataTableInput1 = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTableInput1 = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 1",
         };
-        public readonly BaseConnector ColumnNameInput1 = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnNameInput1 = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector DataTableInput2 = new InputConnector(typeof(DataGrid))
+        public readonly InputConnector DataTableInput2 = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 2",
         };
-        public readonly BaseConnector ColumnNameInput2 = new InputConnector(typeof(string))
+        public readonly InputConnector ColumnNameInput2 = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly BaseConnector ValueOutput = new OutputConnector(typeof(double))
+        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };

@@ -20,7 +20,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected BaseConnector DateTimeOutput = new OutputConnector(typeof(DateTime))
+        protected OutputConnector DateTimeOutput = new OutputConnector(typeof(DateTime))
         {
             Title = "DateTime"
         }; 

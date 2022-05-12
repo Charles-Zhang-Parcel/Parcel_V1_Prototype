@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         {
             Title = "Original Table"
         };
-        public readonly BaseConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         };

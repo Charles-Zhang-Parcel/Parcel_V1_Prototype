@@ -55,8 +55,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Connectors
-        public NotifyObservableCollection<BaseConnector> Input { get; } = new NotifyObservableCollection<BaseConnector>();
-        public NotifyObservableCollection<BaseConnector> Output { get; } = new NotifyObservableCollection<BaseConnector>();
+        public NotifyObservableCollection<InputConnector> Input { get; } = new NotifyObservableCollection<InputConnector>();
+        public NotifyObservableCollection<OutputConnector> Output { get; } = new NotifyObservableCollection<OutputConnector>();
         #endregion
 
         #region Interface
@@ -82,8 +82,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         public abstract OutputConnector MainOutput { get; }
         public abstract NodeExecutionResult Execute();
 
-        public Dictionary<BaseConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =
-            new Dictionary<BaseConnector, ConnectorCacheDescriptor>();
+        public Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =
+            new Dictionary<OutputConnector, ConnectorCacheDescriptor>();
         #endregion
 
         #region Auto Connect Interface
@@ -97,8 +97,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private List<NodeSerializationRoutine> BaseProcessorMemberSerialization { get; }
         protected virtual List<NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
             new List<NodeSerializationRoutine>();
-        public override int GetOutputPinID(BaseConnector connector) => Output.IndexOf(connector);
-        public override int GetInputPinID(BaseConnector connector) => Input.IndexOf(connector);
+        public override int GetOutputPinID(OutputConnector connector) => Output.IndexOf(connector);
+        public override int GetInputPinID(InputConnector connector) => Input.IndexOf(connector);
         public override BaseConnector GetOutputPin(int id) => Output[id];
         public override BaseConnector GetInputPin(int id) => Input[id];
         #endregion
