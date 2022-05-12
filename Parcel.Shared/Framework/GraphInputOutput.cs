@@ -61,13 +61,32 @@ namespace Parcel.Shared.Framework
         public IProcessorNodeCommand RemoveEntryCommand { get; }
         #endregion
         
+        #region Additional View Binding
+        protected abstract Action<GraphInputOutputDefinition> DefinitionNameChanged { get; }
+        #endregion
+        
         #region Routines
-        protected abstract void AddEntry();
-        protected abstract void RemoveEntry();
+        private void AddEntry()
+        {
+            string name = $"{NewEntryPrefix} {Definitions.Count + 1}";
+            GraphInputOutputDefinition def = new GraphInputOutputDefinition() {Name = name};
+            def.PropertyChanged += (sender, args) => DefinitionNameChanged(sender as GraphInputOutputDefinition);
+            
+            Definitions.Add(def);
+            PostAddEntry(def);
+        }
+        private void RemoveEntry()
+        {
+            Definitions.RemoveAt(Definitions.Count - 1);
+            PostRemoveEntry();
+        }
+        protected abstract void PostAddEntry(GraphInputOutputDefinition definition);
+        protected abstract void PostRemoveEntry();
+        protected abstract string NewEntryPrefix { get; }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => Output.Count == 0 ? null : Output[0] as OutputConnector;
+        public override OutputConnector MainOutput => Output.Count == 0 ? null : Output[0];
         public abstract override NodeExecutionResult Execute();
         #endregion
         

@@ -66,10 +66,15 @@ namespace Parcel.FrontEnd.NodifyWPF
 
         #region Commands
         private ToolboxNodeExport LastTool { get; set; }
+        
         public ICommand RepeatLastCommand { get; }
+        
+        public ICommand CreateCalculatorNodeCommand { get; }
         public ICommand SaveCanvasCommand { get; }
         public ICommand NewCanvasCommand { get; }
         public ICommand OpenCanvasCommand { get; }
+        
+        public ICommand ShowHelpCommand { get; }
         public ICommand OpenWebHostCommand { get; }
         #endregion
 

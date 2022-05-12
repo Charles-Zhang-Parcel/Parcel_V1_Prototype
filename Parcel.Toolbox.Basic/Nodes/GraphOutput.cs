@@ -16,24 +16,26 @@ namespace Parcel.Toolbox.Basic.Nodes
         public GraphOutput()
         {
             Title = NodeTypeName = "Graph Output";
+            DefinitionNameChanged = definition =>
+            {
+                InputConnector input = Input[Definitions.IndexOf(definition)];
+                input.Title = definition.Name;
+            };
         }
         #endregion
         
         #region Routines
-        protected sealed override void AddEntry()
+        protected override string NewEntryPrefix { get; } = "Output";
+        protected override Action<GraphInputOutputDefinition> DefinitionNameChanged { get; }
+        protected sealed override void PostAddEntry(GraphInputOutputDefinition definition)
         {
-            var name = $"Output {Definitions.Count + 1}";
-            var def = new GraphInputOutputDefinition() {Name = name};
-            
-            Definitions.Add(def);
-            Input.Add(new InputConnector(def.DefaultValue.GetType())
+            Input.Add(new InputConnector(definition.DefaultValue.GetType())
             {
-                Title = name
+                Title = definition.Name
             });
         }
-        protected sealed override void RemoveEntry()
+        protected sealed override void PostRemoveEntry()
         {
-            Definitions.RemoveAt(Definitions.Count - 1);
             Input.RemoveAt(Input.Count - 1);
         }
         #endregion
