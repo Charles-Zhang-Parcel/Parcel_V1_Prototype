@@ -86,8 +86,8 @@ namespace Parcel.Shared.Framework.ViewModels
     public abstract class BaseConnector: ObservableObject
     {
         #region View Properties
-        private string? _title;
-        public string? Title
+        private string _title;
+        public string Title
         {
             get => _title;
             set => SetField(ref _title, value);

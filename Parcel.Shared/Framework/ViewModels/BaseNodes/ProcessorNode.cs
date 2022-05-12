@@ -79,7 +79,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             Input.Clear();
             Output.Clear();
         }
-        public abstract OutputConnector MainOutput { get; }
+        public virtual OutputConnector MainOutput => Output.Count == 0 ? null : Output[0];
         public abstract NodeExecutionResult Execute();
 
         public Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =

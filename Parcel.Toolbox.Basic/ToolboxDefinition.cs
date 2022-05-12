@@ -26,7 +26,7 @@ namespace Parcel.Toolbox.Basic
             null, // Divisor line // Graph Modularization
             new ToolboxNodeExport("Graph Input", typeof(GraphInput)),
             new ToolboxNodeExport("Graph Output", typeof(GraphOutput)),
-            new ToolboxNodeExport("Graph Reference", typeof(object)),
+            new ToolboxNodeExport("Graph Reference", typeof(GraphReference)),
             new ToolboxNodeExport("Sub Graph", typeof(object)),
         };
         // Test

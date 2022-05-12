@@ -86,7 +86,6 @@ namespace Parcel.Shared.Framework
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => Output.Count == 0 ? null : Output[0];
         public abstract override NodeExecutionResult Execute();
         #endregion
         

@@ -28,6 +28,7 @@ using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 using Parcel.Shared.Framework.ViewModels.Primitives;
 using Parcel.Toolbox.Basic;
+using Parcel.Toolbox.Basic.Nodes;
 using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
 using Parcel.Toolbox.DataProcessing.Nodes;
@@ -43,6 +44,8 @@ namespace Parcel.FrontEnd.NodifyWPF
     /// </summary>
     public sealed partial class MainWindow : BaseWindow
     {
+        private const string _parcelWorkflowFileNameFilter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
+
         #region Constructor
         public MainWindow()
         {
@@ -236,6 +239,20 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void SpawnPropertyWindow(BaseNode node)
         {
+            if (node is GraphReference graphReference)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog()
+                {
+                    Filter = _parcelWorkflowFileNameFilter
+                };
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    graphReference.GraphPath = openFileDialog.FileName;
+                    graphReference.Title = System.IO.Path.GetFileNameWithoutExtension(graphReference.GraphPath);
+                }
+                return;
+            }
+            
             Point cursor = GetCurosrWindowPosition();
             if(node is ProcessorNode processorNode)
                 new PropertyWindow(this, processorNode)
@@ -294,7 +311,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void OpenCanvas()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml";
+            openFileDialog.Filter = _parcelWorkflowFileNameFilter;
             if (openFileDialog.ShowDialog() == true)
             {
                 CurrentFilePath = openFileDialog.FileName;
@@ -307,7 +324,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Parcel workflow file (*.parcel)|*.parcel|YAML file (*.yaml)|*.yaml"
+                    Filter = _parcelWorkflowFileNameFilter
                 };
                 if (saveFileDialog.ShowDialog() == true)
                     CurrentFilePath = saveFileDialog.FileName;
