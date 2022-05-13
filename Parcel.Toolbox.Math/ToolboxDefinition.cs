@@ -12,8 +12,8 @@ namespace Parcel.Toolbox.Math
         public ToolboxNodeExport[] ExportNodes => new[]
         {
             // Quick Access
-            new ToolboxNodeExport("Calculator", typeof(object)), // Simple math parsed string to number
-            new ToolboxNodeExport("Equation", typeof(object)), // Save as Calculator but with a max of 9 variable number of inputs; Auto-replace with $1-$9 as variable names
+            new ToolboxNodeExport("Calculator", typeof(Calculator)), // Simple math parsed string to number
+            new ToolboxNodeExport("Expression", typeof(Expression)), // Save as Calculator but with a max of 9 variable number of inputs; Auto-replace with $1-$9 as variable names
             null, // Divisor line // Basic Numberical Operations
             new ToolboxNodeExport("Add", typeof(Add)),
             new ToolboxNodeExport("Subtract", typeof(Subtract)),

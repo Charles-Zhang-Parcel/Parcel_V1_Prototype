@@ -8,27 +8,45 @@ namespace Parcel.Toolbox.Math.Nodes
     public class Calculator: ProcessorNode
     {
         #region Node Interface
-        private readonly OutputConnector _resultOutput = new OutputConnector(typeof(double))
+        protected readonly OutputConnector _resultOutput = new OutputConnector(typeof(double))
         {
             Title = "Result",
         };
         public Calculator()
         {
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            {
+                {nameof(Value), new NodeSerializationRoutine( () => _value, value => _value = value as string)}
+            };
+            
             Title = NodeTypeName = "Calculator";
             Output.Add(_resultOutput);
+        }
+        #endregion
+        
+        #region Public View Properties
+        private string _value;
+        public string Value
+        {
+            get => _value;
+            set => SetField(ref _value, value);
         }
         #endregion
         
         #region Processor Interface
         protected override NodeExecutionResult Execute()
         {
-            double result = 0;
-
-            return new NodeExecutionResult(new NodeMessage($"{result}", NodeMessageType.Normal), new Dictionary<OutputConnector, object>()
+            object result = new CodingSeb.ExpressionEvaluator.ExpressionEvaluator().Evaluate(Value);
+            
+            return new NodeExecutionResult(new NodeMessage($"{result}"), new Dictionary<OutputConnector, object>()
             {
                 {_resultOutput, result}
             });
         }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
         #endregion
     }
 }

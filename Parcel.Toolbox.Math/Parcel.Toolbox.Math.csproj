@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Parcel.Shared\Parcel.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.5.0-alpha0004" />
+    </ItemGroup>
+
 </Project>

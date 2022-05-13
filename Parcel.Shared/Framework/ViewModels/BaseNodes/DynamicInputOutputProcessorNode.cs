@@ -6,6 +6,5 @@
         public IProcessorNodeCommand AddEntryCommand { get; protected set; }
         public IProcessorNodeCommand RemoveEntryCommand { get; protected set; }
         #endregion
-        
     }
 }

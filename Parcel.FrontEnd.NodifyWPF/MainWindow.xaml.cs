@@ -118,11 +118,6 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Events
-        private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            OpenCanvas();
-            e.Handled = true;
-        }
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
@@ -130,6 +125,15 @@ namespace Parcel.FrontEnd.NodifyWPF
                 ShowSearchNodePopup();
                 e.Handled = true;
             }
+        }
+        private void Editor_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Use MouseLeftButtonDown instead of MouseDoubleClick event to deal with WPF's e.handled not effective issue
+            if (e.ClickCount != 2) return;
+            
+            OpenCanvas();
+            e.Handled = true;
+
         }
         private void Editor_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {

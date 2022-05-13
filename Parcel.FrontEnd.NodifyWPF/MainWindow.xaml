@@ -15,11 +15,12 @@
         xmlns:dataTypes="clr-namespace:Parcel.Shared.DataTypes;assembly=Parcel.Shared"
         xmlns:framework="clr-namespace:Parcel.Shared.Framework;assembly=Parcel.Shared"
         xmlns:advanced="clr-namespace:Parcel.Shared.Framework.Advanced;assembly=Parcel.Shared"
+        xmlns:nodes1="clr-namespace:Parcel.Toolbox.Math.Nodes;assembly=Parcel.Toolbox.Math"
         mc:Ignorable="d"
         Title="{Binding DynamicTitle}" Height="450" Width="800"
         Background="#1E1E1E"
         DataContext="{Binding RelativeSource={RelativeSource self}}"
-        PreviewKeyDown="MainWindow_OnPreviewKeyDown" MouseDoubleClick="MainWindow_OnMouseDoubleClick">
+        PreviewKeyDown="MainWindow_OnPreviewKeyDown">
     <Window.Resources>
         <!--Data Converters-->
         <converters:NodeBackgroundColorConverter x:Key="NodeBackgroundColorConverter" />
@@ -293,7 +294,7 @@
                              PendingConnection="{Binding Canvas.PendingConnection}"
                              SelectedItems="{Binding Canvas.SelectedNodes}"
                              DisconnectConnectorCommand="{Binding Canvas.DisconnectConnectorCommand}"
-                             MouseRightButtonUp="Editor_OnMouseRightButtonUp">
+                             MouseRightButtonUp="Editor_OnMouseRightButtonUp" MouseLeftButtonDown="Editor_OnMouseDoubleClick">
             <nodify:NodifyEditor.PendingConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:PendingConnection}">
                     <nodify:PendingConnection Source="{Binding Source, Mode=OneWayToSource}"
@@ -375,6 +376,34 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
+                            
+                            <DataTemplate DataType="{x:Type nodes1:Calculator}">
+                                <TextBox Text="{Binding Value}"
+                                         MinWidth="100"
+                                         Margin="5 0 0 0" />
+                            </DataTemplate>
+                            
+                            <DataTemplate DataType="{x:Type nodes1:Expression}">
+                                <DockPanel LastChildFill="True">
+                                    <TextBox Text="{Binding Value}"
+                                             MinWidth="100"
+                                             Margin="5 0 0 0" DockPanel.Dock="Top" />
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource PlusIcon}"
+                                                Command="{Binding AddEntryCommand}" />
+                                        <Button Style="{StaticResource IconButton}"
+                                                Content="{StaticResource RemoveKeyIcon}"
+                                                Command="{Binding RemoveEntryCommand}" />
+                                        <TextBlock Foreground="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToBrushColorConverter}}" 
+                                                   Margin="0" Padding="0" 
+                                                   MaxWidth="256" TextWrapping="WrapWithOverflow"
+                                                   Text="{Binding Message.Content}"
+                                                   Visibility="{Binding Message.Type, Converter={StaticResource NodeMessageTypeToVisibilityConverter}}">
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
                             
                             <DataTemplate DataType="{x:Type advanced:GraphInputOutputNodeBase}">
                                 <DataTemplate.Resources>
@@ -480,11 +509,6 @@
                             </DataTemplate>
                             
                             <DataTemplate DataType="{x:Type baseNodes:DynamicInputProcessorNode}">
-                                <DataTemplate.Resources>
-                                    <Style TargetType="TextBox">
-                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                                    </Style>
-                                </DataTemplate.Resources>
                                 <DockPanel LastChildFill="True">
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                                         <Button Style="{StaticResource IconButton}"
