@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,45 +9,44 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Correlation: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput1 = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput1 = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 1",
         };
-        public readonly InputConnector ColumnNameInput1 = new InputConnector(typeof(string))
+        private readonly InputConnector _columnNameInput1 = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly InputConnector DataTableInput2 = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput2 = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 2",
         };
-        public readonly InputConnector ColumnNameInput2 = new InputConnector(typeof(string))
+        private readonly InputConnector _columnNameInput2 = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
+        private readonly OutputConnector _valueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };
         public Correlation()
         {
             Title = NodeTypeName = "Correlation";
-            Input.Add(DataTableInput1);
-            Input.Add(ColumnNameInput1);
-            Input.Add(DataTableInput2);
-            Input.Add(ColumnNameInput2);
-            Output.Add(ValueOutput);
+            Input.Add(_dataTableInput1);
+            Input.Add(_columnNameInput1);
+            Input.Add(_dataTableInput2);
+            Input.Add(_columnNameInput2);
+            Output.Add(_valueOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ValueOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid1 = DataTableInput1.FetchInputValue<DataGrid>();
-            string columnName1 = ColumnNameInput1.FetchInputValue<string>();
-            DataGrid dataGrid2 = DataTableInput2.FetchInputValue<DataGrid>();
-            string columnName2 = ColumnNameInput2.FetchInputValue<string>();
+            DataGrid dataGrid1 = _dataTableInput1.FetchInputValue<DataGrid>();
+            string columnName1 = _columnNameInput1.FetchInputValue<string>();
+            DataGrid dataGrid2 = _dataTableInput2.FetchInputValue<DataGrid>();
+            string columnName2 = _columnNameInput2.FetchInputValue<string>();
             CorrelationParameter parameter = new CorrelationParameter()
             {
                 InputTable1 = dataGrid1,
@@ -56,12 +56,10 @@ namespace Parcel.Toolbox.Finance.Nodes
             };
             FinanceHelper.Correlation(parameter);
 
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
-
-            Message.Content = $"Correlation={parameter.OutputValue}";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"Correlation={parameter.OutputValue}"), new Dictionary<OutputConnector, object>()
+            {
+                {_valueOutput, parameter.OutputValue}
+            });
         }
         #endregion
     }

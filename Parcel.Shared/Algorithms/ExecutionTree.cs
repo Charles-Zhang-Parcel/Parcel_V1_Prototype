@@ -54,7 +54,7 @@ namespace Parcel.Shared.Algorithms
 
         private void ExecuteTreeNode(ExecutionTreeNode node)
         {
-            node.Processor.Execute();
+            node.Processor.Evaluate();
             
             foreach (ExecutionTreeNode childNode in node.Children)
                 ExecuteTreeNode(childNode);

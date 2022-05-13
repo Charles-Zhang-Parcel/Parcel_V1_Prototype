@@ -12,22 +12,22 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class MatrixMultiply: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result"
         };
         public MatrixMultiply()
         {
             Title = NodeTypeName = "Matrix Multiply";
-            Output.Add(DataTableOutput);
+            Output.Add(_dataTableOutput);
 
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => AddInputs(),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveInputs(),
+                RemoveInputs,
                 () => Input.Count > 1);
         }
         #endregion
@@ -49,8 +49,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             MatrixMultiplyParameter parameter = new MatrixMultiplyParameter()
             {
@@ -63,12 +62,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.MatrixMultiply(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
     }

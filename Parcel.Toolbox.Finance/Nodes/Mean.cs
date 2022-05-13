@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,46 +9,43 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Mean: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly InputConnector ColumnNameInput = new InputConnector(typeof(string))
+        private readonly InputConnector _columnNameInput = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
+        private readonly OutputConnector _valueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };
         public Mean()
         {
             Title = NodeTypeName = "Mean";
-            Input.Add(DataTableInput);
-            Input.Add(ColumnNameInput);
-            Output.Add(ValueOutput);
+            Input.Add(_dataTableInput);
+            Input.Add(_columnNameInput);
+            Output.Add(_valueOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ValueOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            string columnName = ColumnNameInput.FetchInputValue<string>();
+            DataGrid dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
+            string columnName = _columnNameInput.FetchInputValue<string>();
             MeanParameter parameter = new MeanParameter()
             {
                 InputTable = dataGrid,
                 InputColumnName = columnName
             };
             FinanceHelper.Mean(parameter);
-
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
-
-            Message.Content = $"Mean={parameter.OutputValue}";
-            Message.Type = NodeMessageType.Normal;
             
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"Mean={parameter.OutputValue}"), new Dictionary<OutputConnector, object>()
+            {
+                {_valueOutput, parameter.OutputValue}
+            });
         }
         #endregion
     }

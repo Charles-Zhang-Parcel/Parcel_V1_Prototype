@@ -11,15 +11,15 @@ namespace Parcel.Toolbox.Graphing.Nodes
     public class LineChart: ProcessorNode, IWebPreviewProcessorNode, INodeProperty
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         };
-        public readonly InputConnector TableNameInput = new PrimitiveStringInputConnector()
+        private readonly InputConnector _tableNameInput = new PrimitiveStringInputConnector()
         {
             Title = "Display Name"
         };
-        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        private readonly OutputConnector _serverConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Present"
         };
@@ -31,14 +31,14 @@ namespace Parcel.Toolbox.Graphing.Nodes
             };
             
             Title = NodeTypeName = ChartTitle = "Line Chart";
-            Input.Add(DataTableInput);
-            Input.Add(TableNameInput);
-            Output.Add(ServerConfigOutput);
+            Input.Add(_dataTableInput);
+            Input.Add(_tableNameInput);
+            Output.Add(_serverConfigOutput);
         }
         #endregion
 
         #region View Binding/Internal Node Properties
-        public string _chartTitle;
+        private string _chartTitle;
         public string ChartTitle
         {
             get => _chartTitle;
@@ -47,31 +47,28 @@ namespace Parcel.Toolbox.Graphing.Nodes
         #endregion
 
         #region Property Editor Interface
-
         private readonly List<PropertyEditor> _editors;
         public List<PropertyEditor> Editors => _editors;
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ServerConfigOutput;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             ServerConfig config = new ServerConfig()
             {
                 ChartType = ChartType.Line,
                 ContentType = CacheDataType.ParcelDataGrid,
                 LayoutSpec = LayoutElementType.GridGraph,
-                DataGridContent = DataTableInput.FetchInputValue<DataGrid>(),
-                ObjectContent = TableNameInput.FetchInputValue<string>()
+                DataGridContent = _dataTableInput.FetchInputValue<DataGrid>(),
+                ObjectContent = _tableNameInput.FetchInputValue<string>()
             };
-
-            ProcessorCache[ServerConfigOutput] = new ConnectorCacheDescriptor(config);
-            Message.Content = $"Ready.";
-            Message.Type = NodeMessageType.Normal;
-            
             WebHostRuntime.Singleton.CurrentLayout = config;
-            ((IWebPreviewProcessorNode)this).OpenPreview("Present");
-            return new NodeExecutionResult(true, null);
+            
+            ((IWebPreviewProcessorNode)this).OpenWebPreview("Present");
+            return new NodeExecutionResult(new NodeMessage($"Ready."), new Dictionary<OutputConnector, object>()
+            {
+                {_serverConfigOutput, config}
+            });
         }
         #endregion
     }

@@ -37,14 +37,14 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Dictionary: ProcessorNode
     {
         #region Node Interface
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Dictionary"
         }; 
         public Dictionary()
         {
             Title = NodeTypeName = "Dictionary";
-            Output.Add(DataTableOutput);
+            Output.Add(_dataTableOutput);
 
             Definitions = new ObservableCollection<DictionaryEntryDefinition>()
             {
@@ -68,8 +68,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             ExpandoObject expando = new ExpandoObject();
             foreach (DictionaryEntryDefinition definition in Definitions)
@@ -78,13 +77,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 dict[definition.Name] = definition.Value;
             }
             DataGrid dataGrid = new DataGrid(expando);
-            
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(dataGrid);
 
-            Message.Content = $"{dataGrid.RowCount} Rows; {dataGrid.ColumnCount} Columns.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{dataGrid.RowCount} Rows; {dataGrid.ColumnCount} Columns."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, dataGrid}
+            });
         }
         #endregion
     }

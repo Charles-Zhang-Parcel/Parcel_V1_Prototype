@@ -14,27 +14,27 @@ namespace Parcel.Toolbox.Present.Nodes
     public class Section: DynamicInputProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly PrimitiveStringInputConnector SectionNameInput = new PrimitiveStringInputConnector()
+        private readonly PrimitiveStringInputConnector _sectionNameInput = new PrimitiveStringInputConnector()
         {
             Title = "Name",
         };
-        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        private readonly OutputConnector _serverConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Config",
         };
         public Section()
         {
             Title = NodeTypeName = "Section";
-            Input.Add(SectionNameInput);
-            Output.Add(ServerConfigOutput);
+            Input.Add(_sectionNameInput);
+            Output.Add(_serverConfigOutput);
             
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => AddInputs(),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveInputs(),
+                RemoveInputs,
                 () => Input.Count > 1);
         }
         #endregion
@@ -51,10 +51,9 @@ namespace Parcel.Toolbox.Present.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ServerConfigOutput;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            string sectionName = SectionNameInput.FetchInputValue<string>();
+            string sectionName = _sectionNameInput.FetchInputValue<string>();
             ServerConfig newConfig = new ServerConfig()
             {
                 Children = Input.Skip(1).Select(i => i.FetchInputValue<ServerConfig>()).ToList(),
@@ -62,14 +61,13 @@ namespace Parcel.Toolbox.Present.Nodes
                 ObjectContent = sectionName,
                 LayoutSpec = LayoutElementType.Section,
             };
-
-            ProcessorCache[ServerConfigOutput] = new ConnectorCacheDescriptor(newConfig);
-            Message.Content = $"Presenting...";
-            Message.Type = NodeMessageType.Normal;
-            
             WebHostRuntime.Singleton.CurrentLayout = newConfig;
-            ((IWebPreviewProcessorNode)this).OpenPreview("Present");
-            return new NodeExecutionResult(true, null);
+            
+            ((IWebPreviewProcessorNode)this).OpenWebPreview("Present");
+            return new NodeExecutionResult(new NodeMessage($"Presenting..."), new Dictionary<OutputConnector, object>()
+            {
+                {_serverConfigOutput, newConfig}
+            });
         }
         #endregion
 
@@ -77,7 +75,7 @@ namespace Parcel.Toolbox.Present.Nodes
         public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
             new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
             {
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), SectionNameInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), _sectionNameInput),
             };
         #endregion
     }

@@ -13,33 +13,32 @@ namespace Parcel.Toolbox.Present.Nodes
     public class Page: ProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector ServerConfigInput = new WebConfigInputConnector()
+        private readonly InputConnector _serverConfigInput = new WebConfigInputConnector()
         {
             Title = "Content",
         };
-        public readonly PrimitiveStringInputConnector PageNameInput = new PrimitiveStringInputConnector()
+        private readonly PrimitiveStringInputConnector _pageNameInput = new PrimitiveStringInputConnector()
         {
             Title = "Name",
         };
-        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        private readonly OutputConnector _serverConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Config",
         };
         public Page()
         {
             Title = NodeTypeName = "Page";
-            Input.Add(PageNameInput);
-            Input.Add(ServerConfigInput);
-            Output.Add(ServerConfigOutput);
+            Input.Add(_pageNameInput);
+            Input.Add(_serverConfigInput);
+            Output.Add(_serverConfigOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ServerConfigOutput;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            ServerConfig incomeConfig = ServerConfigInput.FetchInputValue<ServerConfig>();
-            string pageName = PageNameInput.FetchInputValue<string>();
+            ServerConfig incomeConfig = _serverConfigInput.FetchInputValue<ServerConfig>();
+            string pageName = _pageNameInput.FetchInputValue<string>();
             ServerConfig newConfig = new ServerConfig()
             {
                 Children = new List<ServerConfig>() {incomeConfig},
@@ -47,14 +46,13 @@ namespace Parcel.Toolbox.Present.Nodes
                 ObjectContent = pageName,
                 LayoutSpec = LayoutElementType.Page,
             };
-
-            ProcessorCache[ServerConfigOutput] = new ConnectorCacheDescriptor(newConfig);
-            Message.Content = $"Presenting...";
-            Message.Type = NodeMessageType.Normal;
-            
             WebHostRuntime.Singleton.CurrentLayout = newConfig;
-            ((IWebPreviewProcessorNode)this).OpenPreview("Present");
-            return new NodeExecutionResult(true, null);
+            
+            ((IWebPreviewProcessorNode)this).OpenWebPreview("Present");
+            return new NodeExecutionResult(new NodeMessage($"Presenting..."), new Dictionary<OutputConnector, object>()
+            {
+                {_serverConfigOutput, newConfig}
+            });
         }
         #endregion
 
@@ -62,7 +60,7 @@ namespace Parcel.Toolbox.Present.Nodes
         public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
             new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
             {
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), PageNameInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), _pageNameInput),
             };
         #endregion
     }

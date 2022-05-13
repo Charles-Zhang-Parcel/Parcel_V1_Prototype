@@ -26,5 +26,15 @@ namespace Parcel.Shared.Framework
             set => SetField(ref _content, value);
         }
         #endregion
+
+        public NodeMessage()
+        {
+        }
+
+        public NodeMessage(string content, NodeMessageType type = NodeMessageType.Normal)
+        {
+            _type = type;
+            _content = content;
+        }
     }
 }

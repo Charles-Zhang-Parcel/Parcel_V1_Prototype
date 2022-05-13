@@ -1,14 +1,26 @@
-﻿namespace Parcel.Shared.Framework
-{
-    public struct NodeExecutionResult
-    {
-        public bool Success { get; set; }
-        public string ErrorMessage { get; set; }
+﻿using System.Collections.Generic;
+using Parcel.Shared.Framework.ViewModels;
 
-        public NodeExecutionResult(bool success, string errorMessage)
+namespace Parcel.Shared.Framework
+{
+    public readonly struct NodeExecutionResult
+    {
+        #region Accesor
+        public bool Success => Message.Type != NodeMessageType.Error;
+        public string ErrorMessage => Message.Type == NodeMessageType.Error ? Message.Content : null;
+        #endregion
+
+        #region Construction
+        public NodeExecutionResult(NodeMessage message, Dictionary<OutputConnector, object> caches)
         {
-            Success = success;
-            ErrorMessage = errorMessage;
+            Message = message;
+            Caches = caches;
         }
+        #endregion
+
+        #region States
+        public Dictionary<OutputConnector, object> Caches { get; }
+        public NodeMessage Message { get; }
+        #endregion
     }
 }

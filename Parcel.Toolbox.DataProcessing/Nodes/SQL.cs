@@ -30,24 +30,24 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class SQL: DynamicInputProcessorNode, INodeProperty
     {
         #region Node Interface
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result"
         };
-        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        private readonly OutputConnector _serverConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Present"
         };
         public SQL()
         {
-            _editors = new List<PropertyEditor>()
+            Editors = new List<PropertyEditor>()
             {
                 new PropertyEditor("Code", PropertyEditorType.Code, () => _code, o => Code = (string)o)
             };
             
             Title = NodeTypeName = "SQL";
-            Output.Add(DataTableOutput);
-            Output.Add(ServerConfigOutput);
+            Output.Add(_dataTableOutput);
+            Output.Add(_serverConfigOutput);
             
             Input.Add(new DatabaseTableInputConnector("Table 1"));
             
@@ -61,7 +61,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region View Binding/Internal Node Properties
-        public string _code = "select * from @Table1";
+        private string _code = "select * from @Table1";
         public string Code
         {
             get => _code;
@@ -70,14 +70,13 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region Property Editor Interface
-
-        private readonly List<PropertyEditor> _editors;
-        public List<PropertyEditor> Editors => _editors;
+        public List<PropertyEditor> Editors { get; }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
+
+        protected override NodeExecutionResult Execute()
         {
             SQLParameter parameter = new SQLParameter()
             {
@@ -93,12 +92,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.SQL(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
     }

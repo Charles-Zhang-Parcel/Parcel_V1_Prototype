@@ -11,14 +11,14 @@ namespace Parcel.Toolbox.Present.Nodes
     public class PresentOnline: DynamicInputProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly PrimitiveStringInputConnector PresentNameInput = new PrimitiveStringInputConnector()
+        private readonly PrimitiveStringInputConnector _presentNameInput = new PrimitiveStringInputConnector()
         {
             Title = "Name",
         };
         public PresentOnline()
         {
             Title = NodeTypeName = "Present";
-            Input.Add(PresentNameInput);
+            Input.Add(_presentNameInput);
             
             AddInputs();
             
@@ -43,21 +43,17 @@ namespace Parcel.Toolbox.Present.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => null;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             ServerConfig config = new ServerConfig()
             {
                 Children = Input.Skip(1).Select(i => i.FetchInputValue<ServerConfig>()).ToList(),
                 LayoutSpec = LayoutElementType.Presentation
             };
-            
-            Message.Content = $"Presenting...";
-            Message.Type = NodeMessageType.Normal;
-            
             WebHostRuntime.Singleton.CurrentLayout = config;
-            ((IWebPreviewProcessorNode)this).OpenPreview("Present");
-            return new NodeExecutionResult(true, null);
+            
+            ((IWebPreviewProcessorNode)this).OpenWebPreview("Present");
+            return new NodeExecutionResult(new NodeMessage($"Presenting..."), null);
         }
         #endregion
     }

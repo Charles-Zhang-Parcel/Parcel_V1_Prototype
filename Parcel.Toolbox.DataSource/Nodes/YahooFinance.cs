@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
@@ -11,68 +12,65 @@ namespace Parcel.Toolbox.DataSource.Nodes
     public class YahooFinance: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector SymbolInput = new PrimitiveStringInputConnector()
+        private readonly InputConnector _symbolInput = new PrimitiveStringInputConnector()
         {
             Title = "Symbol",
         };
-        public readonly  InputConnector StartDateInput = new PrimitiveDateTimeInputConnector()
+        private readonly  InputConnector _startDateInput = new PrimitiveDateTimeInputConnector()
         {
             Title = "Start Date"
         };
-        public readonly  InputConnector EndDateInput = new PrimitiveDateTimeInputConnector()
+        private readonly  InputConnector _endDateInput = new PrimitiveDateTimeInputConnector()
         {
             Title = "End Date"
         };
-        public readonly InputConnector IntervalInput = new PrimitiveStringInputConnector()
+        private readonly InputConnector _intervalInput = new PrimitiveStringInputConnector()
         {
             Title = "Interval",
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 
         public YahooFinance()
         {
             Title = NodeTypeName = "YahooFinance";
-            Input.Add(SymbolInput);
-            Input.Add(StartDateInput);
-            Input.Add(EndDateInput);
-            Input.Add(IntervalInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_symbolInput);
+            Input.Add(_startDateInput);
+            Input.Add(_endDateInput);
+            Input.Add(_intervalInput);
+            Output.Add(_dataTableOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             YahooFinanceParameter parameter = new YahooFinanceParameter()
             {
-                InputSymbol = SymbolInput.FetchInputValue<string>(),
-                InputInterval = IntervalInput.FetchInputValue<string>(),
-                InputStartDate = StartDateInput.FetchInputValue<DateTime>(),
-                InputEndDate = EndDateInput.FetchInputValue<DateTime>()
+                InputSymbol = _symbolInput.FetchInputValue<string>(),
+                InputInterval = _intervalInput.FetchInputValue<string>(),
+                InputStartDate = _startDateInput.FetchInputValue<DateTime>(),
+                InputEndDate = _endDateInput.FetchInputValue<DateTime>()
             };
             DataSourceHelper.YahooFinance(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.RowCount} Rows; {parameter.OutputTable.ColumnCount} Columns."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
 
         #region Auto Connect Interface
-        public override bool ShouldHaveConnection => SymbolInput.Connections.Count == 0;
+        public override bool ShouldHaveConnection => _symbolInput.Connections.Count == 0;
         public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
             new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
             {
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-250, -100), SymbolInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), StartDateInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), EndDateInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), IntervalInput)
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-250, -100), _symbolInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), _startDateInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), _endDateInput),
+                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), _intervalInput)
             };
         #endregion
     }

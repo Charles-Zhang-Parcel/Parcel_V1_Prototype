@@ -4,7 +4,7 @@ using Parcel.Shared.DataTypes;
 
 namespace Parcel.Shared.Framework
 {
-    public struct ConnectorCacheDescriptor
+    public readonly struct ConnectorCacheDescriptor
     {
         private static readonly Dictionary<Type, CacheDataType> DataTypeMapping = new Dictionary<Type, CacheDataType>()
         {
@@ -17,8 +17,8 @@ namespace Parcel.Shared.Framework
             {typeof(DataGrid), CacheDataType.ParcelDataGrid},
         };
         
-        public object DataObject { get; set; }
-        public CacheDataType DataType { get; set; }
+        public object DataObject { get; }
+        public CacheDataType DataType { get; }
 
         public ConnectorCacheDescriptor(object dataObject)
         {

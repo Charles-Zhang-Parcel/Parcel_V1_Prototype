@@ -80,9 +80,27 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             Output.Clear();
         }
         public virtual OutputConnector MainOutput => Output.Count == 0 ? null : Output[0];
-        public abstract NodeExecutionResult Execute();
+        public void Evaluate()
+        {
+            NodeExecutionResult result = this.Execute();
 
-        public Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; } =
+            if (result.Message != null)
+            {
+                Message.Content = result.Message.Content;
+                Message.Type = result.Message.Type;
+            }
+            
+            if (result.Caches == null) return;
+            foreach ((OutputConnector outputConnector, object value) in result.Caches)
+                ProcessorCache[outputConnector] = value is ConnectorCacheDescriptor descriptor ? descriptor : new ConnectorCacheDescriptor(value);
+        }
+        public ConnectorCacheDescriptor this[OutputConnector cacheConnector] => ProcessorCache[cacheConnector];
+        public bool HasCache(OutputConnector cacheConnector) => ProcessorCache.ContainsKey(cacheConnector);
+        #endregion
+
+        #region Routines
+        protected abstract NodeExecutionResult Execute();
+        private Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; } =
             new Dictionary<OutputConnector, ConnectorCacheDescriptor>();
         #endregion
 

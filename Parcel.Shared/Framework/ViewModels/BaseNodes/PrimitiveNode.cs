@@ -31,10 +31,12 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
         
         #region Processor Interface
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(_value);
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(null, new Dictionary<OutputConnector, object>()
+            {
+                {ValueOutput, _value}                
+            });
         }
         #endregion
 

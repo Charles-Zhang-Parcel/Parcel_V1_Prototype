@@ -159,7 +159,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
                     node.Location + new Vector(-200, -60)) as OpenFileNode;
-                Canvas.Schema.TryAddConnection(filePathNode!.FilePathOutput, node.Input.First());
+                Canvas.Schema.TryAddConnection(filePathNode!.MainOutput, node.Input.First());
                 
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (node is CSV)

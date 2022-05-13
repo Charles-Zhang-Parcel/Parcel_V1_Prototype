@@ -50,7 +50,8 @@ namespace Parcel.Toolbox.Basic.Nodes
         #endregion
         
         #region Processor Interface
-        public override NodeExecutionResult Execute()
+
+        protected override NodeExecutionResult Execute()
         {
             Dictionary<string, object> parameterSet = new Dictionary<string, object>();
             foreach (InputConnector inputConnector in Input)
@@ -64,17 +65,15 @@ namespace Parcel.Toolbox.Basic.Nodes
             };
             BasicHelper.GraphReference(parameter);
 
+            Dictionary<OutputConnector, object> cache = new Dictionary<OutputConnector, object>();
             foreach ((string key, object value) in parameter.OutputParameterSet)
             {
                 OutputConnector output = Output.SingleOrDefault(o => o.Title == key);
                 if (output != null) 
-                    ProcessorCache[output] = new ConnectorCacheDescriptor(value);   
+                    cache[output] = value;   
             }
 
-            Message.Content = $"{parameterSet.Count} Inputs -> {parameter.OutputParameterSet.Count} Outputs";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameterSet.Count} Inputs -> {parameter.OutputParameterSet.Count} Outputs"), cache);
         }
         #endregion
         

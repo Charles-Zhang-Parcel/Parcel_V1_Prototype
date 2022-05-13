@@ -20,7 +20,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected OutputConnector DateTimeOutput = new OutputConnector(typeof(DateTime))
+        private readonly OutputConnector _dateTimeOutput = new OutputConnector(typeof(DateTime))
         {
             Title = "DateTime"
         }; 
@@ -29,17 +29,16 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             Title = NodeTypeName = "DateTime";
             DateTime = DateTime.Now.Date;
             ValueOutput.IsHidden = true;
-            Output.Add(DateTimeOutput);
+            Output.Add(_dateTimeOutput);
         }
         #endregion
 
         #region Interface
-        public override OutputConnector MainOutput => DateTimeOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            ProcessorCache[DateTimeOutput] = new ConnectorCacheDescriptor(DateTime);
-            
-            return base.Execute();
+            NodeExecutionResult result = base.Execute();
+            result.Caches.Add(_dateTimeOutput, DateTime);
+            return result;
         }
         #endregion
     }

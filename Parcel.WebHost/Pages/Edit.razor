@@ -27,9 +27,9 @@
 {
     var node = WebHostRuntime.Singleton.LastNode;
     OutputConnector output = node.MainOutput;
-    if (node.ProcessorCache.ContainsKey(output))
+    if (node.HasCache(output))
     {
-        ConnectorCacheDescriptor cache = node.ProcessorCache[output];
+        ConnectorCacheDescriptor cache = node[output];
         switch (cache.DataType)
         {
             case CacheDataType.Generic:
@@ -162,9 +162,9 @@
         // };
         
         OutputConnector output = node.MainOutput;
-        if (node.ProcessorCache.ContainsKey(output))
+        if (node.HasCache(output))
         {
-            ConnectorCacheDescriptor cache = node.ProcessorCache[output];
+            ConnectorCacheDescriptor cache = node[output];
             if (cache.DataType != CacheDataType.ParcelDataGrid) return;
             
             DataGrid dataGrid = cache.DataObject as DataGrid;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -9,22 +10,22 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Append: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Combined Table",
         };
         public Append()
         {
             Title = NodeTypeName = "Append";
-            Output.Add(DataTableOutput);
+            Output.Add(_dataTableOutput);
             
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => AddInputs(),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveInputs(),
+                RemoveInputs,
                 () => Input.Count > 1);
         }
         #endregion
@@ -41,8 +42,9 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
+
+        protected override NodeExecutionResult Execute()
         {
             AppendParameter parameter = new AppendParameter()
             {
@@ -52,12 +54,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.Append(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.Columns.Count} Columns";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.Columns.Count} Columns"), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
     }

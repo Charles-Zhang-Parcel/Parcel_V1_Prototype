@@ -15,7 +15,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        public readonly OutputConnector FilePathOutput = new OutputConnector(typeof(string))
+        private readonly OutputConnector _filePathOutput = new OutputConnector(typeof(string))
         {
             Title = "File"
         }; 
@@ -23,17 +23,18 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         {
             Title = NodeTypeName = "File";
             ValueOutput.IsHidden = true;
-            Output.Add(FilePathOutput);
+            Output.Add(_filePathOutput);
         }
         #endregion
 
         #region Interface
-        public override OutputConnector MainOutput => FilePathOutput;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _filePathOutput;
+
+        protected override NodeExecutionResult Execute()
         {
-            ProcessorCache[FilePathOutput] = new ConnectorCacheDescriptor(Path);
-            
-            return base.Execute();
+            NodeExecutionResult result = base.Execute();
+            result.Caches.Add(_filePathOutput, Path);
+            return result;
         }
         #endregion
     }

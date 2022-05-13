@@ -41,18 +41,17 @@ namespace Parcel.Toolbox.Basic.Nodes
         #endregion
         
         #region Processor Interface
-        public override NodeExecutionResult Execute()
+
+        protected override NodeExecutionResult Execute()
         {
+            Dictionary<OutputConnector, object> cache = new Dictionary<OutputConnector, object>();
             for (int index = 0; index < Definitions.Count; index++)
             {
                 GraphInputOutputDefinition definition = Definitions[index];
-                ProcessorCache[Output[index]] = new ConnectorCacheDescriptor(definition.DefaultValue);
+                cache[Output[index]] = definition.DefaultValue;
             }
 
-            Message.Content = $"{Definitions.Count} Inputs.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{Definitions.Count} Inputs."), cache);
         }
         #endregion
 

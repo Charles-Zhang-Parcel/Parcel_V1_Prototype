@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,25 +9,25 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class PercentReturn: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
 
-        public readonly InputConnector LatestAtTopInput = new PrimitiveBooleanInputConnector()
+        private readonly InputConnector _latestAtTopInput = new PrimitiveBooleanInputConnector()
         {
             Title = "Latest At Top"
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
         };
         public PercentReturn()
         {
             Title = NodeTypeName = "PercentReturn";
-            Input.Add(DataTableInput);
-            Input.Add(LatestAtTopInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_dataTableInput);
+            Input.Add(_latestAtTopInput);
+            Output.Add(_dataTableOutput);
             
             Tooltip = $"This node takes in a table of time series data in each column; It will automatically trim rows; Non-numerical data will be trimmed.";
             Message.Content = "Input a time series.";
@@ -35,11 +36,10 @@ namespace Parcel.Toolbox.Finance.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            bool latestAtTop = LatestAtTopInput.FetchInputValue<bool>();
+            DataGrid dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
+            bool latestAtTop = _latestAtTopInput.FetchInputValue<bool>();
             PercentReturnParameter parameter = new PercentReturnParameter()
             {
                 InputTable = dataGrid,
@@ -47,12 +47,10 @@ namespace Parcel.Toolbox.Finance.Nodes
             };
             FinanceHelper.PercentReturn(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.RowCount} Rows, {parameter.OutputTable.ColumnCount} Columns";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.RowCount} Rows, {parameter.OutputTable.ColumnCount} Columns"), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
     }

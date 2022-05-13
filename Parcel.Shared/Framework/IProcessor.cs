@@ -8,10 +8,14 @@ namespace Parcel.Shared.Framework
     public interface IProcessor
     {
         public OutputConnector MainOutput { get; }
-        public NodeExecutionResult Execute();
-        public Dictionary<OutputConnector, ConnectorCacheDescriptor> ProcessorCache { get; set; }
+        public void Evaluate();
+        public ConnectorCacheDescriptor this[OutputConnector cacheConnector] { get; }
+        public bool HasCache(OutputConnector cacheConnector);
     }
 
+    /// <summary>
+    /// Automatic nodes provides a way to quickly define a large library of simple function nodes without defining classes for them
+    /// </summary>
     public struct AutomaticNodeDescriptor
     {
         public string NodeName { get; set; }

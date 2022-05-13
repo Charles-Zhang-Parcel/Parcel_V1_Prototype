@@ -14,7 +14,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected OutputConnector NumberOutput = new OutputConnector(typeof(double))
+        private readonly OutputConnector _numberOutput = new OutputConnector(typeof(double))
         {
             Title = "Number"
         }; 
@@ -23,17 +23,16 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             Title = NodeTypeName = "Number";
             Number = 0;
             ValueOutput.IsHidden = true;
-            Output.Add(NumberOutput);
+            Output.Add(_numberOutput);
         }
         #endregion
 
         #region Interface
-        public override OutputConnector MainOutput => NumberOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            ProcessorCache[NumberOutput] = new ConnectorCacheDescriptor(Number);
-            
-            return base.Execute();
+            NodeExecutionResult result = base.Execute();
+            result.Caches.Add(_numberOutput, Number);
+            return result;
         }
         #endregion
     }

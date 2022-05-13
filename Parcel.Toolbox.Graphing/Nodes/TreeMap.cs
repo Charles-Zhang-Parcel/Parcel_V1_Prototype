@@ -11,34 +11,34 @@ namespace Parcel.Toolbox.Graphing.Nodes
     public class TreeMap: ProcessorNode, IWebPreviewProcessorNode, INodeProperty
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         };
-        public readonly InputConnector TableNameInput = new PrimitiveStringInputConnector()
+        private readonly InputConnector _tableNameInput = new PrimitiveStringInputConnector()
         {
             Title = "Display Name"
         };
-        public readonly OutputConnector ServerConfigOutput = new OutputConnector(typeof(ServerConfig))
+        private readonly OutputConnector _serverConfigOutput = new OutputConnector(typeof(ServerConfig))
         {
             Title = "Present"
         };
         public TreeMap()
         {
-            _editors = new List<PropertyEditor>()
+            Editors = new List<PropertyEditor>()
             {
                 new PropertyEditor("Parameters", PropertyEditorType.TextBox, () => _chartTitle, v => _chartTitle = (string)v)
             };
             
             Title = NodeTypeName = ChartTitle = "Tree Map";
-            Input.Add(DataTableInput);
-            Input.Add(TableNameInput);
-            Output.Add(ServerConfigOutput);
+            Input.Add(_dataTableInput);
+            Input.Add(_tableNameInput);
+            Output.Add(_serverConfigOutput);
         }
         #endregion
 
         #region View Binding/Internal Node Properties
-        public string _chartTitle;
+        private string _chartTitle;
         public string ChartTitle
         {
             get => _chartTitle;
@@ -47,33 +47,31 @@ namespace Parcel.Toolbox.Graphing.Nodes
         #endregion
 
         #region Property Editor Interface
-
-        private readonly List<PropertyEditor> _editors;
-        public List<PropertyEditor> Editors => _editors;
+        public List<PropertyEditor> Editors { get; }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ServerConfigOutput;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _serverConfigOutput;
+
+        protected override NodeExecutionResult Execute()
         {
-            var dataGrid = DataTableInput.FetchInputValue<DataGrid>();
+            var dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
             ServerConfig config = new ServerConfig()
             {
                 ChartType = ChartType.TreeMap,
                 ContentType = CacheDataType.ParcelDataGrid,
                 LayoutSpec = LayoutElementType.GridGraph,
                 DataGridContent = dataGrid,
-                ObjectContent = TableNameInput.FetchInputValue<string>()
+                ObjectContent = _tableNameInput.FetchInputValue<string>()
             };
-
-            ProcessorCache[ServerConfigOutput] = new ConnectorCacheDescriptor(config);
-            Message.Content = $"Ready.";
-            Message.Type = NodeMessageType.Normal;
-            
             WebHostRuntime.Singleton.CurrentLayout = config;
             WebHostRuntime.Singleton.DataTableEndPoints.Add("TreeMap", dataGrid);
-            ((IWebPreviewProcessorNode)this).OpenPreview("Present");
-            return new NodeExecutionResult(true, null);
+            
+            ((IWebPreviewProcessorNode)this).OpenWebPreview("Present");
+            return new NodeExecutionResult(new NodeMessage($"Ready."), new Dictionary<OutputConnector, object>()
+            {
+                {_serverConfigOutput, config}
+            });
         }
         #endregion
     }

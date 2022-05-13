@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,35 +9,32 @@ namespace Parcel.Toolbox.Plotting.Nodes
     public class Plot: ProcessorNode, IWebPreviewProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Value",
         };
         public Plot()
         {
             Title = NodeTypeName = "Plot";
-            Input.Add(DataTableInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_dataTableInput);
+            Output.Add(_dataTableOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
+            DataGrid dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(dataGrid);
-
-            Message.Content = $"Plotting...";
-            Message.Type = NodeMessageType.Normal;
-            
-            ((IWebPreviewProcessorNode)this).OpenPreview();
-            return new NodeExecutionResult(true, null);
+            ((IWebPreviewProcessorNode)this).OpenWebPreview();
+            return new NodeExecutionResult(new NodeMessage($"Plotting..."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, dataGrid}
+            });
         }
         #endregion
     }

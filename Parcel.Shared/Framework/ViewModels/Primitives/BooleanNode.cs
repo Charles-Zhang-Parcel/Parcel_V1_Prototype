@@ -20,7 +20,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
         
         #region Node Interface
-        protected OutputConnector TruthOutput = new OutputConnector(typeof(bool))
+        private readonly OutputConnector _truthOutput = new OutputConnector(typeof(bool))
         {
             Title = "Truth"
         }; 
@@ -29,17 +29,18 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
             Title = NodeTypeName = "Boolean";
             Boolean = false;
             ValueOutput.IsHidden = true;
-            Output.Add(TruthOutput);
+            Output.Add(_truthOutput);
         }
         #endregion
 
         #region Interface
-        public override OutputConnector MainOutput => TruthOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _truthOutput as OutputConnector;
+
+        protected override NodeExecutionResult Execute()
         {
-            ProcessorCache[TruthOutput] = new ConnectorCacheDescriptor(Boolean);
-            
-            return base.Execute();
+            NodeExecutionResult result = base.Execute();
+            result.Caches.Add(_truthOutput, Boolean);
+            return result;
         }
         #endregion
     }

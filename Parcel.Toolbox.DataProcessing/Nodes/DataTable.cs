@@ -33,7 +33,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class DataTable: ProcessorNode
     {
         #region Node Interface
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         }; 
@@ -52,12 +52,12 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 () => Definitions.Count > 1);
             
             Title = NodeTypeName = "Data Table";
-            Output.Add(DataTableOutput);
+            Output.Add(_dataTableOutput);
         }
         #endregion
         
         #region View Binding/Internal Node Properties
-        public DataGrid _dataGrid = new DataGrid();
+        private DataGrid _dataGrid = new DataGrid();
         public DataGrid DataGrid
         {
             get => _dataGrid;
@@ -70,8 +70,9 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
+
+        protected override NodeExecutionResult Execute()
         {
             // Update columns
             foreach (DataTableFieldDefinition definition in Definitions)
@@ -100,10 +101,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 .Except(Definitions.Select(d => d.Name)).ToArray())
                 _dataGrid.RemoveColumn(extra);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(_dataGrid);
-            Message.Content = $"{_dataGrid.ColumnCount} Fields.";
-            Message.Type = NodeMessageType.Normal;
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{_dataGrid.ColumnCount} Fields."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, _dataGrid}
+            });
         }
         #endregion
     }

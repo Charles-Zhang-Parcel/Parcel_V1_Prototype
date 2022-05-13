@@ -86,7 +86,8 @@ namespace Parcel.Shared.Framework
         #endregion
         
         #region Processor Interface
-        public abstract override NodeExecutionResult Execute();
+
+        protected abstract override NodeExecutionResult Execute();
         #endregion
         
         #region Serialization

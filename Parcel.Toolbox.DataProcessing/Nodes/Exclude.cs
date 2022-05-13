@@ -13,27 +13,27 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Exclude: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Result",
         };
         public Exclude()
         {
             Title = NodeTypeName = "Exclude";
-            Input.Add(DataTableInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_dataTableInput);
+            Output.Add(_dataTableOutput);
             
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => AddInputs(),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveInputs(),
+                RemoveInputs,
                 () => Input.Count > 2);
         }
         #endregion
@@ -50,10 +50,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
+
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
+            DataGrid dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
             ExcludeParameter parameter = new ExcludeParameter()
             {
                 InputTable = dataGrid,
@@ -62,12 +63,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.Exclude(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.Columns.Count} Columns";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.Columns.Count} Columns"), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
         
@@ -88,7 +87,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => DataTableInput.Connections.Count == 0 ||
+        public override bool ShouldHaveConnection => _dataTableInput.Connections.Count == 0 ||
                                                      (Input.Count > 1 && Input.Skip(1).Any(i => i.Connections.Count == 0));
         #endregion
     }

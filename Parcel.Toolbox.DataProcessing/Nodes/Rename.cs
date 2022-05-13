@@ -14,27 +14,27 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Rename: DynamicInputProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Original Table"
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table"
         };
         public Rename()
         {
             Title = NodeTypeName = "Rename";
-            Input.Add(DataTableInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_dataTableInput);
+            Output.Add(_dataTableOutput);
 
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => AddInputs(),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveInputs(),
+                RemoveInputs,
                 () => Input.Count > 2);
         }
         #endregion
@@ -56,12 +56,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
             RenameParameter parameter = new RenameParameter()
             {
-                InputTable = DataTableInput.FetchInputValue<DataGrid>(),
+                InputTable = _dataTableInput.FetchInputValue<DataGrid>(),
                 InputColumns = Input.Skip(1)
                     .Where((input, index) => index % 2 == 0)
                     .Select(input => input.FetchInputValue<string>()).ToArray(),
@@ -71,12 +70,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.Rename(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{(Input.Count - 1) / 2} columns renamed.";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{(Input.Count - 1) / 2} columns renamed."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
 
@@ -98,7 +95,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => DataTableInput.Connections.Count == 0 ||
+        public override bool ShouldHaveConnection => _dataTableInput.Connections.Count == 0 ||
                                                      (Input.Count > 1 && Input.Skip(1).Any(i => i.Connections.Count == 0));
         #endregion
     }

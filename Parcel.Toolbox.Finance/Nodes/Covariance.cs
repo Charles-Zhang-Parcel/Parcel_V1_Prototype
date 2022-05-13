@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,45 +9,44 @@ namespace Parcel.Toolbox.Finance.Nodes
     public class Covariance: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTable1Input = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTable1Input = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 1",
         };
-        public readonly InputConnector ColumnName1Input = new InputConnector(typeof(string))
+        private readonly InputConnector _columnName1Input = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly InputConnector DataTable2Input = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTable2Input = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table 2",
         };
-        public readonly InputConnector ColumnName2Input = new InputConnector(typeof(string))
+        private readonly InputConnector _columnName2Input = new InputConnector(typeof(string))
         {
             Title = "Column Name",
         };
-        public readonly OutputConnector ValueOutput = new OutputConnector(typeof(double))
+        private readonly OutputConnector _valueOutput = new OutputConnector(typeof(double))
         {
             Title = "Value",
         };
         public Covariance()
         {
             Title = NodeTypeName = "Covariance";
-            Input.Add(DataTable1Input);
-            Input.Add(ColumnName1Input);
-            Input.Add(DataTable2Input);
-            Input.Add(ColumnName2Input);
-            Output.Add(ValueOutput);
+            Input.Add(_dataTable1Input);
+            Input.Add(_columnName1Input);
+            Input.Add(_dataTable2Input);
+            Input.Add(_columnName2Input);
+            Output.Add(_valueOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => ValueOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid1 = DataTable1Input.FetchInputValue<DataGrid>();
-            string columnName1 = ColumnName1Input.FetchInputValue<string>();
-            DataGrid dataGrid2 = DataTable2Input.FetchInputValue<DataGrid>();
-            string columnName2 = ColumnName2Input.FetchInputValue<string>();
+            DataGrid dataGrid1 = _dataTable1Input.FetchInputValue<DataGrid>();
+            string columnName1 = _columnName1Input.FetchInputValue<string>();
+            DataGrid dataGrid2 = _dataTable2Input.FetchInputValue<DataGrid>();
+            string columnName2 = _columnName2Input.FetchInputValue<string>();
             CovarianceParameter parameter = new CovarianceParameter()
             {
                 InputTable1 = dataGrid1,
@@ -56,12 +56,10 @@ namespace Parcel.Toolbox.Finance.Nodes
             };
             FinanceHelper.Covariance(parameter);
 
-            ProcessorCache[ValueOutput] = new ConnectorCacheDescriptor(parameter.OutputValue);
-
-            Message.Content = $"Covariance={parameter.OutputValue}";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"Covariance={parameter.OutputValue}"), new Dictionary<OutputConnector, object>()
+            {
+                {_valueOutput, parameter.OutputValue}
+            });
         }
         #endregion
     }

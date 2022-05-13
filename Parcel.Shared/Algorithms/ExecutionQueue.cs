@@ -25,7 +25,7 @@ namespace Parcel.Shared.Algorithms
             {
                 try
                 {
-                    node.Execute();
+                    node.Evaluate();
                 }
                 catch (Exception e)
                 {

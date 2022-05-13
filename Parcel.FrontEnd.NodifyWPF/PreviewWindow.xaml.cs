@@ -65,7 +65,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             get => _dataGridData;
             set => SetField(ref _dataGridData, value);
         }
-        public bool _dataGridIsReadOnly = true;
+        private bool _dataGridIsReadOnly = true;
         public bool DataGridIsReadOnly
         {
             get => _dataGridIsReadOnly;
@@ -97,9 +97,9 @@ namespace Parcel.FrontEnd.NodifyWPF
             DataGridVisibility = Visibility.Collapsed;
             
             OutputConnector output = Node.MainOutput;
-            if (Node.ProcessorCache.ContainsKey(output))
+            if (Node.HasCache(output))
             {
-                ConnectorCacheDescriptor cache = Node.ProcessorCache[output];
+                ConnectorCacheDescriptor cache = Node[output];
                 switch (cache.DataType)
                 {
                     case CacheDataType.Generic:

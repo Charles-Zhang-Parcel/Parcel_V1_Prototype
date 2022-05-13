@@ -1,4 +1,5 @@
-﻿using Parcel.Shared.DataTypes;
+﻿using System.Collections.Generic;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -8,33 +9,32 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
     public class Take: ProcessorNode
     {
         #region Node Interface
-        public readonly InputConnector DataTableInput = new InputConnector(typeof(DataGrid))
+        private readonly InputConnector _dataTableInput = new InputConnector(typeof(DataGrid))
         {
             Title = "Data Table",
         };
-        public readonly InputConnector RowCountInput = new InputConnector(typeof(double))
+        private readonly InputConnector _rowCountInput = new InputConnector(typeof(double))
         {
             Title = "Row Count",
         };
-        public readonly OutputConnector DataTableOutput = new OutputConnector(typeof(DataGrid))
+        private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
             Title = "Data Table Column",
         };
         public Take()
         {
             Title = NodeTypeName = "Take";
-            Input.Add(DataTableInput);
-            Input.Add(RowCountInput);
-            Output.Add(DataTableOutput);
+            Input.Add(_dataTableInput);
+            Input.Add(_rowCountInput);
+            Output.Add(_dataTableOutput);
         }
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => DataTableOutput as OutputConnector;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            DataGrid dataGrid = DataTableInput.FetchInputValue<DataGrid>();
-            double rowCount = RowCountInput.FetchInputValue<double>();
+            DataGrid dataGrid = _dataTableInput.FetchInputValue<DataGrid>();
+            double rowCount = _rowCountInput.FetchInputValue<double>();
             TakeParameter parameter = new TakeParameter()
             {
                 InputTable = dataGrid,
@@ -42,12 +42,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             };
             DataProcessingHelper.Take(parameter);
 
-            ProcessorCache[DataTableOutput] = new ConnectorCacheDescriptor(parameter.OutputTable);
-
-            Message.Content = $"{parameter.OutputTable.Rows.Count} Rows";
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage($"{parameter.OutputTable.Rows.Count} Rows"), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, parameter.OutputTable}
+            });
         }
         #endregion
     }

@@ -6,7 +6,7 @@ namespace Parcel.Shared.Framework
     public interface IWebPreviewProcessorNode
     {
         #region Interface
-        void OpenPreview(string target = "Preview")
+        void OpenWebPreview(string target = "Preview")
         {
             if (WebHostRuntime.Singleton != null && this is ProcessorNode processorNode)
             {

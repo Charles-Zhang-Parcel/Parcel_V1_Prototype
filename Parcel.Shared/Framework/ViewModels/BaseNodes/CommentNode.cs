@@ -11,21 +11,23 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         {
             MemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                {nameof(Comment), new NodeSerializationRoutine(() => _comment, value => _comment = value as string)}
+                {nameof(Title), new NodeSerializationRoutine(() => _title, value => _title = value as string)},
+                {nameof(Comment), new NodeSerializationRoutine(() => _comment, value => _comment = value as string)},
+                {nameof(Size), new NodeSerializationRoutine(() => _size, value => _size = (Size)value)},
             };
         }
         #endregion
         
         #region View Components
-        private string? _title = "Comment";
-        public string? Title
+        private string _title = "Comment";
+        public string Title
         {
             get => _title;
             set => SetField(ref _title, value);
         }
         
-        private string? _comment = string.Empty;
-        public string? Comment
+        private string _comment = string.Empty;
+        public string Comment
         {
             get => _comment;
             set => SetField(ref _comment, value);

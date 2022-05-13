@@ -34,13 +34,9 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
         #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => null;
-        public override NodeExecutionResult Execute()
+        protected override NodeExecutionResult Execute()
         {
-            Message.Content = string.Empty;
-            Message.Type = NodeMessageType.Normal;
-            
-            return new NodeExecutionResult(true, null);
+            return new NodeExecutionResult(new NodeMessage(string.Empty), null);
         }
         #endregion
     }

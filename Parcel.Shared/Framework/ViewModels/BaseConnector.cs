@@ -211,20 +211,20 @@ namespace Parcel.Shared.Framework.ViewModels
                             prev = knot.Previous;
 
                         if (prev is ProcessorNode processor)
-                            return (T)processor.ProcessorCache[connection.Input as OutputConnector].DataObject;
+                            return (T)processor[connection.Input as OutputConnector].DataObject;
 
                         throw new InvalidOperationException("Knot nodes connect to empty source.");
                     }
                     else if (connection.Input.Node is ProcessorNode processor)
                     {
-                        return (T) processor.ProcessorCache[connection.Input as OutputConnector].DataObject;
+                        return (T) processor[connection.Input as OutputConnector].DataObject;
                     }
                     else throw new InvalidOperationException("Invalid node type.");
                 }
                 else
                 {
-                    if (this is OutputConnector _outputConnector && Node is ProcessorNode processor && processor.ProcessorCache.ContainsKey(_outputConnector))
-                        return (T) processor.ProcessorCache[_outputConnector].DataObject;
+                    if (this is OutputConnector _outputConnector && Node is ProcessorNode processor && processor.HasCache(_outputConnector))
+                        return (T) processor[_outputConnector].DataObject;
                     else
                         return DefaultDataStorage != null ? (T) DefaultDataStorage : default(T);
                 }
