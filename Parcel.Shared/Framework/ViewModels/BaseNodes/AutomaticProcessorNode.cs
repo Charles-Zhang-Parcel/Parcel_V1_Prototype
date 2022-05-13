@@ -23,6 +23,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                 {nameof(ToolboxFullName), new NodeSerializationRoutine(() => ToolboxFullName, value => ToolboxFullName = value as string)},
                 {nameof(InputTypes), new NodeSerializationRoutine(() => InputTypes, value => InputTypes = value as CacheDataType[])},
                 {nameof(OutputTypes), new NodeSerializationRoutine(() => OutputTypes, value => OutputTypes = value as CacheDataType[])},
+                {nameof(InputNames), new NodeSerializationRoutine(() => InputNames, value => InputNames = value as string[])},
+                {nameof(OutputNames), new NodeSerializationRoutine(() => OutputNames, value => OutputNames = value as string[])},
             };
         }
         public AutomaticProcessorNode(AutomaticNodeDescriptor descriptor, IToolboxEntry toolbox)
@@ -33,6 +35,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             ToolboxFullName = toolbox.GetType().AssemblyQualifiedName;
             InputTypes = descriptor.InputTypes;
             OutputTypes = descriptor.OutputTypes;
+            InputNames = descriptor.InputNames;
+            OutputNames = descriptor.OutputNames;
             
             // Population
             PopulateInputsOutputs();
@@ -56,20 +60,27 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private void PopulateInputsOutputs()
         {
             Title = NodeTypeName = AutomaticNodeType;
-            foreach (CacheDataType inputType in InputTypes)
+            for (int index = 0; index < InputTypes.Length; index++)
             {
+                CacheDataType inputType = InputTypes[index];
+                string preferredTitle = InputNames?[index];
                 switch (inputType)
                 {
                     case CacheDataType.Boolean:
-                        Input.Add(new PrimitiveBooleanInputConnector() {Title = "Bool"});
+                        Input.Add(new PrimitiveBooleanInputConnector() {Title = preferredTitle ?? "Bool"});
                         break;
                     case CacheDataType.Number:
-                        Input.Add(new PrimitiveNumberInputConnector() {Title = "Number"});
+                        Input.Add(new PrimitiveNumberInputConnector() {Title = preferredTitle ?? "Number"});
                         break;
                     case CacheDataType.String:
+                        Input.Add(new PrimitiveStringInputConnector() {Title = preferredTitle ?? "String"});
+                        break;
                     case CacheDataType.DateTime:
+                        Input.Add(new PrimitiveDateTimeInputConnector() {Title = preferredTitle ?? "Date"});
+                        break;
                     case CacheDataType.ParcelDataGrid:
-                    case CacheDataType.Array:
+                        Input.Add(new InputConnector(typeof(DataGrid)) {Title = preferredTitle ?? "Data"});
+                        break;
                     case CacheDataType.Generic:
                     case CacheDataType.BatchJob:
                     case CacheDataType.ServerConfig:
@@ -79,20 +90,27 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                 }
             }
 
-            foreach (CacheDataType outputType in OutputTypes)
+            for (int index = 0; index < OutputTypes.Length; index++)
             {
+                CacheDataType outputType = OutputTypes[index];
+                string preferredTitle = OutputNames?[index];
                 switch (outputType)
                 {
                     case CacheDataType.Boolean:
-                        Output.Add(new OutputConnector(typeof(bool)) {Title = "Truth"});
+                        Output.Add(new OutputConnector(typeof(bool)) {Title = preferredTitle ?? "Truth"});
                         break;
                     case CacheDataType.Number:
-                        Output.Add(new OutputConnector(typeof(double)) {Title = "Number"});
+                        Output.Add(new OutputConnector(typeof(double)) {Title = preferredTitle ?? "Number"});
                         break;
                     case CacheDataType.String:
+                        Output.Add(new OutputConnector(typeof(string)) {Title = preferredTitle ?? "Value"});
+                        break;
                     case CacheDataType.DateTime:
+                        Output.Add(new OutputConnector(typeof(DateTime)) {Title = preferredTitle ?? "Date"});
+                        break;
                     case CacheDataType.ParcelDataGrid:
-                    case CacheDataType.Array:
+                        Output.Add(new OutputConnector(typeof(DataGrid)) {Title = preferredTitle ?? "Data"});
+                        break;
                     case CacheDataType.Generic:
                     case CacheDataType.BatchJob:
                     case CacheDataType.ServerConfig:
@@ -109,6 +127,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private string ToolboxFullName { get; set; }
         private CacheDataType[] InputTypes { get; set; }
         private CacheDataType[] OutputTypes { get; set; }
+        private string[] InputNames { get; set; }
+        private string[] OutputNames { get; set; }
         #endregion
 
         #region Processor Interface
@@ -165,7 +185,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                             nodeType = typeof(DateTimeNode);
                             break;
                         case CacheDataType.ParcelDataGrid:
-                        case CacheDataType.Array:
+                            nodeType = typeof(DataGrid);
+                            break;
                         case CacheDataType.Generic:
                         case CacheDataType.BatchJob:
                         case CacheDataType.ServerConfig:

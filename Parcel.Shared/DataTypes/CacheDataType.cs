@@ -20,9 +20,8 @@ namespace Parcel.Shared.DataTypes
         String,
         DateTime,
         // Basic Numerical
-        ParcelDataGrid,
+        ParcelDataGrid, // Including arrays
         // Advanced
-        Array,
         Generic,
         BatchJob,
         ServerConfig

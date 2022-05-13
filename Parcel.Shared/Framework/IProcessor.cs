@@ -24,6 +24,11 @@ namespace Parcel.Shared.Framework
         public CacheDataType[] OutputTypes { get; }
         public Func<object[], object[]> CallMarshal { get; }
 
+        #region Additional Payload
+        public string[] InputNames { get; set; }
+        public string[] OutputNames { get; set; }
+        #endregion
+
         public AutomaticNodeDescriptor(string nodeName, CacheDataType[] inputTypes, CacheDataType[] outputTypes, Func<object[], object[]> callMarshal)
         {
             NodeName = nodeName;

@@ -5,17 +5,23 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
                   mc:Ignorable="d"
-                  WindowStyle="None" ResizeMode="CanResizeWithGrip"
-                  Title="PopupTab" Height="300" Width="150"
+                  WindowStyle="None" ResizeMode="NoResize"
+                  Title="Tools" Height="300" Width="150" SizeToContent="WidthAndHeight"
                   PreviewKeyDown="PopupTab_OnPreviewKeyDown"
                   MouseDown="PopupTab_OnMouseDown">
     <DockPanel LastChildFill="True">
+        <!--Decorator Frame-->
+        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+            <Border Height="5" Background="DodgerBlue"></Border>
+        </DockPanel>
+        
+        <!--Search-->
         <DockPanel DockPanel.Dock="Top" LastChildFill="True">
             <Image DockPanel.Dock="Left" Width="15" Height="15"></Image>
             <TextBox></TextBox>
         </DockPanel>
         
-        <ListView x:Name="modulesList">
+        <ListView x:Name="modulesList" Padding="0,0,0,4">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>

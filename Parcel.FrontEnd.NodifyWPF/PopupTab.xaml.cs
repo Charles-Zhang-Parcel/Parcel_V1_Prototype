@@ -20,6 +20,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             registry.RegisterToolbox("Data Processing", Assembly.GetAssembly(typeof(Parcel.Toolbox.DataProcessing.ToolboxDefinition)));
             registry.RegisterToolbox("File System", Assembly.GetAssembly(typeof(Parcel.Toolbox.FileSystem.ToolboxDefinition)));
             registry.RegisterToolbox("Finance", Assembly.GetAssembly(typeof(Parcel.Toolbox.Finance.ToolboxDefinition)));
+            registry.RegisterToolbox("Generator", Assembly.GetAssembly(typeof(Parcel.Toolbox.Generator.ToolboxDefinition)));
             registry.RegisterToolbox("Special", Assembly.GetAssembly(typeof(Parcel.FrontEnd.NodifyWPF.SpecialNodes.GraphToolboxDefinition)));
             registry.RegisterToolbox("Data Source", Assembly.GetAssembly(typeof(Parcel.Toolbox.DataSource.ToolboxDefinition)));
             registry.RegisterToolbox("Math", Assembly.GetAssembly(typeof(Parcel.Toolbox.Math.ToolboxDefinition)));
@@ -47,18 +48,21 @@ namespace Parcel.FrontEnd.NodifyWPF
                 
                 string formalName = $"{name.Replace(" ", String.Empty)}"; 
                 string toolboxHelperTypeName = $"Parcel.Toolbox.{formalName}.{formalName}Helper";
-                IToolboxEntry toolbox = (IToolboxEntry)Activator.CreateInstance(registry.Toolboxes[name]
-                    .GetTypes().Single(p => typeof(IToolboxEntry).IsAssignableFrom(p)));
-                if (toolbox != null)
+                foreach (Type type in registry.Toolboxes[name]
+                    .GetTypes().Where(p => typeof(IToolboxEntry).IsAssignableFrom(p)))
                 {
-                    foreach (ToolboxNodeExport node in toolbox.ExportNodes)
-                        AddMenuItem(node, topMenu);
-                    foreach (AutomaticNodeDescriptor definition in toolbox.AutomaticNodes)
-                        AddMenuItem(definition == null ? null : new ToolboxNodeExport(definition.NodeName, typeof(AutomaticProcessorNode))
-                        {
-                            Descriptor = definition,
-                            Toolbox = toolbox,
-                        }, topMenu);
+                    IToolboxEntry toolbox = (IToolboxEntry)Activator.CreateInstance(type);
+                    if (toolbox != null)
+                    {
+                        foreach (ToolboxNodeExport node in toolbox.ExportNodes)
+                            AddMenuItem(node, topMenu);
+                        foreach (AutomaticNodeDescriptor definition in toolbox.AutomaticNodes)
+                            AddMenuItem(definition == null ? null : new ToolboxNodeExport(definition.NodeName, typeof(AutomaticProcessorNode))
+                            {
+                                Descriptor = definition,
+                                Toolbox = toolbox,
+                            }, topMenu);
+                    }   
                 }
 
                 modulesList.Items.Add(menu);

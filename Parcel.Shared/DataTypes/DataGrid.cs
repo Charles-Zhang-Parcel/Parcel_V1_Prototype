@@ -166,10 +166,10 @@ namespace Parcel.Shared.DataTypes
         public DataGrid(){}
         public DataGrid(ExpandoObject expando)
         {
-            var dict = (IDictionary<string, object>)expando;
+            IDictionary<string, object> dict = (IDictionary<string, object>)expando;
             foreach (string key in dict.Keys)
             {
-                var col = new DataColumn(key);
+                DataColumn col = new DataColumn(key);
                 col.Add(dict[key]);
                 Columns.Add(col);
             }
@@ -230,6 +230,33 @@ namespace Parcel.Shared.DataTypes
                     Columns[col].Add(row[col]);   
             }
         }
+        #endregion
+
+        #region Array Constructors
+        public DataGrid(IEnumerable<string> values)
+        {
+            DataColumn col = new DataColumn("Array");
+            foreach (string value in values)
+                col.Add(value);
+            Columns.Add(col);
+        }
+
+        public DataGrid(IEnumerable<int> values)
+        {
+            DataColumn col = new DataColumn("Array");
+            foreach (int value in values)
+                col.Add(value);
+            Columns.Add(col);
+        }
+
+        public DataGrid(IEnumerable<double> values)
+        {
+            DataColumn col = new DataColumn("Array");
+            foreach (double value in values)
+                col.Add(value);
+            Columns.Add(col);
+        }
+
         #endregion
 
         #region Members
