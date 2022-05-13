@@ -6,11 +6,11 @@
             xmlns:local="clr-namespace:Parcel.FrontEnd.NodifyWPF"
             mc:Ignorable="d" MouseDown="PreviewWindow_OnMouseDown"
             Title="{Binding Node, Converter={StaticResource ProcessorNodeToNodeFullNameConverter}}" 
-            Height="200" MinWidth="150" SizeToContent="Width"
+            Height="200" MinWidth="420" SizeToContent="Width"
             DataContext="{Binding RelativeSource={RelativeSource self}}">
     <Grid>
         <Grid Visibility="{Binding InfoGridVisibility}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Label Content="{Binding TestLabel}"></Label>    
+            <Label Content="{Binding TestLabel}" FontSize="36"></Label>    
         </Grid>
         
         <DockPanel Visibility="{Binding DataGridVisibility}"

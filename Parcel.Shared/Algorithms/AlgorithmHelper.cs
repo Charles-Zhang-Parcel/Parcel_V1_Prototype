@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Parcel.Shared.Framework;
+using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Algorithms
@@ -28,6 +30,22 @@ namespace Parcel.Shared.Algorithms
                 return outConnections.Any(c => FindSelf(startingNode, c));
             }
             else throw new ArgumentException("Invalid node type");
+        }
+
+        public static void ExecuteGraph(NodesCanvas canvas)
+        {
+            IEnumerable<ProcessorNode> processors = canvas.Nodes
+                .Where(n => n is ProcessorNode node && node.IsPreview == true)
+                .Select(n => n as ProcessorNode);
+            
+            IExecutionGraph graph = new ExecutionQueue();
+            graph.InitializeGraph(processors);
+            graph.ExecuteGraph();
+
+            foreach (BaseNode webNode in canvas.Nodes.Where(n => n is IWebPreviewProcessorNode))
+            {
+                (webNode as ProcessorNode).IsPreview = false;
+            }
         }
     }
 }

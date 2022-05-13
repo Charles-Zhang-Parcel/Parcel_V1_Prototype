@@ -188,6 +188,8 @@ namespace Parcel.Shared.Framework.ViewModels
                 || (FlowType == ConnectorFlowType.Input && Connections.Count == 0);
         public void Disconnect()
             => Node.Graph.Schema.DisconnectConnector(this);
+        public void UpdateConnectorShape()
+            => Shape = DecideShape(DataType);
         #endregion
 
         #region Interface

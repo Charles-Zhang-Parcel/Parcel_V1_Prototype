@@ -82,10 +82,22 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region View Properties
+        private const string TitlePrefix = "Parcel - Workflow Engine";
+        private string _dynamicTitle = TitlePrefix;
+        public string DynamicTitle { get => _dynamicTitle; set => SetField(ref _dynamicTitle, value); }
         private string _webAccessPointUrl;
         public string WebAccessPointUrl { get => _webAccessPointUrl; set => SetField(ref _webAccessPointUrl, value); }
         private string _currentFilePath;
-        public string CurrentFilePath { get => _currentFilePath; set => SetField(ref _currentFilePath, value); }
+        public string CurrentFilePath
+        {
+            get => _currentFilePath;
+            set
+            {
+                SetField(ref _currentFilePath, value);
+                DynamicTitle = $"{(Owner != null ? "<Reference>" : "<Main>")} {System.IO.Path.GetFileNameWithoutExtension(value)}";
+            }
+        }
+
         #endregion
 
         #region Advanced Node Graph Behaviors
@@ -106,6 +118,11 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Events
+        private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenCanvas();
+            e.Handled = true;
+        }
         private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
@@ -135,8 +152,11 @@ namespace Parcel.FrontEnd.NodifyWPF
         private void OpenFileNode_ButtonClick(object sender, RoutedEventArgs e)
         {
             if (!(e.Source is Button {DataContext: OpenFileNode node})) return;
-            
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Title = "Select File to Open",
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 node.Path = openFileDialog.FileName;
@@ -160,12 +180,14 @@ namespace Parcel.FrontEnd.NodifyWPF
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
                     node.Location + new Vector(-200, -60)) as OpenFileNode;
                 Canvas.Schema.TryAddConnection(filePathNode!.MainOutput, node.Input.First());
-                
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                if (node is CSV)
-                    openFileDialog.Filter = "CSV file (*.csv)|*.csv|All types (*.*)|*.*";
-                else if (node is Excel)
-                    openFileDialog.Filter = "Excel file (*.xlsx)|*.xlsx|All types (*.*)|*.*";
+
+                OpenFileDialog openFileDialog = new OpenFileDialog() { Title = "Select File to Open" };
+                openFileDialog.Filter = node switch
+                {
+                    CSV _ => "CSV file (*.csv)|*.csv|All types (*.*)|*.*",
+                    Excel _ => "Excel file (*.xlsx)|*.xlsx|All types (*.*)|*.*",
+                    _ => openFileDialog.Filter
+                };
                 if (openFileDialog.ShowDialog() == true)
                 {
                     filePathNode.Path = openFileDialog.FileName;
@@ -194,12 +216,15 @@ namespace Parcel.FrontEnd.NodifyWPF
                 return;
             }
             
-            // TODO: This is a good chance to auto-save, before anything can crash
+            // This is a good chance to auto-save, before anything can crash
+            if (CurrentFilePath != null || System.IO.File.Exists(CurrentFilePath))
+                Canvas.Save(GetAutoSavePath(CurrentFilePath));
             
             node.IsPreview = true;
-            if (!(node is IWebPreviewProcessorNode))
+            if (!(node is IWebPreviewProcessorNode)) // IWebPreviewProcessorNode opens web preview during execution 
                 SpawnPreviewWindow(node);
-            ExecuteAll();
+            if (!(node is GraphReference reference) || _graphPreviewWindows.ContainsKey(reference) || _previewWindows.ContainsKey(reference))  // For graph reference we really don't want to execute it during preview the first time
+                ExecuteAll();
 
             e.Handled = true;
         }
@@ -237,6 +262,23 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             else
             {
+                if (node is GraphReference graph)
+                {
+                    if (graph.GraphPath == null)
+                        InitializeGraphReferenceNode(graph);
+                    if (graph.GraphPath == null) return;
+                
+                    MainWindow graphPreview = new MainWindow()
+                    {
+                        Owner = this,
+                        CurrentFilePath = graph.GraphPath,
+                    };
+                    graphPreview.Canvas.Open(graph.GraphPath);
+                    _graphPreviewWindows[graph] = graphPreview;
+                    graphPreview.Closed += (sender, args) => _graphPreviewWindows.Remove(graph);
+                    graphPreview.Show();
+                }
+                
                 PreviewWindow preview = new PreviewWindow(this, node);
                 _previewWindows.Add(node, preview);
                 preview.Closed += (sender, args) => _previewWindows.Remove((sender as PreviewWindow)!.Node); 
@@ -247,15 +289,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             if (node is GraphReference graphReference)
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog()
-                {
-                    Filter = _parcelWorkflowFileNameFilter
-                };
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    graphReference.GraphPath = openFileDialog.FileName;
-                    graphReference.Title = System.IO.Path.GetFileNameWithoutExtension(graphReference.GraphPath);
-                }
+                InitializeGraphReferenceNode(graphReference);
                 return;
             }
             
@@ -273,22 +307,24 @@ namespace Parcel.FrontEnd.NodifyWPF
                     Top = cursor.Y
                 }.Show();
         }
+        private static void InitializeGraphReferenceNode(GraphReference graphReference)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Title = "Select Existing Workflow",
+                Filter = _parcelWorkflowFileNameFilter
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                graphReference.GraphPath = openFileDialog.FileName;
+                graphReference.Title = System.IO.Path.GetFileNameWithoutExtension(graphReference.GraphPath);
+            }
+        }
         private void ExecuteAll()
         {
-            var processors = Canvas.Nodes
-                .Where(n => n is ProcessorNode node && node.IsPreview == true)
-                .Select(n => n as ProcessorNode);
-            
-            IExecutionGraph graph = new ExecutionQueue();
-            graph.InitializeGraph(processors);
-            graph.ExecuteGraph();
+            AlgorithmHelper.ExecuteGraph(Canvas);
             foreach (PreviewWindow p in _previewWindows.Values)
                 p.Update();
-
-            foreach (var webNode in Canvas.Nodes.Where(n => n is IWebPreviewProcessorNode))
-            {
-                (webNode as ProcessorNode).IsPreview = false;
-            }
         }
         private void ShowSearchNodePopup()
         {
@@ -316,8 +352,11 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void OpenCanvas()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = _parcelWorkflowFileNameFilter;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select Parcel Workflow File",
+                Filter = _parcelWorkflowFileNameFilter
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 CurrentFilePath = openFileDialog.FileName;
@@ -330,6 +369,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
+                    Title = "Choose Where to Save Current Workflow",
                     Filter = _parcelWorkflowFileNameFilter
                 };
                 if (saveFileDialog.ShowDialog() == true)
@@ -346,11 +386,23 @@ namespace Parcel.FrontEnd.NodifyWPF
             return new Point((this.WindowState == WindowState.Maximized ? rect.Left : this.Left) + cursor.X,
                 (this.WindowState == WindowState.Maximized ? rect.Top : this.Top) + cursor.Y);
         }
+        private string GetAutoSavePath(string currentFilePath)
+        {
+            string fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(currentFilePath);
+            string fileFolder = System.IO.Path.GetDirectoryName(currentFilePath);
+            string extension = System.IO.Path.GetExtension(currentFilePath);
+
+            string dateString = DateTime.Now.ToString("yyyyMMdd HH-mm-ss");
+            string newFilePath = System.IO.Path.Combine(fileFolder!, $"{fileNameWithoutExtension}_{dateString}{extension}");
+            return newFilePath;
+        }
         #endregion
 
         #region State
         private readonly Dictionary<ProcessorNode, PreviewWindow> _previewWindows =
             new Dictionary<ProcessorNode, PreviewWindow>();
+        private readonly Dictionary<GraphReference, MainWindow> _graphPreviewWindows =
+            new Dictionary<GraphReference, MainWindow>();
         #endregion
 
         #region Interop

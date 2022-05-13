@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Dynamic;
-using System.Linq;
-using Parcel.Shared.DataTypes;
-using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
-using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Toolbox.Basic.Nodes
+namespace Parcel.Shared.Framework.Advanced
 {
     public class GraphOutput: GraphInputOutputNodeBase
     {
@@ -16,20 +10,22 @@ namespace Parcel.Toolbox.Basic.Nodes
         public GraphOutput()
         {
             Title = NodeTypeName = "Graph Output";
-            DefinitionNameChanged = definition =>
+            DefinitionChanged = definition =>
             {
                 InputConnector input = Input[Definitions.IndexOf(definition)];
                 input.Title = definition.Name;
+                input.DataType = definition.ObjectType;
+                input.UpdateConnectorShape();
             };
         }
         #endregion
         
         #region Routines
         protected override string NewEntryPrefix { get; } = "Output";
-        protected override Action<GraphInputOutputDefinition> DefinitionNameChanged { get; }
+        protected override Action<GraphInputOutputDefinition> DefinitionChanged { get; }
         protected sealed override void PostAddEntry(GraphInputOutputDefinition definition)
         {
-            Input.Add(new InputConnector(definition.DefaultValue.GetType())
+            Input.Add(new InputConnector(definition.ObjectType)
             {
                 Title = definition.Name
             });
@@ -44,14 +40,14 @@ namespace Parcel.Toolbox.Basic.Nodes
 
         protected override NodeExecutionResult Execute()
         {
-            Dictionary<OutputConnector, object> cache = new Dictionary<OutputConnector, object>();
+            // Fetch value from input and update payload
             for (int index = 0; index < Definitions.Count; index++)
             {
                 GraphInputOutputDefinition definition = Definitions[index];
-                cache[Output[index]] = definition.DefaultValue;
+                definition.Payload = Input[index].FetchInputValue<object>();
             }
 
-            return new NodeExecutionResult(new NodeMessage($"{Definitions.Count} Outputs."), cache);
+            return new NodeExecutionResult(new NodeMessage($"{Definitions.Count} Outputs."), null);
         }
         #endregion
 
@@ -59,7 +55,7 @@ namespace Parcel.Toolbox.Basic.Nodes
         protected override void DeserializeFinalize()
         {
             foreach (GraphInputOutputDefinition definition in Definitions)
-                Input.Add(new InputConnector(definition.GetType())
+                Input.Add(new InputConnector(definition.ObjectType)
                 {
                     Title = definition.Name
                 });

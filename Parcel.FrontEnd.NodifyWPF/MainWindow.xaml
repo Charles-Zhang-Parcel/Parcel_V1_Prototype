@@ -14,21 +14,29 @@
         xmlns:System="clr-namespace:System;assembly=System.Runtime"
         xmlns:dataTypes="clr-namespace:Parcel.Shared.DataTypes;assembly=Parcel.Shared"
         xmlns:framework="clr-namespace:Parcel.Shared.Framework;assembly=Parcel.Shared"
+        xmlns:advanced="clr-namespace:Parcel.Shared.Framework.Advanced;assembly=Parcel.Shared"
         mc:Ignorable="d"
-        Title="Parcel - Workflow Engine" Height="450" Width="800"
+        Title="{Binding DynamicTitle}" Height="450" Width="800"
         Background="#1E1E1E"
         DataContext="{Binding RelativeSource={RelativeSource self}}"
-        PreviewKeyDown="MainWindow_OnPreviewKeyDown">
+        PreviewKeyDown="MainWindow_OnPreviewKeyDown" MouseDoubleClick="MainWindow_OnMouseDoubleClick">
     <Window.Resources>
         <!--Data Converters-->
+        <converters:NodeBackgroundColorConverter x:Key="NodeBackgroundColorConverter" />
         <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         <converters:HiddenVisibilityConverter x:Key="HiddenVisibilityConverter" />
         <converters:NodeMessageTypeToVisibilityConverter x:Key="NodeMessageTypeToVisibilityConverter" />
         <converters:NodeMessageTypeToBrushColorConverter x:Key="NodeMessageTypeToBrushColorConverter" />
-        <ObjectDataProvider x:Key="entriesFromEnum" MethodName="GetValues"
+        <ObjectDataProvider x:Key="DictionaryEntryTypeEntriesFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="dataTypes:DictionaryEntryType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="CacheDataTypeEntriesFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataTypes:CacheDataType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         
@@ -368,7 +376,7 @@
                                 </Style.Triggers>
                             </Style>
                             
-                            <DataTemplate DataType="{x:Type framework:GraphInputOutputNodeBase}">
+                            <DataTemplate DataType="{x:Type advanced:GraphInputOutputNodeBase}">
                                 <DataTemplate.Resources>
                                     <Style TargetType="TextBox">
                                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
@@ -390,12 +398,11 @@
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type framework:GraphInputOutputDefinition}">
+                                            <DataTemplate DataType="{x:Type advanced:GraphInputOutputDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
                                                     <TextBox Text="{Binding Name}"></TextBox>
-                                                    <ComboBox ItemsSource="{Binding Source={StaticResource entriesFromEnum}}"
+                                                    <ComboBox ItemsSource="{Binding Source={StaticResource CacheDataTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
-                                                    <TextBox Text="{Binding DefaultValue}"></TextBox>
                                                 </DockPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -428,7 +435,7 @@
                                             <DataTemplate DataType="{x:Type nodes:DictionaryEntryDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
                                                     <TextBox Text="{Binding Name}"></TextBox>
-                                                    <ComboBox ItemsSource="{Binding Source={StaticResource entriesFromEnum}}"
+                                                    <ComboBox ItemsSource="{Binding Source={StaticResource DictionaryEntryTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
                                                     <TextBox Text="{Binding Value}"></TextBox>
                                                 </DockPanel>
@@ -463,7 +470,7 @@
                                             <DataTemplate DataType="{x:Type nodes:DataTableFieldDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
                                                     <TextBox Text="{Binding Name}"></TextBox>
-                                                    <ComboBox ItemsSource="{Binding Source={StaticResource entriesFromEnum}}"
+                                                    <ComboBox ItemsSource="{Binding Source={StaticResource DictionaryEntryTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
                                                 </DockPanel>
                                             </DataTemplate>

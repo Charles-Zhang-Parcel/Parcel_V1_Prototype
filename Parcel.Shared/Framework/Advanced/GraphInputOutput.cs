@@ -6,7 +6,7 @@ using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
-namespace Parcel.Shared.Framework
+namespace Parcel.Shared.Framework.Advanced
 {
     public class GraphInputOutputDefinition: ObservableObject
     {
@@ -17,18 +17,20 @@ namespace Parcel.Shared.Framework
             get => _name;
             set => SetField(ref _name, value);
         }
-        private DictionaryEntryType _type = DictionaryEntryType.Number;
-        public DictionaryEntryType Type // TODO: This member is not made use of yet; Currently we are just parsing the string according to heuristics
+        private CacheDataType _type = CacheDataType.Number;
+        public CacheDataType Type
         {
             get => _type;
             set => SetField(ref _type, value);
         }
-        private object _defaultValue = 0;
-        public object DefaultValue
-        {
-            get => _defaultValue;
-            set => SetField(ref _defaultValue, value is string s ? DataGrid.Preformatting(s) : value);  // Currently we are not making use of Type property
-        }
+        #endregion
+
+        #region Payload
+        public object Payload { get; set; }
+        #endregion
+
+        #region Accessor
+        public Type ObjectType => CacheTypeHelper.ConvertToObjectType(Type);
         #endregion
     }
 
@@ -49,20 +51,20 @@ namespace Parcel.Shared.Framework
             ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
                 {"Entries", new NodeSerializationRoutine(() => SerializeEntries(),
-                    source => DeserializeEntries((List<Tuple<string, int, object>>)source))}
+                    source => DeserializeEntries((List<Tuple<string, int>>)source))}
             };
         }
         #endregion
 
         #region View Binding/Internal Node Properties
         private ObservableCollection<GraphInputOutputDefinition> _definitions = new ObservableCollection<GraphInputOutputDefinition>();
-        public ObservableCollection<GraphInputOutputDefinition> Definitions { get => _definitions; set => SetField(ref _definitions, value); }
+        public ObservableCollection<GraphInputOutputDefinition> Definitions { get => _definitions; private set => SetField(ref _definitions, value); }
         public IProcessorNodeCommand AddEntryCommand { get; }
         public IProcessorNodeCommand RemoveEntryCommand { get; }
         #endregion
         
         #region Additional View Binding
-        protected abstract Action<GraphInputOutputDefinition> DefinitionNameChanged { get; }
+        protected abstract Action<GraphInputOutputDefinition> DefinitionChanged { get; }
         #endregion
         
         #region Routines
@@ -70,7 +72,7 @@ namespace Parcel.Shared.Framework
         {
             string name = $"{NewEntryPrefix} {Definitions.Count + 1}";
             GraphInputOutputDefinition def = new GraphInputOutputDefinition() {Name = name};
-            def.PropertyChanged += (sender, args) => DefinitionNameChanged(sender as GraphInputOutputDefinition);
+            def.PropertyChanged += (sender, args) => DefinitionChanged(sender as GraphInputOutputDefinition);
             
             Definitions.Add(def);
             PostAddEntry(def);
@@ -92,16 +94,15 @@ namespace Parcel.Shared.Framework
         
         #region Serialization
         protected sealed override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
-        private List<Tuple<string, int, object>> SerializeEntries()
-            => Definitions.Select(def => new Tuple<string, int, object>(def.Name, (int) def.Type, def.DefaultValue))
+        private List<Tuple<string, int>> SerializeEntries()
+            => Definitions.Select(def => new Tuple<string, int>(def.Name, (int) def.Type))
                 .ToList();
-        private void DeserializeEntries(List<Tuple<string, int, object>> source)
+        private void DeserializeEntries(List<Tuple<string, int>> source)
         {
             Definitions.AddRange(source.Select(tuple => new GraphInputOutputDefinition()
             {
                 Name = tuple.Item1,
-                Type = (DictionaryEntryType) tuple.Item2,
-                DefaultValue = tuple.Item3
+                Type = (CacheDataType) tuple.Item2
             }));
             DeserializeFinalize();
         }

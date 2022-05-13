@@ -169,37 +169,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                 {
                     if(Input[i].Connections.Count != 0) continue;
 
-                    Type nodeType;
-                    switch (InputTypes[i])
-                    {
-                        case CacheDataType.Boolean:
-                            nodeType = typeof(BooleanNode);
-                            break;
-                        case CacheDataType.Number:
-                            nodeType = typeof(NumberNode);
-                            break;
-                        case CacheDataType.String:
-                            nodeType = typeof(StringNode);
-                            break;
-                        case CacheDataType.DateTime:
-                            nodeType = typeof(DateTimeNode);
-                            break;
-                        case CacheDataType.ParcelDataGrid:
-                            nodeType = typeof(DataGrid);
-                            break;
-                        case CacheDataType.Generic:
-                        case CacheDataType.BatchJob:
-                        case CacheDataType.ServerConfig:
-                            throw new NotImplementedException();
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    Type nodeType = CacheTypeHelper.ConvertToNodeType(InputTypes[i]);
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, nodeType);
                     auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i]));
                 }
                 return auto.ToArray();
             }
         }
+
         public override bool ShouldHaveConnection => Input.Count > 0 && Input.Any(i => i.Connections.Count == 0);
         #endregion
     }

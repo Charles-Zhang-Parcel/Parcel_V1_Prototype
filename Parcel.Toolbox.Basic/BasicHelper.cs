@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Parcel.Shared.Algorithms;
 using Parcel.Shared.Framework;
+using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
+using Parcel.Shared.Serialization;
 
 namespace Parcel.Toolbox.Basic
 {
@@ -19,7 +22,12 @@ namespace Parcel.Toolbox.Basic
     {
         public static void GraphReference(GraphReferenceParameter parameter)
         {
-            
+            // Instantiate
+            NodesCanvas canvas = new NodesCanvas();
+            canvas.Open(parameter.InputGraph);
+
+            // Execute
+            parameter.OutputParameterSet = new Subgraph().Execute(canvas, parameter.InputParameterSet);
         }
     }
 }
