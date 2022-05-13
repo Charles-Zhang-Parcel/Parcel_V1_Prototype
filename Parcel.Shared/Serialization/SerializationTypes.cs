@@ -41,6 +41,7 @@ namespace Parcel.Shared.Serialization
             if (node != null)
             {
                 node.Deserialize(NodeMembers, canvas);
+                node.PostDeserialization();
                 return node;
             }
 

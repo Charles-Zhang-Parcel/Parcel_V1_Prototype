@@ -28,6 +28,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
 
         #region Interface
+        public override OutputConnector MainOutput => _numberOutput;
         protected override NodeExecutionResult Execute()
         {
             NodeExecutionResult result = base.Execute();

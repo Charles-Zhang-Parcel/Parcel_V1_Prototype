@@ -71,7 +71,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                     instanceMembers[key].Deserialize(data);
             }
         }
-
+        internal virtual void PostDeserialization(){}
+        
         public abstract int GetOutputPinID(OutputConnector connector);
         public abstract int GetInputPinID(InputConnector connector);
         public abstract BaseConnector GetOutputPin(int id);

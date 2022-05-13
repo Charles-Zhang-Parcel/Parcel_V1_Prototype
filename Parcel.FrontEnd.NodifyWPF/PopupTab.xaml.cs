@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using Parcel.FrontEnd.NodifyWPF.SpecialNodes;
 using Parcel.Shared;
 using Parcel.Shared.Framework;
-using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
-using Parcel.Toolbox.Basic;
-using Parcel.Toolbox.ControlFlow;
-using Parcel.Toolbox.DataProcessing;
-using Parcel.Toolbox.FileSystem;
-using Parcel.Toolbox.Finance;
-using ToolboxDefinition = Parcel.Toolbox.Basic.ToolboxDefinition;
 
 namespace Parcel.FrontEnd.NodifyWPF
 {
@@ -34,6 +23,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             registry.RegisterToolbox("Special", Assembly.GetAssembly(typeof(Parcel.FrontEnd.NodifyWPF.SpecialNodes.GraphToolboxDefinition)));
             registry.RegisterToolbox("Data Source", Assembly.GetAssembly(typeof(Parcel.Toolbox.DataSource.ToolboxDefinition)));
             registry.RegisterToolbox("Math", Assembly.GetAssembly(typeof(Parcel.Toolbox.Math.ToolboxDefinition)));
+            registry.RegisterToolbox("Logic", Assembly.GetAssembly(typeof(Parcel.Toolbox.Logic.ToolboxDefinition)));
             registry.RegisterToolbox("Plotting", Assembly.GetAssembly(typeof(Parcel.Toolbox.Plotting.ToolboxDefinition)));
             registry.RegisterToolbox("Graphing", Assembly.GetAssembly(typeof(Parcel.Toolbox.Graphing.ToolboxDefinition)));
             registry.RegisterToolbox("Present", Assembly.GetAssembly(typeof(Parcel.Toolbox.Present.ToolboxDefinition)));
@@ -41,49 +31,55 @@ namespace Parcel.FrontEnd.NodifyWPF
             Owner = owner;
             InitializeComponent();
             
-            foreach (string toolbox in registry.Toolboxes.Keys.OrderBy(k => k))
+            foreach (string name in registry.Toolboxes.Keys.OrderBy(k => k))
             {
-                var menu = new Menu()
+                Menu menu = new Menu()
                 {
                     // Margin = new Thickness(1)
                 };
-                var topMenu = new MenuItem()
+                MenuItem topMenu = new MenuItem
                 {
                     // Padding = new Thickness(4),
-                    Header = toolbox,
+                    Header = name, 
+                    Width = this.Width * 0.8,
                 };
-                topMenu.Width = this.Width * 0.8;
                 menu.Items.Add(topMenu);
                 
-                var formalName = $"{toolbox.Replace(" ", String.Empty)}"; 
-                var toolboxHelperTypeName = $"Parcel.Toolbox.{formalName}.{formalName}Helper";
-                var type = typeof(IToolboxEntry);
-                var definition = (IToolboxEntry)Activator.CreateInstance(registry.Toolboxes[toolbox]
-                    .GetTypes().Single(p => type.IsAssignableFrom(p)));
-                foreach (ToolboxNodeExport node in definition.ExportNodes)
+                string formalName = $"{name.Replace(" ", String.Empty)}"; 
+                string toolboxHelperTypeName = $"Parcel.Toolbox.{formalName}.{formalName}Helper";
+                IToolboxEntry toolbox = (IToolboxEntry)Activator.CreateInstance(registry.Toolboxes[name]
+                    .GetTypes().Single(p => typeof(IToolboxEntry).IsAssignableFrom(p)));
+                if (toolbox != null)
                 {
-                    if (node == null)
-                    {
-                        topMenu.Items.Add(new Separator());
-                    }
-                    else
-                    {
-                        var item = new MenuItem()
+                    foreach (ToolboxNodeExport node in toolbox.ExportNodes)
+                        AddMenuItem(node, topMenu);
+                    foreach (AutomaticNodeDescriptor definition in toolbox.AutomaticNodes)
+                        AddMenuItem(definition == null ? null : new ToolboxNodeExport(definition.NodeName, typeof(AutomaticProcessorNode))
                         {
-                            Header = node.Name
-                        };
-                        item.Tag = node;
-                    
-                        item.Click += NodeMenuItemOnClick;
-                        topMenu.Items.Add(item);   
-                    }
+                            Descriptor = definition,
+                            Toolbox = toolbox,
+                        }, topMenu);
                 }
+
                 modulesList.Items.Add(menu);
             }
         }
-        
+
+        #region Routines
+        private void AddMenuItem(ToolboxNodeExport node, MenuItem topMenu)
+        {
+            if (node == null)
+                topMenu.Items.Add(new Separator());
+            else
+            {
+                MenuItem item = new MenuItem {Header = node.Name, Tag = node};
+                item.Click += NodeMenuItemOnClick;
+                topMenu.Items.Add(item);
+            }
+        }
+        #endregion
+
         #region Interface
-        public ToolboxNodeExport ToolSelection { get; set; }
         public Action<ToolboxNodeExport> ItemSelected { get; set; }
         #endregion
 
@@ -104,8 +100,8 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             if (!(e.Source is MenuItem item) || item.Tag == null) return;
             
-            ToolSelection = item.Tag as ToolboxNodeExport;
-            ItemSelected(ToolSelection);
+            ToolboxNodeExport toolSelection = item.Tag as ToolboxNodeExport;
+            ItemSelected(toolSelection);
             Close();
         }
         #endregion

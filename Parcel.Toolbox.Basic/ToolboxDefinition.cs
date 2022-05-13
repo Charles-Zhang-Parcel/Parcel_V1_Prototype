@@ -2,7 +2,6 @@
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 using Parcel.Shared.Framework.ViewModels.Primitives;
-using Parcel.Toolbox.Basic.AutomaticNodes;
 using Parcel.Toolbox.Basic.Nodes;
 
 namespace Parcel.Toolbox.Basic
@@ -29,11 +28,7 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("Graph Reference", typeof(GraphReference)),
             new ToolboxNodeExport("Sub Graph", typeof(object)),
         };
-        // Test
-        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[]
-        {
-            new AutomaticNodeDescriptor("Add", new []{typeof (double), typeof(double)}, typeof(double), objects => Test.Add((double)objects[0], (double)objects[1]))
-        };
+        public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[] { };
         #endregion
     }
 }

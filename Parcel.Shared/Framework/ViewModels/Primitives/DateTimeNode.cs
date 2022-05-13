@@ -34,6 +34,7 @@ namespace Parcel.Shared.Framework.ViewModels.Primitives
         #endregion
 
         #region Interface
+        public override OutputConnector MainOutput => _dateTimeOutput;
         protected override NodeExecutionResult Execute()
         {
             NodeExecutionResult result = base.Execute();

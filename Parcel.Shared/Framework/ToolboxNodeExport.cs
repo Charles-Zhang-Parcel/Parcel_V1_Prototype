@@ -4,8 +4,15 @@ namespace Parcel.Shared.Framework
 {
     public class ToolboxNodeExport
     {
-        public string Name { get; set; }
-        public Type Type { get; set; }
+        #region Attributes
+        public string Name { get; }
+        public Type Type { get; }
+        #endregion
+
+        #region Additional Payloads
+        public AutomaticNodeDescriptor Descriptor { get; set; }
+        public IToolboxEntry Toolbox { get; set; }
+        #endregion
 
         public ToolboxNodeExport(string name, Type type)
         {

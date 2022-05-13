@@ -218,7 +218,13 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Routine
         private BaseNode SpawnNode(ToolboxNodeExport tool, Point spawnLocation)
         {
-            BaseNode node = (BaseNode) Activator.CreateInstance(tool.Type);
+            if (tool.Descriptor != null && tool.Type != typeof(AutomaticProcessorNode))
+                throw new ArgumentException("Wrong type.");
+            
+            BaseNode node = tool.Descriptor != null 
+                ? new AutomaticProcessorNode(tool.Descriptor, tool.Toolbox)
+                : (BaseNode) Activator.CreateInstance(tool.Type);
+
             node!.Location = spawnLocation;
             Canvas.Nodes.Add(node);
             return node;
