@@ -359,6 +359,13 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void OpenCanvas()
         {
+            // Close previews
+            foreach (KeyValuePair<ProcessorNode,PreviewWindow> previewWindow in _previewWindows)
+                previewWindow.Value.Close();
+            foreach (KeyValuePair<GraphReference,MainWindow> graphPreviewWindow in _graphPreviewWindows)
+                graphPreviewWindow.Value.Close();
+            
+            // Open
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Title = "Select Parcel Workflow File",
