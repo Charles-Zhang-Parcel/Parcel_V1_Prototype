@@ -350,7 +350,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                     SpawnNode(LastTool, spawnLocation);
                 }
             }
-            popupTab.ItemSelected += action;
+            popupTab.ItemSelectedAdditionalCallback += action;
             popupTab.MouseLeave += delegate { popupTab.Close(); };  // ISSUE: This will cause Closed event being called before the OnClick event
             popupTab.Show();
         }

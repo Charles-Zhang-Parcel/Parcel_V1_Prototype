@@ -8,7 +8,8 @@
                   WindowStyle="None" ResizeMode="NoResize"
                   Title="Tools" Height="300" Width="150" SizeToContent="WidthAndHeight"
                   PreviewKeyDown="PopupTab_OnPreviewKeyDown"
-                  MouseDown="PopupTab_OnMouseDown">
+                  MouseDown="PopupTab_OnMouseDown"
+                  DataContext="{Binding RelativeSource={RelativeSource self}}">
     <DockPanel LastChildFill="True">
         <!--Decorator Frame-->
         <DockPanel DockPanel.Dock="Top" LastChildFill="True">
@@ -18,10 +19,27 @@
         <!--Search-->
         <DockPanel DockPanel.Dock="Top" LastChildFill="True">
             <Image DockPanel.Dock="Left" Width="15" Height="15"></Image>
-            <TextBox></TextBox>
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     PreviewKeyDown="SearchTextBox_OnPreviewKeyDown"></TextBox>
         </DockPanel>
         
-        <ListView x:Name="modulesList" Padding="0,0,0,4">
+        <!--Search Results-->
+        <ListView x:Name="SearchResultsListView" ItemsSource="{Binding SearchResults}" Padding="0,0,0,4"
+                  Visibility="{Binding SearchResultsVisibility}" PreviewKeyDown="SearchResultsListView_OnPreviewKeyDown">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding}" MouseDown="SearchResultsListViewLabel_OnMouseDown"></Label>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <!--Default Catagories-->
+        <ListView x:Name="ModulesListView" Padding="0,0,0,4" Visibility="{Binding DefaultCategoriesVisibility}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
