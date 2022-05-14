@@ -17,7 +17,7 @@ namespace Parcel.Toolbox.Logic.Nodes
         };
         private readonly OutputConnector _dataTableOutput = new OutputConnector(typeof(DataGrid))
         {
-            Title = "Combined Table",
+            Title = "Selected Table",
         };
         public Choose()
         {

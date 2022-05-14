@@ -52,7 +52,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), 
                 () => LastTool != null && !(FocusManager.GetFocusedElement(this) is TextBox) && !(Keyboard.FocusedElement is TextBox));
             SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(false), () => true);
-            NewCanvasCommand = new DelegateCommand(() => SaveCanvas(true), () => true);
+            NewCanvasCommand = new DelegateCommand(() => { Canvas.Nodes.Clear(); Canvas.Connections.Clear(); SaveCanvas(true);}, () => true);
             OpenCanvasCommand = new DelegateCommand(OpenCanvas, () => true);
             OpenWebHostCommand = new DelegateCommand(() => WebHostRuntime.Singleton.Open(), () => true);
 
