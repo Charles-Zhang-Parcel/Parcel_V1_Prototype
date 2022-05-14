@@ -254,6 +254,9 @@ namespace Parcel.FrontEnd.NodifyWPF
                 ? new AutomaticProcessorNode(tool.Descriptor, tool.Toolbox)
                 : (BaseNode) Activator.CreateInstance(tool.Type);
 
+            if (node is ProcessorNode processorNode)
+                processorNode.Title = tool.Name;
+
             node!.Location = spawnLocation;
             Canvas.Nodes.Add(node);
             return node;

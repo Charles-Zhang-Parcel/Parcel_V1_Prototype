@@ -88,7 +88,6 @@ namespace Parcel.Shared.Framework.Advanced
         #endregion
         
         #region Processor Interface
-
         protected abstract override NodeExecutionResult Execute();
         #endregion
         

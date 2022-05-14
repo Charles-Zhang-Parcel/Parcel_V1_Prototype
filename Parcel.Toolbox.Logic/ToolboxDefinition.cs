@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
+using Parcel.Toolbox.Logic.Nodes;
 
 namespace Parcel.Toolbox.Logic
 {
@@ -9,7 +10,11 @@ namespace Parcel.Toolbox.Logic
         #region Interface
         public string ToolboxName => "Logic";
         public string ToolboxAssemblyFullName => Assembly.GetExecutingAssembly().FullName;
-        public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[]{};
+        public ToolboxNodeExport[] ExportNodes => new ToolboxNodeExport[]
+        {
+            // Functional
+            new ToolboxNodeExport("Choose", typeof(Choose)),
+        };
         public AutomaticNodeDescriptor[] AutomaticNodes => new AutomaticNodeDescriptor[]
         {
             // Numerical

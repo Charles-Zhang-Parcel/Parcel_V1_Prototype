@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Parcel.Shared.DataTypes;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
@@ -106,7 +107,24 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 
         #region Auto Connect Interface
         public virtual bool ShouldHaveConnection => Input.Count != 0 && Input.First().Connections.Count == 0;
-        public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes { get; } = null; // Not available
+
+        public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
+        {
+            get
+            {
+                List<Tuple<ToolboxNodeExport, Vector, InputConnector>> auto =
+                    new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
+                for (int i = 0; i < Input.Count; i++)
+                {
+                    if(Input[i].Connections.Count != 0 || Input[i].DataType == typeof(DataGrid)) continue;
+
+                    ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, CacheTypeHelper.ConvertToNodeType(Input[i].DataType));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-180, -20 + (i - 1) * 50), Input[i]));
+                }
+                return auto.ToArray();
+            }
+        }
+
         #endregion
 
         #region Serialization

@@ -32,6 +32,8 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Column Subtract", typeof(object)),
             new ToolboxNodeExport("Column Multiply", typeof(object)),
             new ToolboxNodeExport("Column Divide", typeof(object)),
+            null, // Divisor Line // Basic Operations
+            new ToolboxNodeExport("Sum", typeof(Sum)),
             null, // Divisor line // Matrix Operations
             new ToolboxNodeExport("Matrix Multiply", typeof(MatrixMultiply)), // Dynamic connector sequence, With option to transpose
             new ToolboxNodeExport("Matrix Scaling", typeof(object)), // Multiplication by a constant

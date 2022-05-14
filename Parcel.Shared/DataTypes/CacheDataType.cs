@@ -78,5 +78,18 @@ namespace Parcel.Shared.DataTypes
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public static Type ConvertToNodeType(Type dataType)
+        {
+            if (dataType == typeof(double))
+                return typeof(NumberNode);
+            else if (dataType == typeof(string))
+                return typeof(StringNode);
+            else if (dataType == typeof(bool))
+                return typeof(BooleanNode);
+            else if (dataType == typeof(DateTime))
+                return typeof(DateTimeNode);
+            throw new ArgumentException("Advanced data type not supported.");
+        }
     }
 }
