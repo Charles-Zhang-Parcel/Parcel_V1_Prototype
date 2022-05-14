@@ -22,6 +22,20 @@ namespace Parcel.Toolbox.Math.Nodes
         };
         public Add()
         {
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            {
+                {
+                    nameof(_number1Input),
+                    new NodeSerializationRoutine(() => _number1Input.DefaultDataStorage,
+                        o => _number1Input.DefaultDataStorage = o)
+                },
+                {
+                    nameof(_number2Input),
+                    new NodeSerializationRoutine(() => _number2Input.DefaultDataStorage,
+                        o => _number2Input.DefaultDataStorage = o)
+                },
+            };
+            
             Title = NodeTypeName = "Add";
             Input.Add(_number1Input);
             Input.Add(_number2Input);
@@ -49,8 +63,7 @@ namespace Parcel.Toolbox.Math.Nodes
         #endregion
         
         #region Serialization
-        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
-            null;
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
         protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
         #endregion
     }
