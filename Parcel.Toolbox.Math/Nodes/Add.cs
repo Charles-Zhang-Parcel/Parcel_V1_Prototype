@@ -8,11 +8,11 @@ namespace Parcel.Toolbox.Math.Nodes
     public class Add: ProcessorNode
     {
         #region Node Interface
-        private readonly InputConnector _number1Input = new InputConnector(typeof(double))
+        private readonly InputConnector _number1Input = new PrimitiveNumberInputConnector()
         {
             Title = "Number 1",
         };
-        private readonly InputConnector _number2Input = new InputConnector(typeof(double))
+        private readonly InputConnector _number2Input = new PrimitiveNumberInputConnector()
         {
             Title = "Number 2",
         };

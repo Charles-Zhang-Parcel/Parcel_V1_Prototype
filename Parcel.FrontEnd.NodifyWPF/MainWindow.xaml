@@ -255,6 +255,36 @@
                             </nodify:NodeInput.HeaderTemplate>
                         </nodify:NodeInput>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:PrimitiveStringInputConnector}">
+                        <nodify:NodeInput>
+                            <nodify:NodeInput.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type viewModels:PrimitiveStringInputConnector}">
+                                    <StackPanel Orientation="Horizontal" DataContext="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:NodeInput},Mode=FindAncestor}}">
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="0 0 5 0" />
+                                        <TextBox Text="{Binding Value}"
+                                                  Visibility="{Binding IsConnected, Converter={converters:BooleanToVisibilityConverter Negate=True}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </nodify:NodeInput.HeaderTemplate>
+                        </nodify:NodeInput>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:PrimitiveNumberInputConnector}">
+                        <nodify:NodeInput>
+                            <nodify:NodeInput.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type viewModels:PrimitiveNumberInputConnector}">
+                                    <StackPanel Orientation="Horizontal" DataContext="{Binding Path=DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type nodify:NodeInput},Mode=FindAncestor}}">
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="0 0 5 0" />
+                                        <TextBox Text="{Binding Value}"
+                                                 Visibility="{Binding IsConnected, Converter={converters:BooleanToVisibilityConverter Negate=True}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </nodify:NodeInput.HeaderTemplate>
+                        </nodify:NodeInput>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type viewModels:BaseConnector}">
                         <nodify:NodeInput/>
                     </DataTemplate>
@@ -329,6 +359,18 @@
                             Command="{Binding OpenWebHostCommand}" />
             </nodify:NodifyEditor.InputBindings>
             <nodify:NodifyEditor.Resources>
+                <!--Custom Styling-->
+                <Style TargetType="{x:Type TextBox}"
+                       BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Setter Property="Background" Value="#333337" />
+                    <Setter Property="BorderBrush" Value="#3F3F3F" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Padding" Value="2 1" />
+                    <Setter Property="Margin" Value="1"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+                
                 <!--Node Type Data Templates-->
                 <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                     <nodify:Node Header="{Binding Title}"

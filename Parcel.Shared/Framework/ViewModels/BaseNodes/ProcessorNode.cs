@@ -106,8 +106,9 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Auto Connect Interface
-        public virtual bool ShouldHaveConnection => Input.Count != 0 && Input.First().Connections.Count == 0;
-
+        private bool IsPrimitiveInput(InputConnector connector)
+            => connector is PrimitiveInputConnector;
+        public virtual bool ShouldHaveConnection => Input.Count != 0 && Input.Any(i => !IsPrimitiveInput(i) && i.Connections.Count == 0);
         public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
         {
             get

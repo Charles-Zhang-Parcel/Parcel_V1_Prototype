@@ -7,23 +7,35 @@ using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
-    public class PrimitiveBooleanInputConnector : PrimitiveInputConnector
+    public sealed class PrimitiveBooleanInputConnector : PrimitiveInputConnector
     {
         public PrimitiveBooleanInputConnector() : base(typeof(bool))
         {
             Value = false;
         }
+
+        public override object Value 
+        {  
+            get => _defaultDataStorage;
+            set => SetField(ref _defaultDataStorage, value is string s ? bool.Parse(s) : value); 
+        }
     }
     
-    public class PrimitiveDateTimeInputConnector : PrimitiveInputConnector
+    public sealed class PrimitiveDateTimeInputConnector : PrimitiveInputConnector
     {
         public PrimitiveDateTimeInputConnector() : base(typeof(DateTime))
         {
             Value = DateTime.Now.Date;
         }
+        
+        public override object Value 
+        {  
+            get => _defaultDataStorage;
+            set => SetField(ref _defaultDataStorage, value is string s ? DateTime.Parse(s) : value); 
+        }
     }
     
-    public class PrimitiveStringInputConnector : PrimitiveInputConnector
+    public sealed class PrimitiveStringInputConnector : PrimitiveInputConnector
     {
         public PrimitiveStringInputConnector() : base(typeof(string))
         {
@@ -31,23 +43,29 @@ namespace Parcel.Shared.Framework.ViewModels
         }
     }
     
-    public class PrimitiveNumberInputConnector : PrimitiveInputConnector
+    public sealed class PrimitiveNumberInputConnector : PrimitiveInputConnector
     {
         public PrimitiveNumberInputConnector() : base(typeof(double))
         {
             Value = 0;
         }
+        
+        public override object Value 
+        {  
+            get => _defaultDataStorage;
+            set => SetField(ref _defaultDataStorage, value is string s ? double.Parse(s) : value); 
+        }
     }
     
-    public class PrimitiveInputConnector : InputConnector
+    public abstract class PrimitiveInputConnector : InputConnector
     {
-        public object Value
+        public virtual object Value
         {
             get => _defaultDataStorage;
             set => SetField(ref _defaultDataStorage, value);
         }
-        
-        public PrimitiveInputConnector(Type dataType) : base(dataType)
+
+        protected PrimitiveInputConnector(Type dataType) : base(dataType)
         {
         }
     }
