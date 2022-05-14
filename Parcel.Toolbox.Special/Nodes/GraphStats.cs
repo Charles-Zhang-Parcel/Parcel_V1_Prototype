@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
-using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
-using Parcel.Toolbox.Finance;
 
-namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
+namespace Parcel.Toolbox.Special.Nodes
 {
     /// <summary>
     /// The property panel of this can have special referencing to Graph-level setting

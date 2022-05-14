@@ -21,7 +21,9 @@ namespace Parcel.Toolbox.Basic
             new ToolboxNodeExport("String", typeof(StringNode)),
             new ToolboxNodeExport("Boolean", typeof(BooleanNode)),
             new ToolboxNodeExport("DateTime", typeof(DateTimeNode)),
+            new ToolboxNodeExport("Text", typeof(object)),
             new ToolboxNodeExport("File", typeof(OpenFileNode)),
+            new ToolboxNodeExport("Save File", typeof(object)),
             // new ToolboxNodeExport("Array", typeof(object)), // Generic array representation of all above types, CANNOT have mixed types
             null, // Divisor line // Graph Modularization
             new ToolboxNodeExport("Graph Input", typeof(GraphInput)),

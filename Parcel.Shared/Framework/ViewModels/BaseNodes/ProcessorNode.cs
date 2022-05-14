@@ -138,6 +138,11 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                 .ToDictionary(d => d.Key, d => d.Value);
         private Dictionary<string, NodeSerializationRoutine> BaseProcessorMemberSerialization { get; }
         protected abstract Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        /// <remarks>
+        /// It's not possible/not wise to generalize this further - because (specialized) nodes can have internal states that change when adding/removing dynamic
+        /// inputs; As such both the number of inputs (and potentially outputs) and the default storage value associated with them are responsibilities of
+        /// those derived ProcessorNodes. 
+        /// </remarks>
         protected abstract NodeSerializationRoutine InputConnectorsSerialization { get; }
         public override int GetOutputPinID(OutputConnector connector) => Output.IndexOf(connector);
         public override int GetInputPinID(InputConnector connector) => Input.IndexOf(connector);

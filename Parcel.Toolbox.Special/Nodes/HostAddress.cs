@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
+﻿using System.Collections.Generic;
 using Parcel.Shared;
-using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
-using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
-using Parcel.Toolbox.Finance;
 
-namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
+namespace Parcel.Toolbox.Special.Nodes
 {
     public class HostAddress: ProcessorNode
     {
