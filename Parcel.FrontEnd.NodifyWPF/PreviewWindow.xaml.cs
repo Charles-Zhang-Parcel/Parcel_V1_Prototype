@@ -22,9 +22,6 @@ namespace Parcel.FrontEnd.NodifyWPF
             Owner = owner;
             Node = processorNode;
 
-            if (processorNode is DataTable)
-                DataGridIsReadOnly = false;
-            
             InitializeComponent();
 
             GeneratePreviewForOutput();
@@ -65,12 +62,6 @@ namespace Parcel.FrontEnd.NodifyWPF
             get => _dataGridData;
             set => SetField(ref _dataGridData, value);
         }
-        private bool _dataGridIsReadOnly = true;
-        public bool DataGridIsReadOnly
-        {
-            get => _dataGridIsReadOnly;
-            set => SetField(ref _dataGridIsReadOnly, value);   
-        }
         #endregion
 
         #region Interface
@@ -110,7 +101,9 @@ namespace Parcel.FrontEnd.NodifyWPF
                         InfoGridVisibility = Visibility.Visible;
                         break;
                     case CacheDataType.ParcelDataGrid:
-                        PopulateDataGrid(cache.DataObject as DataGrid);
+                        PopulateDataGrid(WpfDataGrid, cache.DataObject as DataGrid, out string[] dataGridDataColumns, out List<dynamic> dataGridData);
+                        DataGridDataColumns = dataGridDataColumns;
+                        DataGridData = dataGridData;
                         DataGridVisibility = Visibility.Visible;
                         break;
                     default:
@@ -121,7 +114,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
         }
 
-        private void PopulateDataGrid(DataGrid dataGrid)
+        public static void PopulateDataGrid(System.Windows.Controls.DataGrid wpfDataGrid, DataGrid dataGrid,
+            out string[] dataGridDataColumns, out List<dynamic> dataGridData)
         {
             string FormatHeader(string header, string typeName)
             {
@@ -133,22 +127,22 @@ namespace Parcel.FrontEnd.NodifyWPF
 
             // Collect column names
             IEnumerable<IDictionary<string, object>> rows = objects.OfType<IDictionary<string, object>>();
-            DataGridDataColumns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            dataGridDataColumns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
             // Generate columns
-            WpfDataGrid.Columns.Clear();
-            foreach (string columnName in DataGridDataColumns)
+            wpfDataGrid.Columns.Clear();
+            foreach (string columnName in dataGridDataColumns)
             {
                 // now set up a column and binding for each property
-                var column = new DataGridTextColumn 
+                DataGridTextColumn column = new DataGridTextColumn 
                 {
                     Header = FormatHeader(columnName, columnInfo[columnName].TypeName),
                     Binding = new Binding(columnName)
                 };
-                WpfDataGrid.Columns.Add(column);
+                wpfDataGrid.Columns.Add(column);
             }
 
             // Bind object
-            DataGridData = objects;
+            dataGridData = objects;
         }
 
         #endregion

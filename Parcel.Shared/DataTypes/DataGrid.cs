@@ -41,6 +41,12 @@ namespace Parcel.Shared.DataTypes
                 _columnType = null; // throw new ArgumentException("Wrong type.");
             _columnData.Add(value);
         }
+
+        public void RemoveAt(int index)
+        {
+            if (_columnData.Count == 0) return;
+            _columnData.RemoveAt(index);
+        }
         public int Length => _columnData.Count;
         public dynamic this[int index] => _columnData[index];
         public IEnumerable<T> GetDataAs<T>() => _columnData.OfType<T>();

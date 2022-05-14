@@ -39,6 +39,13 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }; 
         public DataTable()
         {
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            {
+                {nameof(Data), new NodeSerializationRoutine(() => Data, o => Data = o as object[][])},
+                {"Entries", new NodeSerializationRoutine(SerializeEntries,
+                    source => DeserializeEntries((List<Tuple<string, int>>)source))}
+            };
+            
             Definitions = new ObservableCollection<DataTableFieldDefinition>()
             {
                 new DataTableFieldDefinition() {Name = "New Field"}
@@ -55,56 +62,86 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             Output.Add(_dataTableOutput);
         }
         #endregion
+
+        #region Native Data
+        public object[][] Data { get; set; }
+        #endregion
         
         #region View Binding/Internal Node Properties
-        private DataGrid _dataGrid = new DataGrid();
-        public DataGrid DataGrid
-        {
-            get => _dataGrid;
-            set => SetField(ref _dataGrid, value);
-        }
         private ObservableCollection<DataTableFieldDefinition> _definitions;
-        public ObservableCollection<DataTableFieldDefinition> Definitions { get => _definitions; set => SetField(ref _definitions, value); }
+        public ObservableCollection<DataTableFieldDefinition> Definitions { get => _definitions;
+            private set => SetField(ref _definitions, value); }
         public IProcessorNodeCommand AddEntryCommand { get; }
         public IProcessorNodeCommand RemoveEntryCommand { get; }
         #endregion
 
-        #region Processor Interface
-        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
-
-        protected override NodeExecutionResult Execute()
+        #region Methods
+        public DataGrid InitializeDataGrid()
         {
+            // Create table
+            DataGrid dataGrid = new DataGrid();
             // Update columns
             foreach (DataTableFieldDefinition definition in Definitions)
             {
-                if (_dataGrid.Columns.All(c => c.Header != definition.Name))
+                DataColumn column = dataGrid.AddColumn(definition.Name);
+                // Add data to fix column type
+                switch (definition.Type)
                 {
-                    var column = _dataGrid.AddColumn(definition.Name);
-                    switch (definition.Type)
-                    {
-                        case DictionaryEntryType.Number:
-                            column.Add((double)0.0);
-                            break;
-                        case DictionaryEntryType.String:
-                            column.Add(string.Empty);
-                            break;
-                        case DictionaryEntryType.Boolean:
-                            column.Add(false);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    case DictionaryEntryType.Number:
+                        column.Add(0.0);
+                        break;
+                    case DictionaryEntryType.String:
+                        column.Add(string.Empty);
+                        break;
+                    case DictionaryEntryType.Boolean:
+                        column.Add(false);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
+                if (Data != null)
+                    column.RemoveAt(0); // Remove redundant data
             }
-            foreach (string extra in _dataGrid.Columns
-                .Select(c=>c.Header)
-                .Except(Definitions.Select(d => d.Name)).ToArray())
-                _dataGrid.RemoveColumn(extra);
-
-            return new NodeExecutionResult(new NodeMessage($"{_dataGrid.ColumnCount} Fields."), new Dictionary<OutputConnector, object>()
+            
+            // Populate data
+            if (Data != null)
             {
-                {_dataTableOutput, _dataGrid}
+                for (int col = 0; col < Math.Min(Data.Length, Definitions.Count); col++)
+                for (int row = 0; row < Data[col].Length; row++)
+                    dataGrid.Columns[col].Add(Data[col][row]);
+            }
+            
+            return dataGrid;
+        }
+        #endregion
+
+        #region Processor Interface
+        protected override NodeExecutionResult Execute()
+        {
+            DataGrid dataGrid = InitializeDataGrid();
+            return new NodeExecutionResult(new NodeMessage($"{dataGrid.ColumnCount} Fields."), new Dictionary<OutputConnector, object>()
+            {
+                {_dataTableOutput, dataGrid}
             });
+        }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        #endregion
+
+        #region Routines
+        private List<Tuple<string, int>> SerializeEntries()
+            => Definitions.Select(def => new Tuple<string, int>(def.Name, (int) def.Type))
+                .ToList();
+        private void DeserializeEntries(IEnumerable<Tuple<string, int>> source)
+        {
+            Definitions.Clear();
+            Definitions.AddRange(source.Select(tuple => new DataTableFieldDefinition()
+            {
+                Name = tuple.Item1,
+                Type = (DictionaryEntryType) tuple.Item2
+            }));
         }
         #endregion
     }

@@ -17,7 +17,7 @@
                    LastChildFill="True"
                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid>
-                <DataGrid x:Name="WpfDataGrid" IsReadOnly="{Binding DataGridIsReadOnly}"
+                <DataGrid x:Name="WpfDataGrid" IsReadOnly="True"
                           AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"
                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                 <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="4,0,0,2" Background="LightGray">

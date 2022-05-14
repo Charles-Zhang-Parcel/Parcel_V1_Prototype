@@ -37,20 +37,20 @@ namespace Parcel.Shared.Framework.Advanced
     public abstract class GraphInputOutputNodeBase : ProcessorNode
     {
         #region Node Interface
-        public GraphInputOutputNodeBase()
+        protected GraphInputOutputNodeBase()
         {
             Title = NodeTypeName = "Graph Input Output";
 
             AddEntryCommand = new RequeryCommand(
-                () => AddEntry(),
+                AddEntry,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => RemoveEntry(),
+                RemoveEntry,
                 () => Definitions.Count > 1);
             
             ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                {"Entries", new NodeSerializationRoutine(() => SerializeEntries(),
+                {"Entries", new NodeSerializationRoutine(SerializeEntries,
                     source => DeserializeEntries((List<Tuple<string, int>>)source))}
             };
         }
@@ -94,6 +94,10 @@ namespace Parcel.Shared.Framework.Advanced
         
         #region Serialization
         protected sealed override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected abstract void DeserializeFinalize();
+        #endregion
+
+        #region Routiens
         private List<Tuple<string, int>> SerializeEntries()
             => Definitions.Select(def => new Tuple<string, int>(def.Name, (int) def.Type))
                 .ToList();
@@ -106,7 +110,6 @@ namespace Parcel.Shared.Framework.Advanced
             }));
             DeserializeFinalize();
         }
-        protected abstract void DeserializeFinalize();
         #endregion
     }
 }

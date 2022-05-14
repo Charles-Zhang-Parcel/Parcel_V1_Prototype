@@ -397,7 +397,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             string extension = System.IO.Path.GetExtension(currentFilePath);
 
             string dateString = DateTime.Now.ToString("yyyyMMdd HH-mm-ss");
-            string newFilePath = System.IO.Path.Combine(fileFolder!, $"{fileNameWithoutExtension}_{dateString}{extension}");
+            string newFilePath = System.IO.Path.Combine(fileFolder!, $"{fileNameWithoutExtension}_autosave_{dateString}{extension}");
             return newFilePath;
         }
         #endregion

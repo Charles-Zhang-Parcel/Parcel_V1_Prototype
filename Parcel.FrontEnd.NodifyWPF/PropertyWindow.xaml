@@ -9,24 +9,25 @@
                   mc:Ignorable="d"
                   Title="{Binding Processor, Converter={StaticResource ProcessorNodeToNodeFullNameConverter}}" 
                   MinHeight="100" MinWidth="300" SizeToContent="WidthAndHeight"
-                  DataContext="{Binding RelativeSource={RelativeSource self}}">
+                  DataContext="{Binding RelativeSource={RelativeSource self}}"
+                  Closed="PropertyWindow_OnClosed">
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="DarkSlateGray"></Setter>
         </Style>
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <StackPanel DataContext="{Binding Processor}" DockPanel.Dock="Top">
+        <StackPanel DockPanel.Dock="Top" DataContext="{Binding Processor}">
             <DockPanel LastChildFill="True">
                 <Label Content="Name"></Label>
                 <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </DockPanel>
-        </StackPanel>
-        <TextBox Text="{Binding PrimitivePreviewText, Mode=OneWay}" 
-                 Padding="2" BorderThickness="0" IsReadOnly="True"
-                 TextWrapping="Wrap" Background="Transparent"/>
-        <StackPanel>
             <Separator HorizontalAlignment="Stretch"/>
+        </StackPanel>
+        <TextBox DockPanel.Dock="Top" Text="{Binding PrimitivePreviewText, Mode=OneWay}" 
+                 Padding="2" BorderThickness="0" IsReadOnly="True" Visibility="{Binding PrimitivePreviewTextBlockVisibility, Mode=OneWay}"
+                 TextWrapping="Wrap" Background="Transparent"/>
+        <StackPanel DockPanel.Dock="Bottom">
             <ItemsControl ItemsSource="{Binding Editors}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -48,5 +49,20 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
+        <DockPanel Visibility="{Binding DataGridVisibility}"
+                   LastChildFill="True"
+                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid>
+                <DataGrid x:Name="WpfDataGrid" IsReadOnly="False"
+                          AutoGenerateColumns="False" ItemsSource="{Binding DataGridData}"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="4,0,0,2" Background="LightGray">
+                    <TextBlock Text="{Binding DataGridDataColumns.Length}"/>
+                    <TextBlock Text=" Columns; "/>
+                    <TextBlock Text="{Binding DataGridData.Count}"/>
+                    <TextBlock Text=" Data Rows"/>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
     </DockPanel>
 </local:BaseWindow>
