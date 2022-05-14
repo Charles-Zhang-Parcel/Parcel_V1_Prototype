@@ -45,6 +45,12 @@ namespace Parcel.Toolbox.Graphing.Nodes
             set => SetField(ref _chartTitle, value);
         }
         #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        #endregion
 
         #region Property Editor Interface
         public List<PropertyEditor> Editors { get; }

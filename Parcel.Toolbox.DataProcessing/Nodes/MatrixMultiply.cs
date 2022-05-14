@@ -18,6 +18,14 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public MatrixMultiply()
         {
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
+            
             Title = NodeTypeName = "Matrix Multiply";
             Output.Add(_dataTableOutput);
 
@@ -46,6 +54,12 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region View Binding/Internal Node Properties
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
 
         #region Processor Interface

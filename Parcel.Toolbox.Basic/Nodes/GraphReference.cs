@@ -91,7 +91,6 @@ namespace Parcel.Toolbox.Basic.Nodes
         #endregion
 
         #region Private States
-
         private List<GraphInputOutputDefinition> InputDefinitions { get; set; } =
             new List<GraphInputOutputDefinition>();
         private List<GraphInputOutputDefinition> OutputDefinitions { get; set; } =
@@ -126,8 +125,9 @@ namespace Parcel.Toolbox.Basic.Nodes
 
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
         #endregion
-        
+
         #region Auto Generate Interface
         public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
         {

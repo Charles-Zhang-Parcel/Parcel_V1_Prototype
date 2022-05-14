@@ -56,5 +56,11 @@ namespace Parcel.Toolbox.Present.Nodes
             return new NodeExecutionResult(new NodeMessage($"Presenting..."), null);
         }
         #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        #endregion
     }
 }

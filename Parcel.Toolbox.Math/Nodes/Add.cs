@@ -47,5 +47,11 @@ namespace Parcel.Toolbox.Math.Nodes
             });
         }
         #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        #endregion
     }
 }

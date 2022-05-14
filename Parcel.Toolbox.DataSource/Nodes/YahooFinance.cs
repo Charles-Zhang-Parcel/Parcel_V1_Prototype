@@ -61,6 +61,12 @@ namespace Parcel.Toolbox.DataSource.Nodes
             });
         }
         #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        #endregion
 
         #region Auto Connect Interface
         public override bool ShouldHaveConnection => _symbolInput.Connections.Count == 0;

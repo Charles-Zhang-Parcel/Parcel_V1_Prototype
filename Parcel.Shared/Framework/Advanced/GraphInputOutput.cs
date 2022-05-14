@@ -48,11 +48,9 @@ namespace Parcel.Shared.Framework.Advanced
                 RemoveEntry,
                 () => Definitions.Count > 1);
             
-            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
-            {
-                {"Entries", new NodeSerializationRoutine(SerializeEntries,
-                    source => DeserializeEntries((List<Tuple<string, int>>)source))}
-            };
+            // Serialization
+            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+                source => DeserializeEntries((List<Tuple<string, int>>)source)); 
         }
         #endregion
 
@@ -92,8 +90,11 @@ namespace Parcel.Shared.Framework.Advanced
         #endregion
         
         #region Serialization
-        protected sealed override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+
+        protected sealed override Dictionary<string, NodeSerializationRoutine>
+            ProcessorNodeMemberSerialization { get; } = null;
         protected abstract void DeserializeFinalize();
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
 
         #region Routiens

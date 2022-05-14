@@ -29,8 +29,15 @@ namespace Parcel.Toolbox.Math.Nodes
         {
             ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
-                {nameof(Value), new NodeSerializationRoutine( () => _value, value => _value = value as string)}
+                {nameof(Value), new NodeSerializationRoutine( () => _value, value => _value = value as string)},
             };
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
             
             Title = NodeTypeName = "Expression";
             Output.Add(_resultOutput);
@@ -85,6 +92,8 @@ namespace Parcel.Toolbox.Math.Nodes
         
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+
         #endregion
         
         #region Auto Connect Interface

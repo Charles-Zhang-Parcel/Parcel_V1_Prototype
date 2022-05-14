@@ -23,6 +23,15 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Exclude()
         {
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                Input.Add(_dataTableInput);                
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
+            
             Title = NodeTypeName = "Exclude";
             Input.Add(_dataTableInput);
             Output.Add(_dataTableOutput);
@@ -68,6 +77,12 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 {_dataTableOutput, parameter.OutputTable}
             });
         }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
         
         #region Auto Generate Interface

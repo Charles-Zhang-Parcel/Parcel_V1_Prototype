@@ -130,11 +130,14 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #region Serialization
         public sealed override Dictionary<string, NodeSerializationRoutine> MemberSerialization =>
             BaseProcessorMemberSerialization.Select(d => d)
-                .Union(ProcessorNodeMemberSerialization.Select(d => d))
+                .Union(ProcessorNodeMemberSerialization?.Select(d => d) ?? new KeyValuePair<string, NodeSerializationRoutine>[]{})
+                .Union( InputConnectorsSerialization != null 
+                    ? new [] {new KeyValuePair<string, NodeSerializationRoutine>(nameof(InputConnectorsSerialization), InputConnectorsSerialization)}
+                    : new KeyValuePair<string, NodeSerializationRoutine>[]{})
                 .ToDictionary(d => d.Key, d => d.Value);
         private Dictionary<string, NodeSerializationRoutine> BaseProcessorMemberSerialization { get; }
-        protected virtual Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
-            new Dictionary<string, NodeSerializationRoutine>();
+        protected abstract Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected abstract NodeSerializationRoutine InputConnectorsSerialization { get; }
         public override int GetOutputPinID(OutputConnector connector) => Output.IndexOf(connector);
         public override int GetInputPinID(InputConnector connector) => Input.IndexOf(connector);
         public override BaseConnector GetOutputPin(int id) => Output[id];

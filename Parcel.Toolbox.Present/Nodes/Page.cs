@@ -63,5 +63,11 @@ namespace Parcel.Toolbox.Present.Nodes
                 new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), _pageNameInput),
             };
         #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        #endregion
     }
 }

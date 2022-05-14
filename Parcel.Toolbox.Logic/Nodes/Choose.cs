@@ -21,17 +21,14 @@ namespace Parcel.Toolbox.Logic.Nodes
         };
         public Choose()
         {
-            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
             {
-                {"OptionsCount", new NodeSerializationRoutine(() => Input.Count - 1, o =>
-                {
-                    Input.Clear();
-                    Input.Add(_selectorInput);
-                    int count = (int) o;
-                    for (int i = 0; i < count; i++)
-                        AddInputs();
-                })},
-            };
+                Input.Clear();
+                Input.Add(_selectorInput);
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
             
             Title = NodeTypeName = "Choose";
             Input.Add(_selectorInput);
@@ -78,7 +75,11 @@ namespace Parcel.Toolbox.Logic.Nodes
         #endregion
         
         #region Serialization
-        protected sealed override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+
+        protected sealed override Dictionary<string, NodeSerializationRoutine>
+            ProcessorNodeMemberSerialization { get; } = null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+
         #endregion
     }
 }

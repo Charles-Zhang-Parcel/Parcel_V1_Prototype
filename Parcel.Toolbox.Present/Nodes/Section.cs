@@ -24,6 +24,14 @@ namespace Parcel.Toolbox.Present.Nodes
         };
         public Section()
         {
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
+            
             Title = NodeTypeName = "Section";
             Input.Add(_sectionNameInput);
             Output.Add(_serverConfigOutput);
@@ -77,6 +85,12 @@ namespace Parcel.Toolbox.Present.Nodes
             {
                 new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), _sectionNameInput),
             };
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
     }
 }

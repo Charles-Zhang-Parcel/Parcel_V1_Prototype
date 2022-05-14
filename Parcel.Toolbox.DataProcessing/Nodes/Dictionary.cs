@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Dynamic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
@@ -43,6 +45,10 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }; 
         public Dictionary()
         {
+            // Serialization
+            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+                source => DeserializeEntries((List<Tuple<string, int, object>>)source));
+            
             Title = NodeTypeName = "Dictionary";
             Output.Add(_dataTableOutput);
 
@@ -83,6 +89,28 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 {_dataTableOutput, dataGrid}
             });
         }
+        #endregion
+        
+        #region Routines
+        private List<Tuple<string, int, object>> SerializeEntries()
+            => Definitions.Select(def => new Tuple<string, int, object>(def.Name, (int) def.Type, def.Value))
+                .ToList();
+        private void DeserializeEntries(IEnumerable<Tuple<string, int, object>> source)
+        {
+            Definitions.Clear();
+            Definitions.AddRange(source.Select(tuple => new DictionaryEntryDefinition()
+            {
+                Name = tuple.Item1,
+                Type = (DictionaryEntryType) tuple.Item2,
+                Value = tuple.Item3
+            }));
+        }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
     }
 }

@@ -40,6 +40,20 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public SQL()
         {
+            // Serialization
+            ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
+            {
+                {nameof(Code), new NodeSerializationRoutine(() => Code, o => Code = o as string)}
+            };
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
+            
+            
             Editors = new List<PropertyEditor>()
             {
                 new PropertyEditor("Code", PropertyEditorType.Code, () => _code, o => Code = (string)o)
@@ -49,13 +63,13 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             Output.Add(_dataTableOutput);
             Output.Add(_serverConfigOutput);
             
-            Input.Add(new DatabaseTableInputConnector("Table 1"));
+            AddInputs();
             
             AddEntryCommand = new RequeryCommand(
-                () => Input.Add(new DatabaseTableInputConnector($"Table {Input.Count + 1}")),
+                AddInputs,
                 () => true);
             RemoveEntryCommand = new RequeryCommand(
-                () => Input.RemoveAt(Input.Count - 1),
+                RemoveInputs,
                 () => Input.Count > 1);
         }
         #endregion
@@ -72,10 +86,20 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Property Editor Interface
         public List<PropertyEditor> Editors { get; }
         #endregion
+
+        #region Routines
+        private void AddInputs()
+        {
+            Input.Add(new DatabaseTableInputConnector($"Table {Input.Count + 1}"));
+        }
+        private void RemoveInputs()
+        {
+            Input.RemoveAt(Input.Count - 1);
+        }
+        #endregion
         
         #region Processor Interface
-        public override OutputConnector MainOutput => _dataTableOutput as OutputConnector;
-
+        public override OutputConnector MainOutput => _dataTableOutput;
         protected override NodeExecutionResult Execute()
         {
             SQLParameter parameter = new SQLParameter()
@@ -97,6 +121,11 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 {_dataTableOutput, parameter.OutputTable}
             });
         }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
     }
 }

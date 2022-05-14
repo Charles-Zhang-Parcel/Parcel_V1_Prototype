@@ -39,12 +39,13 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         }; 
         public DataTable()
         {
+            // Serialization
             ProcessorNodeMemberSerialization = new Dictionary<string, NodeSerializationRoutine>()
             {
                 {nameof(Data), new NodeSerializationRoutine(() => Data, o => Data = o as object[][])},
-                {"Entries", new NodeSerializationRoutine(SerializeEntries,
-                    source => DeserializeEntries((List<Tuple<string, int>>)source))}
             };
+            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+                source => DeserializeEntries((List<Tuple<string, int>>)source));
             
             Definitions = new ObservableCollection<DataTableFieldDefinition>()
             {
@@ -128,6 +129,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
 
         #region Routines

@@ -16,9 +16,17 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Append()
         {
+            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            {
+                Input.Clear();
+                int count = (int) o;
+                for (int i = 0; i < count; i++)
+                    AddInputs();
+            });
+            
             Title = NodeTypeName = "Append";
             Output.Add(_dataTableOutput);
-            
+
             AddInputs();
             
             AddEntryCommand = new RequeryCommand(
@@ -59,6 +67,12 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 {_dataTableOutput, parameter.OutputTable}
             });
         }
+        #endregion
+        
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
         #endregion
     }
 }

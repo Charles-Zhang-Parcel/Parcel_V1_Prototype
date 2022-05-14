@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using Parcel.Shared;
@@ -38,6 +39,12 @@ namespace Parcel.FrontEnd.NodifyWPF.SpecialNodes
         {
             return new NodeExecutionResult(new NodeMessage(string.Empty), null);
         }
+        #endregion
+
+        #region Serialization
+        protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
+            null;
+        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
         #endregion
     }
 }
