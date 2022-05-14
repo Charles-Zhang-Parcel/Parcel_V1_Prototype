@@ -24,19 +24,24 @@
         </DockPanel>
         
         <!--Search Results-->
-        <ListView x:Name="SearchResultsListView" ItemsSource="{Binding SearchResults}" Padding="0,0,0,4"
+        <ListBox x:Name="SearchResultsListView" ItemsSource="{Binding SearchResults}" Padding="0,0,0,4"
                   Visibility="{Binding SearchResultsVisibility}" PreviewKeyDown="SearchResultsListView_OnPreviewKeyDown">
-            <ListView.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem"> 
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter> 
+                </Style> 
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Label Content="{Binding}" MouseDown="SearchResultsListViewLabel_OnMouseDown"></Label>
+                    <Label Content="{Binding}" MouseDown="SearchResultsListViewLabel_OnMouseDown" Background="Transparent"></Label>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
         
         <!--Default Catagories-->
         <ListView x:Name="ModulesListView" Padding="0,0,0,4" Visibility="{Binding DefaultCategoriesVisibility}">
