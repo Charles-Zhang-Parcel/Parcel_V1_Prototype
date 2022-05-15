@@ -264,6 +264,7 @@
                                         <TextBlock Text="{Binding Title}"
                                                    Margin="0 0 5 0" />
                                         <TextBox Text="{Binding Value}"
+                                                 PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                                   Visibility="{Binding IsConnected, Converter={converters:BooleanToVisibilityConverter Negate=True}}" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -279,6 +280,7 @@
                                         <TextBlock Text="{Binding Title}"
                                                    Margin="0 0 5 0" />
                                         <TextBox Text="{Binding Value}"
+                                                 PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                                  Visibility="{Binding IsConnected, Converter={converters:BooleanToVisibilityConverter Negate=True}}" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -298,7 +300,8 @@
                                                    Margin="0 0 5 0" />
                                         <TextBlock Text="Name"
                                                    Margin="0 0 5 0" />
-                                        <TextBox Text="{Binding TableName}"></TextBox>
+                                        <TextBox Text="{Binding TableName}"
+                                                 PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"></TextBox>
                                     </StackPanel>
                                 </DataTemplate>
                             </nodify:NodeInput.HeaderTemplate>
@@ -382,14 +385,14 @@
                         <nodify:Node.Resources>
                             <DataTemplate DataType="{x:Type baseNodes:PrimitiveNode}">
                                 <TextBox Text="{Binding Value}"
-                                         MinWidth="100"
+                                         MinWidth="100" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                          Margin="5 0 0 0" />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type primitives:OpenFileNode}">
                                 <DockPanel LastChildFill="True">
                                     <Button DockPanel.Dock="Right" Content="Open" Click="OpenFileNode_ButtonClick"></Button>
                                     <TextBox Text="{Binding Path}"
-                                             MinWidth="100" MaxWidth="180"
+                                             MinWidth="100" MaxWidth="180" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                              Margin="5 0 0 0" />
                                 </DockPanel>
                             </DataTemplate>
@@ -421,14 +424,14 @@
                             
                             <DataTemplate DataType="{x:Type nodes1:Calculator}">
                                 <TextBox Text="{Binding Value}"
-                                         MinWidth="100"
+                                         MinWidth="100" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                          Margin="5 0 0 0" />
                             </DataTemplate>
                             
                             <DataTemplate DataType="{x:Type nodes1:Expression}">
                                 <DockPanel LastChildFill="True">
                                     <TextBox Text="{Binding Value}"
-                                             MinWidth="100"
+                                             MinWidth="100" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
                                              Margin="5 0 0 0" DockPanel.Dock="Top" />
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                                         <Button Style="{StaticResource IconButton}"
@@ -471,7 +474,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate DataType="{x:Type advanced:GraphInputOutputDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
-                                                    <TextBox Text="{Binding Name}"></TextBox>
+                                                    <TextBox Text="{Binding Name}" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"></TextBox>
                                                     <ComboBox ItemsSource="{Binding Source={StaticResource CacheDataTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
                                                 </DockPanel>
@@ -505,10 +508,10 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate DataType="{x:Type nodes:DictionaryEntryDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
-                                                    <TextBox Text="{Binding Name}"></TextBox>
+                                                    <TextBox Text="{Binding Name}" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"></TextBox>
                                                     <ComboBox ItemsSource="{Binding Source={StaticResource DictionaryEntryTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
-                                                    <TextBox Text="{Binding Value}"></TextBox>
+                                                    <TextBox Text="{Binding Value}" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"></TextBox>
                                                 </DockPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -540,7 +543,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate DataType="{x:Type nodes:DataTableFieldDefinition}">
                                                 <DockPanel LastChildFill="True" MinWidth="150">
-                                                    <TextBox Text="{Binding Name}"></TextBox>
+                                                    <TextBox Text="{Binding Name}" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"></TextBox>
                                                     <ComboBox ItemsSource="{Binding Source={StaticResource DictionaryEntryTypeEntriesFromEnum}}"
                                                               SelectedItem="{Binding Type}"></ComboBox>
                                                 </DockPanel>

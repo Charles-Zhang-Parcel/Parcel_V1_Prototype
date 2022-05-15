@@ -179,7 +179,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             if (!(sender is Button {Tag: ProcessorNode node} button)) return;
 
             // Auto-Generate
-            if ((node is CSV || node is Excel) && node.ShouldHaveConnection)
+            if ((node is CSV || node is Excel) && node.ShouldHaveAutoConnection)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
                     node.Location + new Vector(-200, -60)) as OpenFileNode;
@@ -197,7 +197,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                     filePathNode.Path = openFileDialog.FileName;
                 }
             }
-            else if (node is IAutoConnect autoConnect && autoConnect.ShouldHaveConnection && node.AutoGenerateNodes != null)
+            else if (node is IAutoConnect autoConnect && autoConnect.ShouldHaveAutoConnection && node.AutoGenerateNodes != null)
             {
                 foreach (Tuple<ToolboxNodeExport,Vector,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
                 {
@@ -211,7 +211,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             
             // Connection check
-            if (node.ShouldHaveConnection && node.AutoGenerateNodes == null)
+            if (node.ShouldHaveAutoConnection && node.AutoGenerateNodes == null)
             {
                 node.Message.Content = "Require Connection.";
                 node.Message.Type = NodeMessageType.Error;
@@ -241,6 +241,24 @@ namespace Parcel.FrontEnd.NodifyWPF
         {
             WebHostRuntime.Singleton.Open((sender as Label).Content as string);
             e.Handled = true;
+        }
+        private void PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride(object sender, KeyEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            // Deal with shortcut key commands issues
+            if (e.Key == Key.C || e.Key == Key.R)
+            {
+                box!.RaiseEvent(new TextCompositionEventArgs(InputManager.Current.PrimaryKeyboardDevice, 
+                    new TextComposition(InputManager.Current, box, 
+                        (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) 
+                        ? e.Key.ToString()
+                        : e.Key.ToString().ToLower())) 
+                {
+                    RoutedEvent = TextCompositionManager.TextInputEvent 
+                });
+                
+                e.Handled = true;
+            }
         }
         #endregion
 

@@ -101,17 +101,16 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                     new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
                 for (int i = 1; i < Input.Count; i+=2)
                 {
-                    if(Input[i].Connections.Count != 0) continue;
+                    if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
-                    var toolDef = new ToolboxNodeExport("Input Name", typeof(StringNode));
+                    ToolboxNodeExport toolDef = new ToolboxNodeExport("Input Name", typeof(StringNode));
                     auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i] as InputConnector));
                     auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, (i - 1) * 50), Input[i+1] as InputConnector));
                 }
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => _dataTableInput.Connections.Count == 0 ||
-                                                     (Input.Count > 1 && Input.Skip(1).Any(i => i.Connections.Count == 0));
+        public override bool ShouldHaveAutoConnection => Input.Count > 1 && Input.Skip(1).Any(InputConnectorShouldRequireAutoConnection);
         #endregion
     }
 }

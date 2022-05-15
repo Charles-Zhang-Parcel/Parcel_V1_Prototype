@@ -148,7 +148,7 @@ namespace Parcel.Toolbox.Basic.Nodes
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => Input.Count > 0 && Input.Any(i => i.Connections.Count == 0);
+        public override bool ShouldHaveAutoConnection => Input.Count > 0 && Input.Any(i => i.Connections.Count == 0);
         #endregion
     }
 }

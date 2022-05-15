@@ -92,7 +92,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                     new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
                 for (int i = 1; i < Input.Count; i++)
                 {
-                    if(Input[i].Connections.Count != 0) continue;
+                    if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     ToolboxNodeExport toolDef = new ToolboxNodeExport("Column Name", typeof(StringNode));
                     auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i] as InputConnector));
@@ -100,8 +100,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => _dataTableInput.Connections.Count == 0 ||
-                                                     (Input.Count > 1 && Input.Skip(1).Any(i => i.Connections.Count == 0));
+        public override bool ShouldHaveAutoConnection => Input.Count > 1 && Input.Skip(1).Any(InputConnectorShouldRequireAutoConnection);
         #endregion
     }
 }

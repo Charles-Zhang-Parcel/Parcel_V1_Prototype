@@ -24,7 +24,7 @@ namespace Parcel.Toolbox.Generator
                 objects => 
                 {
                     Random random = new Random();
-                    return new DataGrid(Enumerable.Range(0, (int)(double)objects[1]).Select(_ => random.NextDouble()));
+                    return new DataGrid(Enumerable.Range(0, (int)(double)objects[0]).Select(_ => random.NextDouble()));
                 }),
             new AutomaticNodeDescriptor("Random Integers in Range", new [] {CacheDataType.Number, CacheDataType.Number, CacheDataType.Number}, CacheDataType.ParcelDataGrid, 
                 objects => 

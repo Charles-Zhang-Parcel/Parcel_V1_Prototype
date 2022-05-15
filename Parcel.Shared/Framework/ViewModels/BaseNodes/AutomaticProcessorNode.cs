@@ -168,7 +168,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                     new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
                 for (int i = 0; i < Input.Count; i++)
                 {
-                    if(!ShouldConnectorRequireConnectionNode(Input[i])) continue;
+                    if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     Type nodeType = CacheTypeHelper.ConvertToNodeType(InputTypes[i]);
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, nodeType);
@@ -178,7 +178,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             }
         }
 
-        public override bool ShouldHaveConnection => Input.Count > 0 && Input.Any(ShouldConnectorRequireConnectionNode);
+        public override bool ShouldHaveAutoConnection => Input.Count > 0 && Input.Any(InputConnectorShouldRequireAutoConnection);
         #endregion
     }
 }

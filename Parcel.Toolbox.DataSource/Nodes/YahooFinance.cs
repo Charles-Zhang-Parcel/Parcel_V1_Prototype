@@ -69,7 +69,7 @@ namespace Parcel.Toolbox.DataSource.Nodes
         #endregion
 
         #region Auto Connect Interface
-        public override bool ShouldHaveConnection => _symbolInput.Connections.Count == 0;
+        public override bool ShouldHaveAutoConnection => _symbolInput.Connections.Count == 0;
         public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
             new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
             {

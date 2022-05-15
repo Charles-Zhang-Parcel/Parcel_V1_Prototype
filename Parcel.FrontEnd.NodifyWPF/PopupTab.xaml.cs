@@ -190,9 +190,9 @@ namespace Parcel.FrontEnd.NodifyWPF
         }
         private void SearchResultsListView_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && SearchResults.Count != 0)
             {
-                ItemSelectedAdditionalCallback(_searchResultLookup[(string)((ListView) sender).SelectedItem]);
+                ItemSelectedAdditionalCallback(_searchResultLookup[(string)((ListBox) sender).SelectedItem ?? SearchResults.First()]);
                 Close();
                 e.Handled = true;
             }

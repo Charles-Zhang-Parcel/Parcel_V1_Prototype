@@ -106,12 +106,12 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Auto Connect Interface
-        protected bool ShouldConnectorRequireConnectionNode(InputConnector connector)
+        protected bool InputConnectorShouldRequireAutoConnection(InputConnector connector)
             => !IsPrimitiveInput(connector) && connector.Connections.Count == 0 &&
                connector.DataType != typeof(DataGrid); // Technically DataGrid connectors do need connection but we can't auto generate for it
         private bool IsPrimitiveInput(InputConnector connector)
             => connector is PrimitiveInputConnector;
-        public virtual bool ShouldHaveConnection => Input.Count != 0 && Input.Any(ShouldConnectorRequireConnectionNode);
+        public virtual bool ShouldHaveAutoConnection => Input.Count != 0 && Input.Any(InputConnectorShouldRequireAutoConnection);
         public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
         {
             get
@@ -120,7 +120,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
                     new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
                 for (int i = 0; i < Input.Count; i++)
                 {
-                    if(!ShouldConnectorRequireConnectionNode(Input[i])) continue;
+                    if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, CacheTypeHelper.ConvertToNodeType(Input[i].DataType));
                     auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-180, -20 + (i - 1) * 50), Input[i]));

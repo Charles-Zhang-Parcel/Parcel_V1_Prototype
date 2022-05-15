@@ -102,7 +102,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
                 return auto.ToArray();
             }
         }
-        public override bool ShouldHaveConnection => _dataTableInput.Connections.Count == 0 ||
+        public override bool ShouldHaveAutoConnection => _dataTableInput.Connections.Count == 0 ||
                                                      (Input.Count > 1 && Input.Skip(1).Any(i => i.Connections.Count == 0));
         #endregion
     }

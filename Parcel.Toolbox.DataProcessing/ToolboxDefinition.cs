@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Excel", typeof(Excel)),
             null, // Divisor line // High Level Operations
             new ToolboxNodeExport("Append", typeof(Append)),
-            new ToolboxNodeExport("Extract", typeof(Extract)),
+            new ToolboxNodeExport("Extract (Reorder)", typeof(Extract)),  // Can be used to extract or reorder fields
             new ToolboxNodeExport("Exclude", typeof(Exclude)),   // Opposite of Extract
             new ToolboxNodeExport("Rename", typeof(Rename)),
             new ToolboxNodeExport("Validate", typeof(object)),  // Validate and reinterpret formats
@@ -26,9 +26,12 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Sort", typeof(Sort)),
             new ToolboxNodeExport("Take", typeof(Take)),    // Similar to "trim"
             null, // Divisor line // Excel-Like Common
-            new ToolboxNodeExport("Pivot (Aggregate)", typeof(object)), // Like Excel Pivot Table
+            // new ToolboxNodeExport("Reorder", typeof(object)), // Swap Fields; Same functionality as "Extract" 
+            new ToolboxNodeExport("Aggregate (Pivot Table)", typeof(object)), // Like Excel Pivot Table; Output string as report; Pivot should be fully automatic
             new ToolboxNodeExport("Filter", typeof(object)),    // Like LINQ Where; Constrain by columns, return rows; Inputs can have multiple rows and columns for multi-search
             new ToolboxNodeExport("Search", typeof(object)),    // Like JQuery DataTable Search - will query through all fields, not constrained by columns
+            new ToolboxNodeExport("Find Distinct Names", typeof(object)), // Find distinct of all non-numerical columns, Outout string as report
+            new ToolboxNodeExport("Join", typeof(object)), // Automatic join two tables
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
             new ToolboxNodeExport("Convert", typeof(object)), // Act on individual columns

@@ -6,7 +6,7 @@ namespace Parcel.Shared.Framework
 {
     public interface IAutoConnect
     {
-        public bool ShouldHaveConnection { get; }
+        public bool ShouldHaveAutoConnection { get; }
         public Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes { get; }
     }
 }
