@@ -37,6 +37,7 @@
       <ProjectReference Include="..\Parcel.Toolbox.Present\Parcel.Toolbox.Present.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.Scripting\Parcel.Toolbox.Scripting.csproj" />
       <ProjectReference Include="..\Parcel.Toolbox.Special\Parcel.Toolbox.Special.csproj" />
+      <ProjectReference Include="..\Parcel.Toolbox.String\Parcel.Toolbox.String.csproj" />
     </ItemGroup>
 
     <ItemGroup>

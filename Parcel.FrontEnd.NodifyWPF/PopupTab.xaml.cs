@@ -29,6 +29,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             _registry.RegisterToolbox("Plotting", Assembly.GetAssembly(typeof(Parcel.Toolbox.Plotting.ToolboxDefinition)));
             _registry.RegisterToolbox("Present", Assembly.GetAssembly(typeof(Parcel.Toolbox.Present.ToolboxDefinition)));
             _registry.RegisterToolbox("Scripting", Assembly.GetAssembly(typeof(Parcel.Toolbox.Scripting.ToolboxDefinition)));
+            _registry.RegisterToolbox("String", Assembly.GetAssembly(typeof(Parcel.Toolbox.String.ToolboxDefinition)));
             _registry.RegisterToolbox("Special", Assembly.GetAssembly(typeof(Parcel.Toolbox.Special.ToolboxDefinition)));
 
             Owner = owner;

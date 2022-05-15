@@ -25,6 +25,10 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Reinterpret", typeof(object)),  // Validate and reinterpret formats
             new ToolboxNodeExport("Sort", typeof(Sort)),
             new ToolboxNodeExport("Take", typeof(Take)),    // Similar to "trim"
+            null, // Divisor line // Excel-Like Common
+            new ToolboxNodeExport("Pivot (Aggregate)", typeof(object)), // Like Excel Pivot Table
+            new ToolboxNodeExport("Filter", typeof(object)),    // Like LINQ Where; Constrain by columns, return rows; Inputs can have multiple rows and columns for multi-search
+            new ToolboxNodeExport("Search", typeof(object)),    // Like JQuery DataTable Search - will query through all fields, not constrained by columns
             null, // Divisor line // Low Level Operations
             new ToolboxNodeExport("Add", typeof(object)),   // Add cell, add row, add column
             new ToolboxNodeExport("Convert", typeof(object)), // Act on individual columns
