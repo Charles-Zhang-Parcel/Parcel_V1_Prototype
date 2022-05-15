@@ -18,7 +18,7 @@ namespace Parcel.Toolbox.DataProcessing
             new ToolboxNodeExport("Excel", typeof(Excel)),
             null, // Divisor line // High Level Operations
             new ToolboxNodeExport("Append", typeof(Append)),
-            new ToolboxNodeExport("Extract (Reorder)", typeof(Extract)),  // Can be used to extract or reorder fields
+            new ToolboxNodeExport("Extract & Reorder", typeof(Extract)),  // Can be used to extract or reorder fields
             new ToolboxNodeExport("Exclude", typeof(Exclude)),   // Opposite of Extract
             new ToolboxNodeExport("Rename", typeof(Rename)),
             new ToolboxNodeExport("Validate", typeof(object)),  // Validate and reinterpret formats
