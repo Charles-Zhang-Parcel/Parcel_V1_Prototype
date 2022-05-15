@@ -55,5 +55,9 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             null;
         protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
         #endregion
+
+        #region Auto-Connect
+        public override bool ShouldHaveAutoConnection => _pathInput.IsConnected == false && string.IsNullOrWhiteSpace(((string) _pathInput.DefaultDataStorage));
+        #endregion
     }
 }

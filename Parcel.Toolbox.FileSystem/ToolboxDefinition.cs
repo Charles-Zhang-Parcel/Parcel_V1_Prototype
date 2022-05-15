@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Parcel.Shared.Framework;
+using Parcel.Toolbox.FileSystem.Nodes;
 
 namespace Parcel.Toolbox.FileSystem
 {
@@ -16,7 +17,7 @@ namespace Parcel.Toolbox.FileSystem
             new ToolboxNodeExport("Read File as Dictionary", typeof(object)),
             // new ToolboxNodeExport("Read File as List", typeof(object)), // Don't do this, it's just one step away the same as CSV
             null, // Divisor line // Save File
-            new ToolboxNodeExport("Write CSV", typeof(object)),
+            new ToolboxNodeExport("Write CSV", typeof(WriteCSV)), // Preview should open file location
             new ToolboxNodeExport("Write String", typeof(object)),
             new ToolboxNodeExport("Write Number", typeof(object)),
         };

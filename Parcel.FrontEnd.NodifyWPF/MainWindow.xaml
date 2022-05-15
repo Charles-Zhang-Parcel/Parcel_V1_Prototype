@@ -398,6 +398,14 @@
                                              Margin="5 0 0 0" />
                                 </DockPanel>
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type primitives:SaveFileNode}">
+                                <DockPanel LastChildFill="True">
+                                    <Button DockPanel.Dock="Right" Content="Open" Click="SaveFileNode_ButtonClick"></Button>
+                                    <TextBox Text="{Binding Path}"
+                                             MinWidth="100" MaxWidth="180" PreviewKeyDown="PrimitiveInputTextbox_OnPreviewKeyDown_CommandOverride"
+                                             Margin="5 0 0 0" />
+                                </DockPanel>
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type primitives:BooleanNode}">
                                 <CheckBox IsChecked="{Binding Value}"
                                           MinWidth="100"

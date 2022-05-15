@@ -33,6 +33,7 @@ using Parcel.Toolbox.ControlFlow;
 using Parcel.Toolbox.DataProcessing;
 using Parcel.Toolbox.DataProcessing.Nodes;
 using Parcel.Toolbox.FileSystem;
+using Parcel.Toolbox.FileSystem.Nodes;
 using Parcel.Toolbox.Finance;
 using BaseConnection = Parcel.Shared.Framework.ViewModels.BaseConnection;
 using PendingConnection = Parcel.Shared.Framework.ViewModels.PendingConnection;
@@ -167,6 +168,20 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             e.Handled = true;
         }
+        private void SaveFileNode_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!(e.Source is Button {DataContext: SaveFileNode node})) return;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                Title = "Select Path to Save",
+            };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                node.Path = saveFileDialog.FileName;
+            }
+            e.Handled = true;
+        }
         private void ProcessorNodeTogglePreviewButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is Border {Tag: ProcessorNode node} border)) return;
@@ -197,6 +212,19 @@ namespace Parcel.FrontEnd.NodifyWPF
                     filePathNode.Path = openFileDialog.FileName;
                 }
             }
+            if (node is WriteCSV && node.ShouldHaveAutoConnection)
+            {
+                SaveFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Path", typeof(SaveFileNode)),
+                    node.Location + new Vector(-200, -60)) as SaveFileNode;
+                Canvas.Schema.TryAddConnection(filePathNode!.MainOutput, node.Input.First());
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog() { Title = "Select Path to Save" };
+                saveFileDialog.Filter = "CSV file (*.csv)|*.csv|All types (*.*)|*.*";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    filePathNode.Path = saveFileDialog.FileName;
+                }
+            }
             else if (node is IAutoConnect autoConnect && autoConnect.ShouldHaveAutoConnection && node.AutoGenerateNodes != null)
             {
                 foreach (Tuple<ToolboxNodeExport,Vector,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
@@ -225,10 +253,10 @@ namespace Parcel.FrontEnd.NodifyWPF
                 Canvas.Save(GetAutoSavePath(CurrentFilePath));
             
             node.IsPreview = true;
-            if (!(node is IWebPreviewProcessorNode)) // IWebPreviewProcessorNode opens web preview during execution 
-                SpawnPreviewWindow(node);
             if (!(node is GraphReference reference) || _graphPreviewWindows.ContainsKey(reference) || _previewWindows.ContainsKey(reference))  // For graph reference we really don't want to execute it during preview the first time
                 ExecuteAll();
+            if (!(node is IWebPreviewProcessorNode)) // IWebPreviewProcessorNode opens web preview during execution 
+                SpawnPreviewWindow(node);
 
             e.Handled = true;
         }
@@ -287,6 +315,8 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             else
             {
+                if (node.MainOutput == null || !node.HasCache(node.MainOutput)) return;
+                
                 if (node is GraphReference graph)
                 {
                     if (graph.GraphPath == null)
