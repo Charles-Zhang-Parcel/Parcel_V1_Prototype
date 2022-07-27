@@ -3,6 +3,7 @@ using Parcel.Shared.Framework.ViewModels.Primitives;
 
 namespace Parcel.Shared.DataTypes
 {
+    [Serializable]
     /// <summary>
     /// This will be a subset of <seealso cref="CacheDataType"/>
     /// </summary>
@@ -12,7 +13,8 @@ namespace Parcel.Shared.DataTypes
         String,
         Boolean
     }
-    
+
+    [Serializable]
     public enum CacheDataType
     {
         // Primitive
