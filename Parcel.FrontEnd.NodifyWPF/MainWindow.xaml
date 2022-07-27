@@ -175,7 +175,7 @@
             <Setter Property="Header"
                     Value="{Binding Title}" />
             <Setter Property="Anchor"
-                    Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    Value="{Binding Anchor, Mode=OneWayToSource, Converter={StaticResource NodeLocationConverter}}" />
             <Setter Property="IsConnected"
                     Value="{Binding IsConnected}" />
             <Setter Property="Visibility"
@@ -203,7 +203,7 @@
             <Setter Property="Header"
                     Value="{Binding Title}" />
             <Setter Property="Anchor"
-                    Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    Value="{Binding Anchor, Mode=OneWayToSource, Converter={StaticResource NodeLocationConverter}}" />
             <Setter Property="IsConnected"
                     Value="{Binding IsConnected}" />
             <Setter Property="Visibility"
@@ -722,8 +722,8 @@
             </nodify:NodifyEditor.Resources>
             <nodify:NodifyEditor.ConnectionTemplate>
                 <DataTemplate DataType="{x:Type viewModels:BaseConnection}">
-                    <nodify:CircuitConnection Source="{Binding Input.Anchor}"
-                                              Target="{Binding Output.Anchor}" 
+                    <nodify:CircuitConnection Source="{Binding Input.Anchor, Converter={StaticResource NodeLocationConverter}}"
+                                              Target="{Binding Output.Anchor, Converter={StaticResource NodeLocationConverter}}" 
                                               SourceOffset="10 0"
                                               TargetOffset="20 0"
                                               OffsetMode="Circle"
