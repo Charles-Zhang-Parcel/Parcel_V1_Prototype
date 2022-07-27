@@ -3,18 +3,24 @@ using System.Windows.Input;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
+    public interface ICommandManager
+    {
+        public void AddEvent(EventHandler e);
+        public void RemoveEvent(EventHandler e);
+    }
     public class RequeryCommand : IProcessorNodeCommand
     {
+        public static ICommandManager CommandManager;
         private readonly Action _action;
-        private readonly Func<bool>? _condition;
+        private readonly Func<bool> _condition;
 
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            add => CommandManager?.AddEvent(value);
+            remove => CommandManager?.RemoveEvent(value);
         }
 
-        public RequeryCommand(Action action, Func<bool>? executeCondition = default)
+        public RequeryCommand(Action action, Func<bool> executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;
@@ -31,16 +37,17 @@ namespace Parcel.Shared.Framework.ViewModels
 
     public class RequeryCommand<T> : IProcessorNodeCommand
     {
+        public static ICommandManager CommandManager => RequeryCommand.CommandManager;
         private readonly Action<T> _action;
-        private readonly Func<T, bool>? _condition;
+        private readonly Func<T, bool> _condition;
 
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            add => CommandManager?.AddEvent(value);
+            remove => CommandManager?.RemoveEvent(value);
         }
 
-        public RequeryCommand(Action<T> action, Func<T, bool>? executeCondition = default)
+        public RequeryCommand(Action<T> action, Func<T, bool> executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;

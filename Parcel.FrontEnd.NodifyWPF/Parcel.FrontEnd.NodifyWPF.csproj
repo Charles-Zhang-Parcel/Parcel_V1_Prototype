@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
+        <Nullable>disable</Nullable>
 
-        <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
         <StartupObject>Parcel.FrontEnd.NodifyWPF.Program</StartupObject>
     </PropertyGroup>
 
@@ -13,12 +13,6 @@
       <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
       <PackageReference Include="Nodify" Version="1.7.0" />
       <PackageReference Include="YamlDotNet" Version="11.2.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="DataTemplateSelectors" />
-      <Folder Include="PropertyWindows" />
-      <Folder Include="WebInterface" />
     </ItemGroup>
 
     <ItemGroup>
@@ -41,7 +35,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="PreviewWindows\sql.xshd.xml" />
       <EmbeddedResource Include="PreviewWindows\sql.xshd.xml" />
     </ItemGroup>
 

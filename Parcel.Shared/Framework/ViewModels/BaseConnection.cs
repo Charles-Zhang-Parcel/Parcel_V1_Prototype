@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using Parcel.Shared.DataTypes;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
@@ -28,7 +28,7 @@ namespace Parcel.Shared.Framework.ViewModels
         #endregion
 
         #region Interface Methods
-        public void Split(Point point)
+        public void Split(Vector2D point)
             => Graph.Schema.SplitConnection(this, point);
 
         public void Remove()

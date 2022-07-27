@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Serialization;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
@@ -21,8 +21,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
     public abstract class BaseNode : ObservableObject
     {
         #region Public View Properties
-        private Point _location;
-        public Point Location
+        private Vector2D _location;
+        public Vector2D Location
         {
             get => _location;
             set => SetField(ref _location, value);
@@ -61,7 +61,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         {
             // Base members
             this.Graph = canvas;
-            _location = (Point)members[nameof(Location)];
+            _location = (Vector2D)members[nameof(Location)];
             
             // Instance members
             Dictionary<string, NodeSerializationRoutine> instanceMembers = MemberSerialization;

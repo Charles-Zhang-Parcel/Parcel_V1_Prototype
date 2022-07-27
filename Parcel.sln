@@ -1,10 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel", "Parcel\Parcel.csproj", "{D088CF16-859B-45FB-A3A3-199A7AD3C624}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel", "Parcel\Parcel.csproj", "{D088CF16-859B-45FB-A3A3-199A7AD3C624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Shared", "Parcel.Shared\Parcel.Shared.csproj", "{E5D16B50-136C-4090-BF3B-4AE8A153FC60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Shared", "Parcel.Shared\Parcel.Shared.csproj", "{E5D16B50-136C-4090-BF3B-4AE8A153FC60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.FileSystem", "Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj", "{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.FileSystem", "Parcel.Toolbox.FileSystem\Parcel.Toolbox.FileSystem.csproj", "{C19D1A11-88D8-4074-AF90-94DB2C76AEEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolboxes", "Toolboxes", "{B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}"
 EndProject
@@ -12,55 +15,59 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SetupTests", "SetupTests", "{1A641966-8FF6-4B74-AC00-A1FA44F64D64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.SetupTest.Test001", "Parcel.SetupTest.Test001\Parcel.SetupTest.Test001.csproj", "{BE2DCDC8-D616-4EB7-A73B-939B7A32902C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.SetupTest.Test001", "Parcel.SetupTest.Test001\Parcel.SetupTest.Test001.csproj", "{BE2DCDC8-D616-4EB7-A73B-939B7A32902C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Macros", "Parcel.Macros\Parcel.Macros.csproj", "{1A11C367-22D5-4E65-98AF-F18AEF4388F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Macros", "Parcel.Macros\Parcel.Macros.csproj", "{1A11C367-22D5-4E65-98AF-F18AEF4388F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Finance", "Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj", "{E62060EE-7760-448B-9CD4-3074BD62A8E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Finance", "Parcel.Toolbox.Finance\Parcel.Toolbox.Finance.csproj", "{E62060EE-7760-448B-9CD4-3074BD62A8E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Test.CoreTests", "Parcel.Test.CoreTests\Parcel.Test.CoreTests.csproj", "{2091A380-446C-4F4E-B142-ABEB60321687}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Test.CoreTests", "Parcel.Test.CoreTests\Parcel.Test.CoreTests.csproj", "{2091A380-446C-4F4E-B142-ABEB60321687}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prototype", "Prototype", "{2AAC71B0-9EE0-43DE-BEC8-21DAC9AA848B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUI Prototype", "GUI Prototype", "{0E026637-B65B-41EF-9CEF-8B3E115E2D8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.FrontEnd.NodifyWPF", "Parcel.FrontEnd.NodifyWPF\Parcel.FrontEnd.NodifyWPF.csproj", "{BB8F74E6-9367-4F92-81E8-279F2E65A663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.FrontEnd.NodifyWPF", "Parcel.FrontEnd.NodifyWPF\Parcel.FrontEnd.NodifyWPF.csproj", "{BB8F74E6-9367-4F92-81E8-279F2E65A663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.DataProcessing", "Parcel.Toolbox.DataProcessing\Parcel.Toolbox.DataProcessing.csproj", "{B5C164A6-1405-4151-A877-20D401BEF910}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.DataProcessing", "Parcel.Toolbox.DataProcessing\Parcel.Toolbox.DataProcessing.csproj", "{B5C164A6-1405-4151-A877-20D401BEF910}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.ControlFlow", "Parcel.Toolbox.ControlFlow\Parcel.Toolbox.ControlFlow.csproj", "{CE2402BA-DB2B-454E-9A4A-EFF3453E02AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.ControlFlow", "Parcel.Toolbox.ControlFlow\Parcel.Toolbox.ControlFlow.csproj", "{CE2402BA-DB2B-454E-9A4A-EFF3453E02AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Basic", "Parcel.Toolbox.Basic\Parcel.Toolbox.Basic.csproj", "{FE9663D4-EA68-46EA-BA33-A0DBF58C2C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Basic", "Parcel.Toolbox.Basic\Parcel.Toolbox.Basic.csproj", "{FE9663D4-EA68-46EA-BA33-A0DBF58C2C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Python", "Parcel.Python\Parcel.Python.csproj", "{C4BC2E37-AE2B-4A2E-B450-BEFA1700E7AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Python", "Parcel.Python\Parcel.Python.csproj", "{C4BC2E37-AE2B-4A2E-B450-BEFA1700E7AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.SetupTest.PythonTest001", "Parcel.SetupTest.PythonTest001\Parcel.SetupTest.PythonTest001.csproj", "{E1A064F4-8196-42DB-9DA1-8AC27B7F99D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.SetupTest.PythonTest001", "Parcel.SetupTest.PythonTest001\Parcel.SetupTest.PythonTest001.csproj", "{E1A064F4-8196-42DB-9DA1-8AC27B7F99D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParcelInstaller", "ParcelInstaller\ParcelInstaller.csproj", "{DD3B19A7-D308-4A5A-BF86-7AE24A7DE51E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParcelInstaller", "ParcelInstaller\ParcelInstaller.csproj", "{DD3B19A7-D308-4A5A-BF86-7AE24A7DE51E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.DataSource", "Parcel.Toolbox.DataSource\Parcel.Toolbox.DataSource.csproj", "{C2C6541D-1D06-490D-AA7F-D2AE957EC81E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.DataSource", "Parcel.Toolbox.DataSource\Parcel.Toolbox.DataSource.csproj", "{C2C6541D-1D06-490D-AA7F-D2AE957EC81E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.SetupTest.DataSourceTest001", "Parcel.SetupTest.DataSourceTest001\Parcel.SetupTest.DataSourceTest001.csproj", "{061618B5-3EFE-4652-B845-3BD9D676D901}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.SetupTest.DataSourceTest001", "Parcel.SetupTest.DataSourceTest001\Parcel.SetupTest.DataSourceTest001.csproj", "{061618B5-3EFE-4652-B845-3BD9D676D901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Plotting", "Parcel.Toolbox.Plotting\Parcel.Toolbox.Plotting.csproj", "{57B2182B-2A80-437E-B85C-5377663921F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Plotting", "Parcel.Toolbox.Plotting\Parcel.Toolbox.Plotting.csproj", "{57B2182B-2A80-437E-B85C-5377663921F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.WebHost", "Parcel.WebHost\Parcel.WebHost.csproj", "{D62804D4-528C-4A9E-B953-DF6E332146F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.WebHost", "Parcel.WebHost\Parcel.WebHost.csproj", "{D62804D4-528C-4A9E-B953-DF6E332146F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Present", "Parcel.Toolbox.Present\Parcel.Toolbox.Present.csproj", "{659F74BC-7861-4610-BAE1-77FB3E402704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Present", "Parcel.Toolbox.Present\Parcel.Toolbox.Present.csproj", "{659F74BC-7861-4610-BAE1-77FB3E402704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Graphing", "Parcel.Toolbox.Graphing\Parcel.Toolbox.Graphing.csproj", "{C5654D5F-2CA5-4E41-9EE0-F1E0D6CFCDF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Graphing", "Parcel.Toolbox.Graphing\Parcel.Toolbox.Graphing.csproj", "{C5654D5F-2CA5-4E41-9EE0-F1E0D6CFCDF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Math", "Parcel.Toolbox.Math\Parcel.Toolbox.Math.csproj", "{F3B9EBF4-004D-4EE4-A901-762AA28E228C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Math", "Parcel.Toolbox.Math\Parcel.Toolbox.Math.csproj", "{F3B9EBF4-004D-4EE4-A901-762AA28E228C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Logic", "Parcel.Toolbox.Logic\Parcel.Toolbox.Logic.csproj", "{831AB957-9BFD-4D83-9F7C-F895310751E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Logic", "Parcel.Toolbox.Logic\Parcel.Toolbox.Logic.csproj", "{831AB957-9BFD-4D83-9F7C-F895310751E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Generator", "Parcel.Toolbox.Generator\Parcel.Toolbox.Generator.csproj", "{5CDF0B81-C327-43B3-ACEF-2EB0F8715B5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Generator", "Parcel.Toolbox.Generator\Parcel.Toolbox.Generator.csproj", "{5CDF0B81-C327-43B3-ACEF-2EB0F8715B5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Scripting", "Parcel.Toolbox.Scripting\Parcel.Toolbox.Scripting.csproj", "{6FD3BC3D-64D6-4A05-AC21-9DBDAF131746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Scripting", "Parcel.Toolbox.Scripting\Parcel.Toolbox.Scripting.csproj", "{6FD3BC3D-64D6-4A05-AC21-9DBDAF131746}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.Special", "Parcel.Toolbox.Special\Parcel.Toolbox.Special.csproj", "{B2B4DC26-3B47-4D11-B5C4-34C52EC5882D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.Special", "Parcel.Toolbox.Special\Parcel.Toolbox.Special.csproj", "{B2B4DC26-3B47-4D11-B5C4-34C52EC5882D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parcel.Toolbox.String", "Parcel.Toolbox.String\Parcel.Toolbox.String.csproj", "{6C0B01C7-CEAD-41C7-AAF1-BE892877941B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parcel.Toolbox.String", "Parcel.Toolbox.String\Parcel.Toolbox.String.csproj", "{6C0B01C7-CEAD-41C7-AAF1-BE892877941B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{B04B840A-6133-4C67-93A5-02979450F352}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtoServer", "ProtoServer\ProtoServer.csproj", "{4CB0267D-A0AF-4B22-B751-2CD910476D7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,6 +179,13 @@ Global
 		{6C0B01C7-CEAD-41C7-AAF1-BE892877941B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C0B01C7-CEAD-41C7-AAF1-BE892877941B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C0B01C7-CEAD-41C7-AAF1-BE892877941B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CB0267D-A0AF-4B22-B751-2CD910476D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CB0267D-A0AF-4B22-B751-2CD910476D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CB0267D-A0AF-4B22-B751-2CD910476D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CB0267D-A0AF-4B22-B751-2CD910476D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C19D1A11-88D8-4074-AF90-94DB2C76AEEB} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
@@ -195,5 +209,9 @@ Global
 		{6FD3BC3D-64D6-4A05-AC21-9DBDAF131746} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
 		{B2B4DC26-3B47-4D11-B5C4-34C52EC5882D} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
 		{6C0B01C7-CEAD-41C7-AAF1-BE892877941B} = {B3C07F96-0230-4CFF-A1A7-EFC3213F4A39}
+		{4CB0267D-A0AF-4B22-B751-2CD910476D7F} = {B04B840A-6133-4C67-93A5-02979450F352}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02467E9F-99F1-4DF1-9F95-B88C4DA6051D}
 	EndGlobalSection
 EndGlobal

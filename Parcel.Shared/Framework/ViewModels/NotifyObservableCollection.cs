@@ -42,8 +42,8 @@ namespace Parcel.Shared.Framework.ViewModels
         private readonly List<Action<T>> _removed = new List<Action<T>>();
         private readonly List<Action<IList<T>>> _cleared = new List<Action<IList<T>>>();
 
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public NotifyObservableCollection()
         {
@@ -179,13 +179,13 @@ namespace Parcel.Shared.Framework.ViewModels
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
             => PropertyChanged?.Invoke(this, args);
 
-        private void OnCollectionChanged(NotifyCollectionChangedAction action, object? item, int index)
+        private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index)
             => OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item, index));
 
-        private void OnCollectionChanged(NotifyCollectionChangedAction action, object? item, int index, int oldIndex)
+        private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index, int oldIndex)
             => OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item, index, oldIndex));
 
-        private void OnCollectionChanged(NotifyCollectionChangedAction action, object? oldItem, object? newItem, int index)
+        private void OnCollectionChanged(NotifyCollectionChangedAction action, object oldItem, object newItem, int index)
             => OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, newItem, oldItem, index));
 
         #endregion

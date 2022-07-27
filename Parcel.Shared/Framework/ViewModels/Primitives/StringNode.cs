@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using Parcel.Shared.Framework.ViewModels.BaseNodes;
+﻿using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels.Primitives
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using Parcel.Shared;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
@@ -57,10 +56,10 @@ namespace Parcel.Toolbox.Present.Nodes
         #endregion
 
         #region Auto-Connect Interface
-        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
-            new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
+        public override Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes =>
+            new Tuple<ToolboxNodeExport, Vector2D, InputConnector>[]
             {
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-150, -50), _pageNameInput),
+                new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector2D(-150, -50), _pageNameInput),
             };
         #endregion
         

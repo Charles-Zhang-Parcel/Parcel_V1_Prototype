@@ -84,21 +84,21 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Events
-        private void AvalonEditor_OnInitialized(object? sender, EventArgs e)
+        private void AvalonEditor_OnInitialized(object sender, EventArgs e)
         {
             TextEditor editor = sender as TextEditor;
             PropertyEditor property = editor!.DataContext as PropertyEditor;
 
             editor.Text = property!.Binding as string;
         }
-        private void AvalonEditor_OnTextChanged(object? sender, EventArgs e)
+        private void AvalonEditor_OnTextChanged(object sender, EventArgs e)
         {
             TextEditor editor = sender as TextEditor;
             PropertyEditor property = editor!.DataContext as PropertyEditor;
             
             property!.Binding  = editor.Text;
         }
-        private void PropertyWindow_OnClosed(object? sender, EventArgs e)
+        private void PropertyWindow_OnClosed(object sender, EventArgs e)
         {
             if (Processor is DataTable dataTable && DataGridData.Count > 0)
             {

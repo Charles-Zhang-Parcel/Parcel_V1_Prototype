@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
@@ -31,7 +30,7 @@ namespace Parcel.Shared.Framework.ViewModels
             return false;
         }
 
-        public bool TryAddConnection(BaseConnector source, object? target)
+        public bool TryAddConnection(BaseConnector source, object target)
         {
             if (target != null && CanAddConnection(source, target))
             {
@@ -79,7 +78,7 @@ namespace Parcel.Shared.Framework.ViewModels
             connections.ForEach(c => graph.Connections.Remove(c));
         }
 
-        public void SplitConnection(BaseConnection connection, Point location)
+        public void SplitConnection(BaseConnection connection, Vector2D location)
         {
             var connector = connection.Output;
 
@@ -101,7 +100,7 @@ namespace Parcel.Shared.Framework.ViewModels
             connection.Remove();
         }
 
-        public void AddCommentAroundNodes(IList<BaseNode> nodes, string? text = default)
+        public void AddCommentAroundNodes(IList<BaseNode> nodes, string text = default)
         {
             var rect = nodes.GetBoundingBox(50);
             var comment = new CommentNode()

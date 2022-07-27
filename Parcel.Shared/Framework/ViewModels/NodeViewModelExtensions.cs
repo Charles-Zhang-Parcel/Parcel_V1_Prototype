@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
 namespace Parcel.Shared.Framework.ViewModels
 {
     public static class NodeViewModelExtensions
     {
-        public static Rect GetBoundingBox(this IList<BaseNode> nodes, double padding = 0, int gridCellSize = 15)
+        public static Bound GetBoundingBox(this IList<BaseNode> nodes, double padding = 0, int gridCellSize = 15)
         {
             double minX = double.MaxValue;
             double minY = double.MaxValue;
@@ -43,9 +43,9 @@ namespace Parcel.Shared.Framework.ViewModels
                 }
             }
 
-            var result = new Rect(minX - padding, minY - padding, maxX - minX + padding * 2, maxY - minY + padding * 2);
-            result.X = (int)result.X / gridCellSize * gridCellSize;
-            result.Y = (int)result.Y / gridCellSize * gridCellSize;
+            var result = new Bound(minX - padding, minY - padding, maxX - minX + padding * 2, maxY - minY + padding * 2);
+            result.Location.X = (int)result.X / gridCellSize * gridCellSize;
+            result.Location.Y = (int)result.Y / gridCellSize * gridCellSize;
             return result;
         }
 

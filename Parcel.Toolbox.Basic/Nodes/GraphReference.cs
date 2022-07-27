@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.Advanced;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
-using Parcel.Shared.Framework.ViewModels.Primitives;
 using Parcel.Shared.Serialization;
 
 namespace Parcel.Toolbox.Basic.Nodes
@@ -129,12 +127,12 @@ namespace Parcel.Toolbox.Basic.Nodes
         #endregion
 
         #region Auto Generate Interface
-        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
+        public override Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes
         {
             get
             {
-                List<Tuple<ToolboxNodeExport, Vector, InputConnector>> auto =
-                    new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
+                List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>> auto =
+                    new List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>>();
                 
                 // Add nodes for additional variable-inputs
                 for (int i = 0; i < Input.Count; i++)
@@ -142,7 +140,7 @@ namespace Parcel.Toolbox.Basic.Nodes
                     if(Input[i].Connections.Count != 0) continue;
 
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, GetInputNodeType(InputDefinitions[i]));
-                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i]));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(toolDef, new Vector2D(-100, -50 + (i - 1) * 50), Input[i]));
                 }
                 
                 return auto.ToArray();

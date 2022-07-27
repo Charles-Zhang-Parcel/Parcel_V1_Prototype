@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -70,13 +69,13 @@ namespace Parcel.Toolbox.DataSource.Nodes
 
         #region Auto Connect Interface
         public override bool ShouldHaveAutoConnection => _symbolInput.Connections.Count == 0;
-        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes =>
-            new Tuple<ToolboxNodeExport, Vector, InputConnector>[]
+        public override Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes =>
+            new Tuple<ToolboxNodeExport, Vector2D, InputConnector>[]
             {
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector(-250, -100), _symbolInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector(-250, -50), _startDateInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector(-250, 0), _endDateInput),
-                new Tuple<ToolboxNodeExport, Vector, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector(-250, 50), _intervalInput)
+                new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(new ToolboxNodeExport("String", typeof(StringNode)), new Vector2D(-250, -100), _symbolInput),
+                new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(new ToolboxNodeExport("Start Date", typeof(DateTimeNode)), new Vector2D(-250, -50), _startDateInput),
+                new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(new ToolboxNodeExport("End Date", typeof(DateTimeNode)), new Vector2D(-250, 0), _endDateInput),
+                new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(new ToolboxNodeExport("Interval", typeof(StringNode)), new Vector2D(-250, 50), _intervalInput)
             };
         #endregion
     }

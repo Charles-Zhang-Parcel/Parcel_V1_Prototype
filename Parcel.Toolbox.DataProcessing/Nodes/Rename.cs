@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
@@ -93,19 +92,19 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #endregion
 
         #region Auto-Connect Interface
-        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
+        public override Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes
         {
             get
             {
-                List<Tuple<ToolboxNodeExport, Vector, InputConnector>> auto =
-                    new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
+                List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>> auto =
+                    new List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>>();
                 for (int i = 1; i < Input.Count; i+=2)
                 {
                     if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     ToolboxNodeExport toolDef = new ToolboxNodeExport("Input Name", typeof(StringNode));
-                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i] as InputConnector));
-                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, (i - 1) * 50), Input[i+1] as InputConnector));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(toolDef, new Vector2D(-100, -50 + (i - 1) * 50), Input[i] as InputConnector));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(toolDef, new Vector2D(-100, (i - 1) * 50), Input[i+1] as InputConnector));
                 }
                 return auto.ToArray();
             }

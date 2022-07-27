@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
@@ -112,18 +111,18 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         private bool IsPrimitiveInput(InputConnector connector)
             => connector is PrimitiveInputConnector;
         public virtual bool ShouldHaveAutoConnection => Input.Count != 0 && Input.Any(InputConnectorShouldRequireAutoConnection);
-        public virtual Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
+        public virtual Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes
         {
             get
             {
-                List<Tuple<ToolboxNodeExport, Vector, InputConnector>> auto =
-                    new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
+                List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>> auto =
+                    new List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>>();
                 for (int i = 0; i < Input.Count; i++)
                 {
                     if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, CacheTypeHelper.ConvertToNodeType(Input[i].DataType));
-                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-180, -20 + (i - 1) * 50), Input[i]));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(toolDef, new Vector2D(-180, -20 + (i - 1) * 50), Input[i]));
                 }
                 return auto.ToArray();
             }

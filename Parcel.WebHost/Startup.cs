@@ -123,6 +123,7 @@ namespace Parcel.WebHost
             // Final catch-all
             app.Use(async (context, next) => {
                 await context.Response.WriteAsync("Cannot find target endpoint.");
+                await next();
             });
         }
         #endregion

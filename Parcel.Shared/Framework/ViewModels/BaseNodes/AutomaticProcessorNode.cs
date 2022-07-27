@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.Primitives;
 
@@ -160,19 +159,19 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
         #endregion
 
         #region Auto-Connect Interface
-        public override Tuple<ToolboxNodeExport, Vector, InputConnector>[] AutoGenerateNodes
+        public override Tuple<ToolboxNodeExport, Vector2D, InputConnector>[] AutoGenerateNodes
         {
             get
             {
-                List<Tuple<ToolboxNodeExport, Vector, InputConnector>> auto =
-                    new List<Tuple<ToolboxNodeExport, Vector, InputConnector>>();
+                List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>> auto =
+                    new List<Tuple<ToolboxNodeExport, Vector2D, InputConnector>>();
                 for (int i = 0; i < Input.Count; i++)
                 {
                     if(!InputConnectorShouldRequireAutoConnection(Input[i])) continue;
 
                     Type nodeType = CacheTypeHelper.ConvertToNodeType(InputTypes[i]);
                     ToolboxNodeExport toolDef = new ToolboxNodeExport(Input[i].Title, nodeType);
-                    auto.Add(new Tuple<ToolboxNodeExport, Vector, InputConnector>(toolDef, new Vector(-100, -50 + (i - 1) * 50), Input[i]));
+                    auto.Add(new Tuple<ToolboxNodeExport, Vector2D, InputConnector>(toolDef, new Vector2D(-100, -50 + (i - 1) * 50), Input[i]));
                 }
                 return auto.ToArray();
             }

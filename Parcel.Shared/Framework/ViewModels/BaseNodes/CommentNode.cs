@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Parcel.Shared.DataTypes;
+using System;
 using System.Collections.Generic;
-using System.Windows;
 
 namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 {
@@ -13,7 +13,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             {
                 {nameof(Title), new NodeSerializationRoutine(() => _title, value => _title = value as string)},
                 {nameof(Comment), new NodeSerializationRoutine(() => _comment, value => _comment = value as string)},
-                {nameof(Size), new NodeSerializationRoutine(() => _size, value => _size = (Size)value)},
+                {nameof(Size), new NodeSerializationRoutine(() => _size, value => _size = (Vector2D)value)},
             };
         }
         #endregion
@@ -33,8 +33,8 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             set => SetField(ref _comment, value);
         }
 
-        private Size _size;
-        public Size Size
+        private Vector2D _size;
+        public Vector2D Size
         {
             get => _size;
             set => SetField(ref _size, value);

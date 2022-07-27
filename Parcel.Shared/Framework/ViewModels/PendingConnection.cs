@@ -12,15 +12,15 @@ namespace Parcel.Shared.Framework.ViewModels
         }
 
         #region Public View Properties
-        private BaseConnector? _source;
-        public BaseConnector? Source
+        private BaseConnector _source;
+        public BaseConnector Source
         {
             get => _source;
             set => SetField(ref _source, value);
         }
 
-        private object? _previewTarget;
-        public object? PreviewTarget
+        private object _previewTarget;
+        public object PreviewTarget
         {
             get => _previewTarget;
             set

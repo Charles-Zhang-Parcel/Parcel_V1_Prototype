@@ -11,9 +11,9 @@ namespace Parcel.FrontEnd.NodifyWPF.Converters
         public Visibility FalseVisibility { get; set; } = Visibility.Collapsed;
         public bool Negate { get; set; }
 
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string? stringValue = value?.ToString();
+            string stringValue = value?.ToString();
             if (bool.TryParse(stringValue, out var b))
             {
                 return (Negate ? !b : b) ? Visibility.Visible : FalseVisibility;

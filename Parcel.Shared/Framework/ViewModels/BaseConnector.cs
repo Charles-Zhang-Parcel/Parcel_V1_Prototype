@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
 
@@ -122,8 +121,8 @@ namespace Parcel.Shared.Framework.ViewModels
             get => _isHidden;
             set => SetField(ref _isHidden, value);
         }
-        private Point _anchor;
-        public Point Anchor
+        private Vector2D _anchor;
+        public Vector2D Anchor
         {
             get => _anchor;
             set => SetField(ref _anchor, value);

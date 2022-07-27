@@ -11,11 +11,11 @@ namespace Parcel.Shared.Framework.ViewModels
     public class DelegateCommand : IProcessorNodeCommand
     {
         private readonly Action _action;
-        private readonly Func<bool>? _condition;
+        private readonly Func<bool> _condition;
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler CanExecuteChanged;
 
-        public DelegateCommand(Action action, Func<bool>? executeCondition = default)
+        public DelegateCommand(Action action, Func<bool> executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;
@@ -34,11 +34,11 @@ namespace Parcel.Shared.Framework.ViewModels
     public class DelegateCommand<T> : IProcessorNodeCommand
     {
         private readonly Action<T> _action;
-        private readonly Func<T, bool>? _condition;
+        private readonly Func<T, bool> _condition;
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler CanExecuteChanged;
 
-        public DelegateCommand(Action<T> action, Func<T, bool>? executeCondition = default)
+        public DelegateCommand(Action<T> action, Func<T, bool> executeCondition = default)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
             _condition = executeCondition;

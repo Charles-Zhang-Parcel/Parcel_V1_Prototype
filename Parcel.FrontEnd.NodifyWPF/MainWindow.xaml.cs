@@ -23,6 +23,7 @@ using Microsoft.Win32;
 using Nodify;
 using Parcel.Shared;
 using Parcel.Shared.Algorithms;
+using Parcel.Shared.DataTypes;
 using Parcel.Shared.Framework;
 using Parcel.Shared.Framework.ViewModels;
 using Parcel.Shared.Framework.ViewModels.BaseNodes;
@@ -50,7 +51,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         #region Constructor
         public MainWindow()
         {
-            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, Editor.MouseLocation), 
+            RepeatLastCommand = new DelegateCommand(() => SpawnNode(LastTool, new Vector2D(Editor.MouseLocation.X, Editor.MouseLocation.Y)), 
                 () => LastTool != null && !(FocusManager.GetFocusedElement(this) is TextBox) && !(Keyboard.FocusedElement is TextBox));
             SaveCanvasCommand = new DelegateCommand(() => SaveCanvas(false), () => true);
             NewCanvasCommand = new DelegateCommand(() => { Canvas.Nodes.Clear(); Canvas.Connections.Clear(); SaveCanvas(true);}, () => true);
@@ -112,7 +113,8 @@ namespace Parcel.FrontEnd.NodifyWPF
                 }
                 else if (e.ClickCount > 1)
                 {
-                    connection.Split(e.GetPosition(ctrl) - new Vector(30, 15));
+                    var pos = e.GetPosition(ctrl) - new Vector(30, 15);
+                    connection.Split(new Vector2D(pos.X, pos.Y));
                 }
             }
         }
@@ -197,7 +199,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             if ((node is CSV || node is Excel) && node.ShouldHaveAutoConnection)
             {
                 OpenFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Input", typeof(OpenFileNode)),
-                    node.Location + new Vector(-200, -60)) as OpenFileNode;
+                    node.Location + new Vector2D(-200, -60)) as OpenFileNode;
                 Canvas.Schema.TryAddConnection(filePathNode!.MainOutput, node.Input.First());
 
                 OpenFileDialog openFileDialog = new OpenFileDialog() { Title = "Select File to Open" };
@@ -215,7 +217,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             if (node is WriteCSV && node.ShouldHaveAutoConnection)
             {
                 SaveFileNode filePathNode = SpawnNode(new ToolboxNodeExport("File Path", typeof(SaveFileNode)),
-                    node.Location + new Vector(-200, -60)) as SaveFileNode;
+                    node.Location + new Vector2D(-200, -60)) as SaveFileNode;
                 Canvas.Schema.TryAddConnection(filePathNode!.MainOutput, node.Input.First());
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog() { Title = "Select Path to Save" };
@@ -227,7 +229,7 @@ namespace Parcel.FrontEnd.NodifyWPF
             }
             else if (node is IAutoConnect autoConnect && autoConnect.ShouldHaveAutoConnection && node.AutoGenerateNodes != null)
             {
-                foreach (Tuple<ToolboxNodeExport,Vector,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
+                foreach (Tuple<ToolboxNodeExport,Vector2D,InputConnector> generateNode in autoConnect.AutoGenerateNodes)
                 {
                     BaseNode temp = SpawnNode(generateNode.Item1, node.Location + generateNode.Item2);
                     if(temp is IMainOutputNode outputNode)
@@ -291,7 +293,7 @@ namespace Parcel.FrontEnd.NodifyWPF
         #endregion
 
         #region Routine
-        private BaseNode SpawnNode(ToolboxNodeExport tool, Point spawnLocation)
+        private BaseNode SpawnNode(ToolboxNodeExport tool, Vector2D spawnLocation)
         {
             if (tool.Descriptor != null && tool.Type != typeof(AutomaticProcessorNode))
                 throw new ArgumentException("Wrong type.");
@@ -398,7 +400,7 @@ namespace Parcel.FrontEnd.NodifyWPF
                     && toolboxNodeExport.Type != typeof(object)) // Don't do anything for placeholder nodes
                 {
                     LastTool = toolboxNodeExport;
-                    SpawnNode(LastTool, spawnLocation);
+                    SpawnNode(LastTool, new Vector2D(spawnLocation.X, spawnLocation.Y));
                 }
             }
             popupTab.ItemSelectedAdditionalCallback += action;
