@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0-windows</TargetFramework>
+        <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     </PropertyGroup>
 
     <ItemGroup>
