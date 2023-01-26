@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Parcel.Shared;
-using Parcel.WebHost.Data;
 
 namespace Parcel.WebHost
 {
@@ -32,7 +31,6 @@ namespace Parcel.WebHost
             services.AddControllers();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
