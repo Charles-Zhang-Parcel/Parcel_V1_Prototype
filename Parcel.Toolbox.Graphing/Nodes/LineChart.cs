@@ -54,7 +54,7 @@ namespace Parcel.Toolbox.Graphing.Nodes
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
             null;
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; } = null;
         #endregion
         
         #region Processor Interface

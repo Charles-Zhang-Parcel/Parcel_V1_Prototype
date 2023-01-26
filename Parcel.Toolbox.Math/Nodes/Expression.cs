@@ -31,7 +31,7 @@ namespace Parcel.Toolbox.Math.Nodes
             {
                 {nameof(Value), new NodeSerializationRoutine( () => _value, value => _value = value as string)},
             };
-            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
             {
                 Input.Clear();
                 int count = (int) o;
@@ -92,7 +92,7 @@ namespace Parcel.Toolbox.Math.Nodes
         
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
 
         #endregion
         

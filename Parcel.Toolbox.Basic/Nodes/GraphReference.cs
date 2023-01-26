@@ -123,7 +123,7 @@ namespace Parcel.Toolbox.Basic.Nodes
 
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; } = null;
         #endregion
 
         #region Auto Generate Interface

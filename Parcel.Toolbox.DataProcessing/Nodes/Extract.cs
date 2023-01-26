@@ -22,7 +22,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Extract()
         {
-            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
             {
                 Input.Clear();
                 int count = (int) o;
@@ -79,7 +79,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
             null;
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
         #endregion
 
         #region Auto Generate Interface

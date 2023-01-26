@@ -155,7 +155,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             base.PostDeserialization();
             PopulateInputsOutputs();
         }
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; } = null;
         #endregion
 
         #region Auto-Connect Interface

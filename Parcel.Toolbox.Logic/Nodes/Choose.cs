@@ -21,7 +21,7 @@ namespace Parcel.Toolbox.Logic.Nodes
         };
         public Choose()
         {
-            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count - 1, o =>
             {
                 Input.Clear();
                 Input.Add(_selectorInput);
@@ -78,7 +78,7 @@ namespace Parcel.Toolbox.Logic.Nodes
 
         protected sealed override Dictionary<string, NodeSerializationRoutine>
             ProcessorNodeMemberSerialization { get; } = null;
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
 
         #endregion
     }

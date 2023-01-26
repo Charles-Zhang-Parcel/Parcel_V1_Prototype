@@ -46,7 +46,7 @@ namespace Parcel.Shared.Framework.ViewModels
     {
         public PrimitiveNumberInputConnector() : base(typeof(double))
         {
-            Value = 0;
+            Value = 0.0;
         }
         
         public override object Value 

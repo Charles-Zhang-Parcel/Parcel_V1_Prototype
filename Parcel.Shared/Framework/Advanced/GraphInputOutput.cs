@@ -49,7 +49,7 @@ namespace Parcel.Shared.Framework.Advanced
                 () => Definitions.Count > 1);
             
             // Serialization
-            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
                 source => DeserializeEntries((List<Tuple<string, int>>)source)); 
         }
         #endregion
@@ -94,7 +94,7 @@ namespace Parcel.Shared.Framework.Advanced
         protected sealed override Dictionary<string, NodeSerializationRoutine>
             ProcessorNodeMemberSerialization { get; } = null;
         protected abstract void DeserializeFinalize();
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
         #endregion
 
         #region Routiens

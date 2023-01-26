@@ -42,7 +42,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
 
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; } = null;
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; } = null;
         #endregion
     }
 }

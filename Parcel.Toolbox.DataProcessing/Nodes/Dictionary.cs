@@ -46,7 +46,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         public Dictionary()
         {
             // Serialization
-            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
                 source => DeserializeEntries((List<Tuple<string, int, object>>)source));
             
             Title = NodeTypeName = "Dictionary";
@@ -110,7 +110,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
             null;
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
         #endregion
     }
 }

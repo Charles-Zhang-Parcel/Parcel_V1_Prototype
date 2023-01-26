@@ -16,7 +16,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         };
         public Append()
         {
-            InputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(() => Input.Count, o =>
             {
                 Input.Clear();
                 int count = (int) o;
@@ -72,7 +72,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; } =
             null;
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
         #endregion
     }
 }

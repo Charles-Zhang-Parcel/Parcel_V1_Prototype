@@ -44,7 +44,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
             {
                 {nameof(Data), new NodeSerializationRoutine(() => Data, o => Data = o as object[][])},
             };
-            InputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
+            VariantInputConnectorsSerialization = new NodeSerializationRoutine(SerializeEntries,
                 source => DeserializeEntries((List<Tuple<string, int>>)source));
             
             Definitions = new ObservableCollection<DataTableFieldDefinition>()
@@ -129,7 +129,7 @@ namespace Parcel.Toolbox.DataProcessing.Nodes
         
         #region Serialization
         protected override Dictionary<string, NodeSerializationRoutine> ProcessorNodeMemberSerialization { get; }
-        protected override NodeSerializationRoutine InputConnectorsSerialization { get; }
+        protected override NodeSerializationRoutine VariantInputConnectorsSerialization { get; }
         #endregion
 
         #region Routines
