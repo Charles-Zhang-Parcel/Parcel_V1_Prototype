@@ -53,7 +53,7 @@ namespace Parcel.Shared.Framework.ViewModels.BaseNodes
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException("Failed to retrieve node.");
+                throw new InvalidOperationException($"Failed to retrieve node: {e.Message}.");
             }
         }
         private void PopulateInputsOutputs()
