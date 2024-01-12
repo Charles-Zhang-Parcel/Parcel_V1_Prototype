@@ -1,0 +1,149 @@
+﻿@using Parcel.Shared.DataTypes
+@using ChartJs.Blazor
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Enums
+@using ChartJs.Blazor.Common.Time
+@using ChartJs.Blazor.LineChart
+@using ChartJs.Blazor.Util
+@using System.Drawing
+
+@if (Element != null)
+{
+    ConfigBase chartConfig = InitializeChart(Element);
+    <Chart Config=@chartConfig></Chart>
+}
+
+@code {
+    [Parameter] public ServerConfig Element { get; set; }
+    
+    #region Routines
+    private ConfigBase InitializeChart(ServerConfig config)
+    {
+        if (config.ContentType != CacheDataType.ParcelDataGrid)
+            return null;
+        DataGrid dataGrid = config.DataGridContent;
+        
+        var _config = new LineConfig
+        {
+            Options = new LineOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = config.ObjectContent as string ?? "Unnamed"
+                },
+                Tooltips = new Tooltips
+                {
+                    Mode = InteractionMode.Nearest,
+                    Intersect = true
+                },
+                Hover = new Hover
+                {
+                    Mode = InteractionMode.Nearest,
+                    Intersect = true
+                },
+                Scales = new Scales
+                {
+                    XAxes = new List<CartesianAxis>
+                    {
+                        new TimeAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+                                LabelString = "Date"
+                            },
+                            Time = new TimeOptions
+                            {
+                                TooltipFormat = "ll HH:mm"
+                            },
+                        }
+                    },
+                    YAxes = new List<CartesianAxis>
+                    {
+                        new LinearCartesianAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+                                LabelString = "Value"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Configure labels
+        // _config.Data.Labels.AddRange(GetNextDays(InitalCount).Select(d => d.ToString("o")));
+        // foreach (string color in new[] { "Red", "Yellow", "Green", "Blue" }) // Pie Chart example
+        // {
+        //     _config.Data.Labels.Add(color);
+        // }
+
+        // Initialize data
+        // PieDataset<int> dataset = new PieDataset<int>(new[] { 6, 5, 3, 7 })
+        // {
+        //     BackgroundColor = new[]
+        //     {
+        //         ColorUtil.ColorHexString(255, 99, 132), // Slice 1 aka "Red"
+        //         ColorUtil.ColorHexString(255, 205, 86), // Slice 2 aka "Yellow"
+        //         ColorUtil.ColorHexString(75, 192, 192), // Slice 3 aka "Green"
+        //         ColorUtil.ColorHexString(54, 162, 235), // Slice 4 aka "Blue"
+        //     }
+        // };
+        
+        DateTime[] timeColumn = null;
+        foreach (DataColumn column in dataGrid!.Columns)
+        {
+            if (column.Type == typeof(double))
+            {
+                var data = column.GetDataAs<double>();
+                if (timeColumn == null)
+                {
+                    IDataset<double> lineDataset = new LineDataset<double>()
+                    {
+                        Label = column.Header,
+                        BackgroundColor = ColorUtil.FromDrawingColor(Color.Salmon),
+                        BorderColor = ColorUtil.FromDrawingColor(Color.Salmon),
+                        Fill = FillingMode.Disabled
+                    };
+                    _config.Data.Datasets.Add(lineDataset);
+                }
+                else
+                {
+                    IDataset<TimePoint> timePoints = new LineDataset<TimePoint>()
+                    {
+                        Label = column.Header,
+                        BackgroundColor = ColorUtil.FromDrawingColor(Color.SeaGreen),
+                        BorderColor = ColorUtil.FromDrawingColor(Color.SeaGreen),
+                        Fill = FillingMode.Disabled
+                    };
+
+                    var dataArray = data.ToArray();
+                    for (int t = 0; t < timeColumn.Length; t++)
+                    {
+                        DateTime time = timeColumn[t];
+                        timePoints.Add(new TimePoint(time, dataArray[t]));
+                    }
+
+                    _config.Data.Datasets.Add(timePoints);
+                }
+            }
+            else if (column.Type == typeof(DateTime))
+            {
+                timeColumn = column.GetDataAs<DateTime>().ToArray();
+            }
+        }
+
+        return _config;
+    }
+    #endregion
+
+    #region Helpers
+    string FormatHeader(string header, string typeName)
+    {
+        return $"{header} ({typeName})";
+    }
+    #endregion
+}

@@ -1,0 +1,45 @@
+﻿@using ChartJs.Blazor;
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.PieChart
+@using ChartJs.Blazor.Util
+@using Nodify
+@using Parcel.Shared
+@using Parcel.Shared.DataTypes
+@using Parcel.Shared.Framework
+@using Parcel.Shared.Framework.ViewModels
+@using System.Windows
+@using System.Dynamic
+@using Parcel.Shared.Framework.ViewModels.BaseNodes
+@using System.Drawing
+@using ChartType = Parcel.Shared.DataTypes.ChartType
+@page "/present"
+@inject NavigationManager _myNavigationManager
+
+@if (_myNavigationManager.Uri.Contains("localhost"))
+{
+    string address = _myNavigationManager.Uri.Replace("localhost", WebHostRuntime.Singleton.LocalIPAddress);
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <span>Share this link with others: </span>
+        <a class="navbar-brand" href="@address">@address</a>
+    </nav>
+}
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (WebHostRuntime.Singleton.CurrentLayout != null)
+{
+    <PresentLayout Element=@WebHostRuntime.Singleton.CurrentLayout></PresentLayout>
+}
+
+@code {
+    #region Parameters
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+    #endregion
+    
+    #region Events
+    protected override void OnInitialized()
+    {
+    }
+    #endregion
+}

@@ -1,0 +1,69 @@
+﻿@using Parcel.Shared.DataTypes
+@using ChartJs.Blazor.Common
+
+@if (Element != null)
+{
+    switch (Element.LayoutSpec)
+    {
+        case LayoutElementType.Presentation:
+            <div class="container">
+                @foreach (ServerConfig child in Element.Children)
+                {
+                    <PresentLayout Element=@child/>
+                }
+            </div>
+            break;
+        case LayoutElementType.Page:
+            NavMenu current = Layout.CurrentNavMenu;
+            current.AddNavItem(Element.ObjectContent as string);
+            break;
+        case LayoutElementType.Section:
+            <div class="row">
+                <h3>@Element.ObjectContent</h3>
+            </div>
+            <div class="row">
+                @foreach (ServerConfig child in Element.Children)
+                {
+                    <div class="col-sm">
+                        <PresentLayout Element=@child />
+                    </div>
+                }
+            </div>
+            break;
+        case LayoutElementType.Header:
+            break;
+        case LayoutElementType.GridPanel:
+            <div class="col-sm">
+                One of three columns
+            </div>
+            break;
+        case LayoutElementType.GridLabelElement:
+            break;
+        case LayoutElementType.GridGraph:
+            switch (Element.ChartType)
+            {
+                case ChartType.Line:
+                    <PresentLineChartElement Element=@Element/>
+                    break;
+                case ChartType.Bar:
+                    break;
+                case ChartType.Table:
+                    break;
+                case ChartType.TreeMap:
+                    <PresentTreeMapElement Element=@Element/>
+                    break;                    
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            break;
+        default:
+            throw new ArgumentOutOfRangeException();
+    }
+}
+
+@code {
+    #region Parameters
+    [Parameter] public ServerConfig Element { get; set; }
+    [CascadingParameter] public MainLayout Layout { get; set; }
+    #endregion
+}

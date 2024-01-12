@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+
+<CascadingValue Value="this">
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu @ref="CurrentNavMenu"/>
+        </div>
+    
+        <div class="main">
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
+    </div>
+</CascadingValue>
+
+@code{
+    public NavMenu CurrentNavMenu { get; set; }
+}
